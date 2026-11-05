@@ -1,6 +1,6 @@
 import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
-import { findLesson, UNITS } from '../data/academy/course';
+import { findLesson, allLessonsInOrder, nextLessonAfter } from '../data/academy/course';
 import { cardsForLesson } from '../data/academy/deck';
 import { markLessonComplete, getProgressMap } from '../store/db';
 import { session } from '../state';
@@ -16,12 +16,14 @@ function renderLesson(root: HTMLElement): void {
     return;
   }
   const { lesson } = found;
+  const globalIndex = allLessonsInOrder().findIndex((x) => x.lesson.id === lesson.id) + 1;
+  const totalLessons = allLessonsInOrder().length;
 
   const shell = (body: string) => `
 <div class="screen lesson-screen">
   <header class="topbar topbar-paper">
     <button id="backToClassroomBtn" class="icon-btn" aria-label="عودة إلى الفصل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-    <div class="topbar-titles"><b>الدرس ${lesson.order} من ${UNITS[0].lessons.length}</b><small dir="ltr">LESSON ${lesson.order}</small></div>
+    <div class="topbar-titles"><b>الدرس ${globalIndex} من ${totalLessons}</b><small dir="ltr">LESSON ${globalIndex}</small></div>
     <div class="spacer"></div>
     ${sealSVG(34, 'onPaper')}
   </header>
@@ -55,7 +57,7 @@ function renderLesson(root: HTMLElement): void {
     root.innerHTML = shell(`
     <article class="lesson-document">
       <header class="lesson-head">
-        <span class="lesson-kicker">الدرس ${lesson.order}</span>
+        <span class="lesson-kicker">الدرس ${globalIndex}</span>
         <h1 class="lesson-title">${escapeHtml(lesson.title)}</h1>
         <div class="lesson-objectives">
           <h2>بعد هذا الدرس ستتقن:</h2>
@@ -167,22 +169,20 @@ function renderLesson(root: HTMLElement): void {
   const renderDone = (score: number) => {
     void getProgressMap().then((map) => {
       const best = map[lesson.id]?.bestScore ?? score;
-      const nextLesson = UNITS[0].lessons
-        .filter((l) => l.order > lesson.order)
-        .sort((a, b) => a.order - b.order)[0];
+      const nextLesson = nextLessonAfter(lesson.id)?.lesson ?? null;
 
       root.innerHTML = shell(`
       <div class="done-wrap">
         <article class="done-document">
           <div class="done-seal">${sealSVG(110, 'onPaper')}</div>
           <h1 class="done-title">أُتقنت</h1>
-          <p class="done-sub">الدرس ${lesson.order} — «${escapeHtml(lesson.title)}»</p>
+          <p class="done-sub">الدرس ${globalIndex} — «${escapeHtml(lesson.title)}»</p>
           <div class="done-score" dir="ltr">${score}<small>%</small></div>
           <p class="done-best">أدق محاولة هذه: ${score}% · أفضل درجة لك على الإطلاق: <b>${best}%</b></p>
           <p class="done-note">رفدت ردهة التكرار المتباعد بـ <b>${cardsForLesson(lesson.id).length} بطاقة</b> من هذا الدرس — ستطفو عليك قبل نسيانها بقليل.</p>
           <p class="done-note">ختم مكتب الفصل يُثبت إتمامك. سجلك الأكاديمي يزداد سطرًا، وهمتك تشتد — هذه طريقتك أنت للتخرج.</p>
           <div class="done-actions">
-            ${nextLesson ? `<button id="nextLessonBtn" class="btn btn-primary btn-xl">الدرس التالي: ${escapeHtml(nextLesson.title.slice(0, 46))}${nextLesson.title.length > 46 ? '…' : ''}</button>` : '<p class="done-unit-complete">ختمت الوحدة الأولى كاملة — مبروك يا طالب طَلَاقَة.</p>'}
+            ${nextLesson ? `<button id="nextLessonBtn" class="btn btn-primary btn-xl">الدرس التالي: ${escapeHtml(nextLesson.title.slice(0, 46))}${nextLesson.title.length > 46 ? '…' : ''}</button>` : '<p class="done-unit-complete">ختمت خط الرحلة كاملاً — مبروك يا طالب طَلَاقَة.</p>'}
             <button id="backToClassroomBtn2" class="btn btn-ghost">العودة إلى خط الرحلة</button>
           </div>
         </article>
@@ -192,8 +192,9 @@ function renderLesson(root: HTMLElement): void {
       root.querySelector('#backToClassroomBtn2')!.addEventListener('click', () => go('classroom'));
       root.querySelector('#nextLessonBtn')?.addEventListener('click', () => {
         if (nextLesson) {
+          // go يعيد الدخول ويقرأ currentLessonId من جديد — لا closure متصلبة على الدرس القديم
           session.currentLessonId = nextLesson.id;
-          renderStudy();
+          go('lesson');
         }
       });
     });

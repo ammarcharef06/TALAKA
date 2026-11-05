@@ -518,3 +518,13 @@ body {
 .review-empty-sub { color: var(--ink); line-height: 1.95; margin: 0; }
 .review-empty-note { color: var(--muted); font-size: .85rem; line-height: 1.9; margin: 0; border-top: 1px dashed rgba(14,59,44,.3); padding-top: .6rem; }
 .review-empty .btn { width: 100%; }
+
+/* ══════════ الفصل: كتل المحطات ══════════ */
+.unit-block { width: 100%; margin: 0 0 1.1rem; }
+.unit-block-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .65rem .9rem; background: var(--paper-doc); border: 1px solid rgba(14,59,44,.25); border-radius: 12px; border-inline-start: 4px solid var(--gold); box-shadow: var(--shadow-sm); margin-bottom: .6rem; }
+.unit-block-title { font-family: var(--font-display); color: var(--emerald); font-size: 1.15rem; margin: .1rem 0 0; }
+.unit-block-tagline { color: var(--muted); font-size: .74rem; margin: .18rem 0 0; max-width: 560px; line-height: 1.8; }
+.unit-block-count { color: var(--gold-deep); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; white-space: nowrap; }
+.unit-complete .unit-block-head { border-inline-start-color: var(--success); }
+.unit-complete .unit-block-count { color: var(--success); }
+.unit-block .unit-kicker { color: var(--gold-deep); }

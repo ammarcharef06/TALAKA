@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { initialSrsState, gradeCard, type ReviewQuality } from '../src/engine/srs';
 import { deckIntegrityCheck, SRS_DECK, cardsForLesson, countDueCards } from '../src/data/academy/deck';
-import { UNIT_01 } from '../src/data/academy/course';
+import { UNITS } from '../src/data/academy/course';
 
 const NOW = new Date('2026-11-05T12:00:00.000Z');
 
@@ -49,16 +49,18 @@ describe('SM-2 — الخوارزمية', () => {
 
 describe('الرزمة — نزاهة المحتوى', () => {
   it('كل البطاقات لها درس موجود ومعرفات فريدة وغير فارغة', () => {
-    const { ok, problems } = deckIntegrityCheck(UNIT_01);
+    const { ok, problems } = deckIntegrityCheck(UNITS);
     expect(problems).toEqual([]);
     expect(ok).toBe(true);
   });
 
-  it('جميع الدروس الستة تملك بطاقات مولّدة منها', () => {
-    for (const lesson of UNIT_01.lessons) {
-      expect(cardsForLesson(lesson.id).length).toBeGreaterThanOrEqual(6);
+  it('كل الدروس الستة + الستة الثانية تملك بطاقات، والرزمة ≥ 80', () => {
+    for (const unit of UNITS) {
+      for (const lesson of unit.lessons) {
+        expect(cardsForLesson(lesson.id).length).toBeGreaterThanOrEqual(6);
+      }
     }
-    expect(SRS_DECK.length).toBeGreaterThanOrEqual(40);
+    expect(SRS_DECK.length).toBeGreaterThanOrEqual(80);
   });
 
   it('countDueCards: البطاقة لا تستحق إلا بعد إتمام درسها، أو بدون حالة أو بموعد سابق', () => {

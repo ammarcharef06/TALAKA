@@ -339,7 +339,313 @@ export const UNIT_01: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01];
+export const UNIT_02: Unit = {
+  id: 'm1-working-sentences',
+  order: 2,
+  title: 'المحطة الثانية — الجمل العاملة (A1)',
+  tagline: 'من الكلمات المفردة إلى جمل تعمل فعلاً: النفي، الأسئلة، العادات، والملكية — وحوار المقهى ختماً',
+  forLevels: 'A1',
+  lessons: [
+    {
+      id: 'l7-dont',
+      order: 1,
+      title: 'ليس هكذا — نفي الجملة بـ don\'t و doesn\'t',
+      estMinutes: 10,
+      objectives: [
+        'نفي الجملة الخبرية بطريقتين حسب الفاعل',
+        'الفرق الحاسم بين don\'t و doesn\'t',
+        'تجنب فخ «I not» و«She don\'t»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'القاعدة الذهبية: النفي في المضارع البسيط',
+          body: 'المضارع البسيط يُنفى دائماً بفعل مساعد: «don\'t» مع I / you / we / they، و«doesn\'t» مع he / she / it. لا يوجد «I not» ولا «She not» ولا «She don\'t» — مطلقاً.',
+        },
+        {
+          type: 'table',
+          title: 'أمثلة إيجاب ← نفي',
+          head: ['الجملة الإيجابية', 'الجملة المنفية'],
+          rows: [
+            ['I like coffee.', "I don't like coffee."],
+            ['She works on Fridays.', "She doesn't work on Fridays."],
+            ['They live in Cairo.', "They don't live in Cairo."],
+            ['He speaks French.', "He doesn't speak French."],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'أين يذهب الـ s؟',
+          body: 'عنده ما كان الفعل يأخذ s (he/she/it: works/speaks)، فإن النفي يحبس الـ s داخل doesn\'t: «She doesn\'t work» وليس «She doesn\'t works».',
+        },
+      ],
+      examples: [
+        { text: "I don't like coffee.", note: 'don\'t مع I — لا نضيف s أبداً' },
+        { text: "She doesn't work on Fridays.", note: 'doesn\'t مع she — الـ s انتقلت' },
+        { text: "We don't watch TV in the morning.", note: 'don\'t مع we' },
+        { text: "He doesn't speak Arabic.", note: 'doesn\'t مع he' },
+      ],
+      practice: [
+        { id: 'l7q1', question: 'انفي الجملة: I like fish.', options: ['I don\'t like fish.', 'I not like fish.', 'I doesn\'t like fish.', 'I like don\'t fish.'], answer: 0, explanation: 'don\'t للمخاطبة I — القاعدة الثابتة.' },
+        { id: 'l7q2', question: 'انفي الجملة: She works here.', options: ['She don\'t work here.', 'She doesn\'t works here.', 'She doesn\'t work here.', 'She not works here.'], answer: 2, explanation: 'doesn\'t + الفعل المجرد — الـ s تحوّلت إلى doesn\'t.' },
+        { id: 'l7q3', question: 'انفي الجملة: We study English.', options: ['We don\'t study English.', 'We not study English.', 'We doesn\'t study English.', 'We study don\'t English.'], answer: 0, explanation: 'don\'t مع we — دائماً دون استثناء.' },
+        { id: 'l7q4', question: 'انفي الجملة: He speaks French.', options: ['He don\'t speak French.', 'He doesn\'t speaks French.', 'He doesn\'t speak French.', 'He not speak French.'], answer: 2, explanation: 'he ⇒ doesn\'t + الفعل كما هو دون s.' },
+        { id: 'l7q5', question: 'صواب أم خطأ: «I doesn\'t like it.»', options: ['صواب — تركيب صحيح', 'خطأ — الصواب: I don\'t like it', 'صواب لكنه رسمي جداً', 'خطأ — الصواب: I no like it'], answer: 1, explanation: 'doesn\'t مع he/she/it فقط؛ مع I نقول don\'t.' },
+        { id: 'l7q6', question: 'انفي الجملة: They live in Cairo.', options: ['They don\'t live in Cairo.', 'They doesn\'t live in Cairo.', 'They not live in Cairo.', 'They no live in Cairo.'], answer: 0, explanation: 'don\'t مع they — هذا ثابت في المضارع البسيط.' },
+      ],
+    },
+    {
+      id: 'l8-dodoes',
+      order: 2,
+      title: 'الأسئلة الذهبية بـ Do و Does',
+      estMinutes: 10,
+      objectives: [
+        'صياغة سؤال نعم/لا في المضارع البسيط',
+        'الفرق بين Do و Does حسب الفاعل',
+        'الرد الصحيح بفعل مساعد لا بإعادة الفعل',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'سؤال نعم/لا في المضارع البسيط',
+          body: 'السؤال يبدأ بفعل مساعد: «Do» مع I / you / we / they، و«Does» مع he / she / it. الفعل نفسه يعود دائماً إلى المجرد: «Does he work?» وليس «Does he works?».',
+        },
+        {
+          type: 'table',
+          title: 'النمط بأمثلة',
+          head: ['السؤال', 'الرد المعتاد'],
+          rows: [
+            ['Do you like football?', 'Yes, I do. / No, I don\'t.'],
+            ['Does he live here?', 'Yes, he does. / No, he doesn\'t.'],
+            ['Where do you live?', 'I live in Cairo.'],
+            ['Does she speak Arabic?', 'Yes, she does.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تكرر الفعل في الرد',
+          body: '«Do you like coffee?» جوابها «Yes, I do.» — ليس «Yes, I like.». الإنجليزية ترد بالفعل المساعد وحده، وهذا ما يورط العربي في كل محادثة.',
+        },
+      ],
+      examples: [
+        { text: 'Do you like football?', note: 'سؤال I/you/we/they يبدأ بـ Do' },
+        { text: 'Does he work here?', note: 'he/she/it ⇒ Does' },
+        { text: 'Where do you live?', note: 'أداة استفهام (Where) ثم Do ثم الفاعل' },
+        { text: 'Yes, I do.', note: 'الرد بالفعل المساعد — لا إعادة للفعل' },
+      ],
+      practice: [
+        { id: 'l8q1', question: 'اسأل: «هل تحب الشاي؟»', options: ['Do you like tea?', 'Does you like tea?', 'Are you like tea?', 'Do you likes tea?'], answer: 0, explanation: 'Do مع you — والفعل المجرد like.' },
+        { id: 'l8q2', question: 'اسأل: «هل هو يعمل هنا؟»', options: ['Does he works here?', 'Does he work here?', 'Do he work here?', 'Is he work here?'], answer: 1, explanation: 'Does مع he — والفعل يبقى المجرد work.' },
+        { id: 'l8q3', question: 'الرد الصحيح على Do you like Cairo؟', options: ['Yes, I am.', 'Yes, I do.', 'Yes, I like.', 'Yes, I Cairo.'], answer: 1, explanation: 'الإنجليزية ترد بالمساعد: Yes, I do. — لا «Yes, I like».' },
+        { id: 'l8q4', question: '«أين تعيش؟» بالإنجليزية', options: ['Where you live?', 'Where are you live?', 'Where do you live?', 'Where lives you?'], answer: 2, explanation: 'Where + do + you + الفعل المجرد — الترتيب القياسي.' },
+        { id: 'l8q5', question: 'اسأل: «هل هي تتكلم العربية؟»', options: ['Do she speak Arabic?', 'Does she speaks Arabic?', 'Is she speak Arabic?', 'Does she speak Arabic?'], answer: 3, explanation: 'Does مع she — الفعل المجرد speak.' },
+        { id: 'l8q6', question: 'اسأل: «هل هم يدرسون؟»', options: ['Do they study?', 'Does they study?', 'Are they study?', 'Do they studies?'], answer: 0, explanation: 'Do مع they — والفعل study دون تصريف.' },
+      ],
+    },
+    {
+      id: 'l9-are',
+      order: 3,
+      title: 'اكتمال الكينونة: You are / We are / They are',
+      estMinutes: 10,
+      objectives: [
+        'اكتمال تصريف فعل الكينونة (am/is/are)',
+        'نفي am/is/are وتحويله للصيغة المختصرة',
+        'الأسئلة بـ Are و Is',
+      ],
+      blocks: [
+        {
+          type: 'table',
+          title: 'فعل الكينونة كاملاً',
+          head: ['الفاعل', 'الفعل'],
+          rows: [
+            ['I', 'am'],
+            ['you / we / they', 'are'],
+            ['he / she / it', 'is'],
+          ],
+        },
+        {
+          type: 'rule',
+          title: 'النفي المختصر',
+          body: 'am not لا تختصر بشيء واحد — وإنما تكتب aren\'t مع he/she/it: «She isn\'t here.» و«They aren\'t here.».',
+        },
+        {
+          type: 'table',
+          title: 'الأسئلة بـ am/is/are',
+          head: ['السؤال', 'المعنى'],
+          rows: [
+            ['Are you ready?', 'هل أنت جاهز؟'],
+            ['Is he at home?', 'هل هو في البيت؟'],
+            ['Are they students?', 'هل هم طلاب؟'],
+            ['Am I late?', 'هل تأخرت؟'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'فخ العربي المعتاد',
+          body: 'لا تقل «you\'re student» بلا a — الإنجليزية لا تسمح بمهنة معلقة: «you\'re a student» / «we\'re students».',
+        },
+      ],
+      examples: [
+        { text: 'We are students.', note: 'we ⇒ are' },
+        { text: 'They are from Cairo.', note: 'they ⇒ are' },
+        { text: "You're very kind.", note: 'اختصار you are = you\'re' },
+        { text: "She isn't here.", note: 'نفي مختصر: isn\'t' },
+      ],
+      practice: [
+        { id: 'l9q1', question: 'أكمل: We ___ students.', options: ['am', 'is', 'are', 'be'], answer: 2, explanation: 'we ⇒ are — لا am مع الجمع أبداً.' },
+        { id: 'l9q2', question: 'انفي: They are here.', options: ['They isn\'t here.', 'They aren\'t here.', 'They don\'t are here.', 'They no here.'], answer: 1, explanation: 'they ⇒ aren\'t — النفي المختصر.' },
+        { id: 'l9q3', question: 'اسأل: «هل أنت جاهز؟»', options: ['Is you ready?', 'Are you ready?', 'Do you ready?', 'Am you ready?'], answer: 1, explanation: 'are مع you — والأسئلة بـ are تبدأ بـ Are.' },
+        { id: 'l9q4', question: 'أكمل: ___ they your friends?', options: ['Are', 'Is', 'Am', 'Do'], answer: 0, explanation: 'they ⇒ Are للسؤال.' },
+        { id: 'l9q5', question: 'ترجم: «هم من القاهرة»', options: ['They is from Cairo.', 'They are from Cairo.', 'They am from Cairo.', 'They be from Cairo.'], answer: 1, explanation: 'they ⇒ are — دائماً مع الجمع.' },
+        { id: 'l9q6', question: 'الاختصار لـ «is not» هو؟', options: ['don\'t', 'aren\'t', 'isn\'t', 'ans\'t'], answer: 2, explanation: 'is not ⇒ isn\'t — مثل doesn\'t/don\'t من don\'t/does منطقاً.' },
+      ],
+    },
+    {
+      id: 'l10-habits',
+      order: 4,
+      title: 'العادات الروتينية — المضارع البسيط الحقيقي',
+      estMinutes: 12,
+      objectives: [
+        'التعبير عن العادات اليومية بجمل صحيحة',
+        'ظروف التكرار (always/usually/sometimes/never) ومواقعها',
+        'تصريف الفعل مع he/she/it (s/es)',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'متى نستخدم المضارع البسيط؟',
+          body: 'للعادات والمهن والحقائق والروتين: أستيقظ، أشرب القهوة، أذاكر بعد العشاء — والجملة تتقبل ظرف تكرار في وسطها قبل الفعل دائماً.',
+        },
+        {
+          type: 'table',
+          title: 'ظروف التكرار ومواقعها في الجملة',
+          head: ['الظرف', 'المعنى'],
+          rows: [
+            ['always', 'دائماً'],
+            ['usually', 'عادةً'],
+            ['sometimes', 'أحياناً'],
+            ['rarely', 'نادراً'],
+            ['never', 'أبداً'],
+          ],
+        },
+        {
+          type: 'rule',
+          title: 'he/she/it — التصريف الإجباري',
+          body: 'مع الغائب المفرد يضاف للفعل s (أو es إن انتهى بإلخ: watches/goes/does): She works، He goes، It rains — واحذره من فخ العربي: «he work» خطأ شائع.',
+        },
+      ],
+      examples: [
+        { text: 'I drink coffee every morning.', note: 'عادة يومية بـ «every»' },
+        { text: 'She always studies after dinner.', note: 'always قبل الفعل' },
+        { text: "He doesn't eat meat.", note: 'نفي الغائب — doesn\'t + الفعل المجرد' },
+        { text: 'We usually walk to work.', note: 'usually في المنتصف' },
+      ],
+      practice: [
+        { id: 'l10q1', question: 'أكمل: She ___ (always/study) after dinner.', options: ['study', 'studies', 'studying', 'is study'], answer: 1, explanation: 'she ⇒ الفعل + s: studies — والظرف always قبلها.' },
+        { id: 'l10q2', question: 'أكمل: He ___ never late for class.', options: ['is', 'are', 'am', 'be'], answer: 0, explanation: 'he ⇒ is — والظرف never قبل الفعل المساعد هو الصحيح هنا (He is never late).' },
+        { id: 'l10q3', question: 'اختر الترتيب الصحيح للجملة:', options: ['I always drink coffee in the morning.', 'Always I drink coffee morning.', 'I drink always coffee in morning.', 'Coffee always I drink morning.'], answer: 0, explanation: 'الظرف في المنتصف قبل الفعل، والجملة: فاعل + ظرف + فعل + مفعول.' },
+        { id: 'l10q4', question: '«أنا لا أشرب القهوة أبداً» بالإنجليزية', options: ['I drink coffee never.', 'Never my coffee drink.', 'I never drink coffee.', 'I don\'t no drink coffee.'], answer: 2, explanation: 'never يكفي للنفي — لا يحتاج don\'t معه.' },
+        { id: 'l10q5', question: 'أكمل: They ___ in Alexandria.', options: ['lives', 'live', 'liveing', 'are lives'], answer: 1, explanation: 'they ⇒ الفعل كما هو دون s.' },
+        { id: 'l10q6', question: 'مع he/she/it في المضارع البسيط نضيف للفعل؟', options: ['ed', 'ing', 's / es', 'nothing'], answer: 2, explanation: 's/es مع الغائب المفرد — works/goes/watches.' },
+      ],
+    },
+    {
+      id: 'l11-mine',
+      order: 5,
+      title: 'مملكتك الخاصة — ضمائر الملكية و This is / These are',
+      estMinutes: 10,
+      objectives: [
+        'صيغ الملكية: my / your / his / her / our / their / its',
+        'This is للمفرد و These are للجمع',
+        'سؤال الملكية وتطرقه مع aren\'t / isn\'t',
+      ],
+      blocks: [
+        {
+          type: 'table',
+          title: 'ضمائر الملكية — تعلمها مرة واحدة للأبد',
+          head: ['الفاعل', 'ملكيته'],
+          rows: [
+            ['I', 'my'], ['you', 'your'], ['he', 'his'], ['she', 'her'],
+            ['it', 'its'], ['we', 'our'], ['they', 'their'],
+          ],
+        },
+        {
+          type: 'rule',
+          title: 'This is مقابل These are',
+          body: 'المفرد: «This is my phone». الجمع: «These are their books» — لاحظ: أداة الجمع These يصحبها are/our/wrong الفعل، كما أن This يصحبها الواحد دوماً.',
+        },
+        {
+          type: 'tip',
+          title: 'فخ it/its/it\'s',
+          body: 'its = ملكية الشيء (The cat ate its food). it\'s = اختصار it is (It\'s late — it is late). العلامة الفارقة هي الفاصلة apostrophe.',
+        },
+      ],
+      examples: [
+        { text: 'This is my phone.', note: 'a monobook — this is + اسم مفرد' },
+        { text: 'These are their books.', note: 'these are + جمع' },
+        { text: 'Is this your car?', note: 'سؤال الملكية: Is this + your + اسم' },
+        { text: "It's her bag, not mine.", note: 'my/your/her — الملكية قبل الاسم مباشرة' },
+      ],
+      practice: [
+        { id: 'l11q1', question: 'أكمل: This is ___ book. (we)', options: ['my', 'our', 'their', 'your'], answer: 1, explanation: 'we ⇒ our — ملكيتنا نحن.' },
+        { id: 'l11q2', question: 'انفي: This is my bag.', options: ['This aren\'t my bag.', 'This isn\'t my bag.', 'These isn\'t my bag.', 'This not my bag.'], answer: 1, explanation: 'this ⇒ isn\'t — النفي المختصر للمفرد.' },
+        { id: 'l11q3', question: 'ترجم: «هذه كتبهم»', options: ['This is their books.', 'These are their books.', 'These is their books.', 'This are their books.'], answer: 1, explanation: 'جمع الكتب ⇒ these are + their.' },
+        { id: 'l11q4', question: 'ملكية «she» (الغائب المؤنث)؟', options: ['his', 'her', 'its', 'their'], answer: 1, explanation: 'she ⇒ her — مثل he ⇒ his.' },
+        { id: 'l11q5', question: 'اسأل: «هل هذه سيارتك؟»', options: ['Are this your car?', 'Is this your car?', 'Do this your car?', 'This is your car?'], answer: 1, explanation: 'this مفرد ⇒ is — والسؤال يبدأ بـ Is.' },
+        { id: 'l11q6', question: '«Her bag is new» تعني؟', options: ['حقيبته جديدة.', 'حقيبتها جديدة.', 'حقيبتك جديدة.', 'حقيبتنا جديدة.'], answer: 1, explanation: 'her = «ها» للغائبة — مثل his = «ه» للمذكر.' },
+      ],
+    },
+    {
+      id: 'l12-cafe',
+      order: 6,
+      title: 'حوار المقهى — من الدخول إلى الدفع بثقة',
+      estMinutes: 12,
+      objectives: [
+        'طلب شيء في مقهى بالإنجليزية بأدب',
+        'فهم ردود النادل الأساسية والتفاعل معها',
+        'إتمام مشهد كامل: دخول، طلب، دفع، مغادرة',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'العب الأدوار بصوت عالٍ: أولاً بوصفك الزبون، ثم بوصفك النادل. ثم استمع للحوار ثم مثّله كاملاً مع صديق. الهدف أن تصبح الجملة حركة تلقائية لا عملية ذهنية.',
+        },
+        {
+          type: 'table',
+          title: 'مفردات المقهى الذهبي',
+          head: ['الإنجليزية', 'العربية'],
+          rows: [
+            ['A coffee, please.', 'قهوة من فضلك'],
+            ['Anything else?', 'أي شيء آخر؟'],
+            ['A sandwich / a cake', 'ساندويتش / كعكة'],
+            ['How much is it?', 'بكم هذه؟'],
+            ['That\'s 60 pounds.', 'المجموع ٦٠ جنيهاً'],
+            ['You\'re welcome.', 'على الرحب والسعة'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Good morning.', note: 'تحية الدخول — صباح الخير' },
+        { text: 'Hi! A coffee, please.', note: 'الطلب المهذب بـ please' },
+        { text: 'Anything else?', note: 'سؤال النادل القياسي بعد طلبك' },
+        { text: "Yes, a cheese sandwich, please.", note: '«نعم» + طلب آخر + please' },
+        { text: "That's 60 pounds. Thank you.", note: 'السعر + الشكر' },
+        { text: "You're welcome. Have a nice day.", note: 'على الرحب والسعة + طاب يومك' },
+      ],
+      practice: [
+        { id: 'l12q1', question: 'ما أول شيء يريده الزبون؟', options: ['A tea', 'A coffee', 'A sandwich', 'A cake'], answer: 1, explanation: 'Hi! A coffee, please. — القهوة أولاً.' },
+        { id: 'l12q2', question: 'هل طلب شيئاً بالإضافة للقهوة؟', options: ['لا، فقط القهوة', 'نعم، ساندويتش جبنة', 'نعم، كعكة', 'نعم، شاي'], answer: 1, explanation: 'Yes, a cheese sandwich, please.' },
+        { id: 'l12q3', question: 'كم المجموع الكلي؟', options: ['20 pounds', '40 pounds', '60 pounds', '100 pounds'], answer: 2, explanation: "That's 60 pounds." },
+        { id: 'l12q4', question: 'ماذا يقول النادل في الختام؟', options: ['Goodbye', 'Good night', 'Have a nice day', 'See you tomorrow'], answer: 2, explanation: 'Have a nice day = طاب يومك — تحية المغادرة الأكثر لطفاً.' },
+        { id: 'l12q5', question: '«من فضلك» بالإنجليزية؟', options: ['Thank you', 'Please', 'Welcome', 'Sorry'], answer: 1, explanation: 'please — الكلمة التي تفتح كل الأبواب.' },
+        { id: 'l12q6', question: '«على الرحب والسعة» بالإنجليزية؟', options: ['Thank you', 'Please', 'Good luck', "You're welcome"], answer: 3, explanation: "You're welcome = على الرحب والسعة / عفواً." },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {
@@ -350,14 +656,16 @@ export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][nu
   return null;
 }
 
-/** الدروس مفتوحة بحسب إتمام ما قبلها — الترتيب هو القانون */
-export function lessonAvailability(
-  lessons: Unit['lessons'],
-  progress: Record<string, { completedAt: string; bestScore: number }>
-): Record<string, 'completed' | 'current' | 'locked'> {
+/** كل دروس المنهاج قيد الترتيب الزمني — المحطة الأولى ثم الثانية */
+export function allLessonsInOrder(): { unit: Unit; lesson: Unit['lessons'][number] }[] {
+  return UNITS.flatMap((unit) => unit.lessons.map((lesson) => ({ unit, lesson })));
+}
+
+/** توفر الدروب عبر المنهاج كله: يُفتح الدرس فقط بإتمام ما قبله — بما فيها حد المستويات */
+export function curriculumAvailability(progress: Record<string, { completedAt: string; bestScore: number }>): Record<string, 'completed' | 'current' | 'locked'> {
   const state: Record<string, 'completed' | 'current' | 'locked'> = {};
   let opened = false;
-  for (const lesson of [...lessons].sort((a, b) => a.order - b.order)) {
+  for (const { lesson } of allLessonsInOrder()) {
     if (progress[lesson.id]) {
       state[lesson.id] = 'completed';
     } else if (!opened) {
@@ -368,4 +676,11 @@ export function lessonAvailability(
     }
   }
   return state;
+}
+
+/** الدرس التالي بعد معرف درس ما — عبر المحطات كلها */
+export function nextLessonAfter(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {
+  const all = allLessonsInOrder();
+  const idx = all.findIndex((x) => x.lesson.id === id);
+  return idx >= 0 && idx + 1 < all.length ? all[idx + 1] : null;
 }
