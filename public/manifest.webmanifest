@@ -1,0 +1,21 @@
+{
+  "name": "طَلَاقَة — أكاديمية العرب السيادية للغة الإنجليزية",
+  "short_name": "طَلَاقَة",
+  "description": "توأم رقمي لمؤسسة تعليمية عريقة: من الصفر إلى C2، بلا خادم، بلا حساب، بلا تكلفة.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ar",
+  "orientation": "portrait-primary",
+  "theme_color": "#0E3B2C",
+  "background_color": "#0E3B2C",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
