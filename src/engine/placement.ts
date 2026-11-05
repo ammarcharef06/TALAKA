@@ -128,6 +128,12 @@ interface AnsweredItem {
 export class PlacementEngine {
   private estimates: Record<SectionId, number> = { rules: START_ESTIMATE, vocab: START_ESTIMATE, reading: START_ESTIMATE };
   private answeredItems: AnsweredItem[] = [];
+  /** مولّد العشوائية — قابل للحقن في الاختبارات لنتائج حتمية (لا يغيّر سلوك الإنتاج) */
+  private readonly rng: () => number;
+
+  constructor(rng: () => number = Math.random) {
+    this.rng = rng;
+  }
 
   get totalPlanned(): number {
     return ITEMS_PER_SECTION * SECTION_ORDER.length;
@@ -163,7 +169,7 @@ export class PlacementEngine {
     if (pool.length === 0) return null;
     pool.sort((a, b) => Math.abs(a.difficulty - est) - Math.abs(b.difficulty - est));
     const top = pool.slice(0, Math.min(3, pool.length));
-    return top[Math.floor(Math.random() * top.length)];
+    return top[Math.floor(this.rng() * top.length)];
   }
 
   /** تسجيل إجابة وتحديث التقدير الاحتمالي */

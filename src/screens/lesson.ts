@@ -1,6 +1,7 @@
 import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
 import { findLesson, UNITS } from '../data/academy/course';
+import { cardsForLesson } from '../data/academy/deck';
 import { markLessonComplete, getProgressMap } from '../store/db';
 import { session } from '../state';
 import { escapeHtml } from '../ui/confirm';
@@ -178,6 +179,7 @@ function renderLesson(root: HTMLElement): void {
           <p class="done-sub">الدرس ${lesson.order} — «${escapeHtml(lesson.title)}»</p>
           <div class="done-score" dir="ltr">${score}<small>%</small></div>
           <p class="done-best">أدق محاولة هذه: ${score}% · أفضل درجة لك على الإطلاق: <b>${best}%</b></p>
+          <p class="done-note">رفدت ردهة التكرار المتباعد بـ <b>${cardsForLesson(lesson.id).length} بطاقة</b> من هذا الدرس — ستطفو عليك قبل نسيانها بقليل.</p>
           <p class="done-note">ختم مكتب الفصل يُثبت إتمامك. سجلك الأكاديمي يزداد سطرًا، وهمتك تشتد — هذه طريقتك أنت للتخرج.</p>
           <div class="done-actions">
             ${nextLesson ? `<button id="nextLessonBtn" class="btn btn-primary btn-xl">الدرس التالي: ${escapeHtml(nextLesson.title.slice(0, 46))}${nextLesson.title.length > 46 ? '…' : ''}</button>` : '<p class="done-unit-complete">ختمت الوحدة الأولى كاملة — مبروك يا طالب طَلَاقَة.</p>'}

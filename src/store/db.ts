@@ -1,11 +1,13 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
 import type { StudentRecord } from '../types';
+import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
+const STORE_SRS = 'srs-cards';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -15,6 +17,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_STUDENTS)) db.createObjectStore(STORE_STUDENTS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_META)) db.createObjectStore(STORE_META, { keyPath: 'key' });
       if (!db.objectStoreNames.contains(STORE_PROGRESS)) db.createObjectStore(STORE_PROGRESS, { keyPath: 'lessonId' });
+      if (!db.objectStoreNames.contains(STORE_SRS)) db.createObjectStore(STORE_SRS, { keyPath: 'cardId' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -113,6 +116,39 @@ export async function markLessonComplete(lessonId: string, score: number): Promi
   }
 }
 
+/* ── بطاقات التكرار المتباعد ── */
+
+export async function getAllSrsStates(): Promise<Record<string, SrsState>> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_SRS, 'readonly');
+      const store = t.objectStore(STORE_SRS);
+      const req = store.getAll();
+      req.onsuccess = () => {
+        const map: Record<string, SrsState> = {};
+        for (const row of req.result as (SrsState & { cardId: string })[]) {
+          const { cardId, ...state } = row;
+          map[cardId] = state;
+        }
+        resolve(map);
+      };
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة بطاقات المراجعة'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+export async function recordReview(cardId: string, state: SrsState): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_SRS, 'readwrite', (s) => s.put({ cardId, ...state }));
+  } finally {
+    db.close();
+  }
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -126,6 +162,7 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_STUDENTS);
     await done(STORE_META);
     await done(STORE_PROGRESS);
+    await done(STORE_SRS);
   } finally {
     db.close();
   }

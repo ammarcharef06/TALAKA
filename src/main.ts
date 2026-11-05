@@ -11,6 +11,7 @@ import './screens/card.ts';
 import './screens/building.ts';
 import './screens/classroom.ts';
 import './screens/lesson.ts';
+import './screens/review.ts';
 
 import { go } from './router';
 

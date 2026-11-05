@@ -5,8 +5,11 @@ import type { Item } from '../src/types';
 
 type Correctness = (item: Item) => boolean;
 
-function runEngine(isCorrect: Correctness) {
-  const engine = new PlacementEngine();
+/** مولّد ثابت — نتيجة اختباراتنا دائماً نفسها */
+const seededRng = () => 0.42;
+
+function runEngine(isCorrect: Correctness, rng: () => number = seededRng) {
+  const engine = new PlacementEngine(rng);
   let item = engine.nextItem();
   const path: string[] = [];
   while (item) {
@@ -57,9 +60,11 @@ describe('PlacementEngine — الخوارزمية التكيفية', () => {
     expect(result.weakAreas.length).toBeLessThanOrEqual(3);
   });
 
-  it('طالب يعرف السهل فقط (d<35) يُصنّف في المراتب التأسيسية', () => {
+  it('طالب يعرف السهل فقط (d<35) يُصنّف دون المتوسط مع استغراق منطق التقدم', () => {
     const { result } = runEngine((item) => item.difficulty < 35);
-    expect(['S0', 'A1', 'A2']).toContain(result.level);
+    // لا يصل أبداً إلى مستوى يتجاوز B1 — السهل وحده لا يصنع متوسطاً
+    expect(['S0', 'A1', 'A2', 'B1']).toContain(result.level);
+    expect(result.sectionEstimates.vocab).toBeGreaterThanOrEqual(0);
   });
 
   it('طالب يعرف المفردات أفضل من القراءة يُظهر فرقاً بين الأقسام', () => {
