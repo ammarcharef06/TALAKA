@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   طَلَاقَة — رزمة بطاقات المحطة الأولى (47 بطاقة)
-   مشتقة حرفياً من دروس الوحدة: كل بطاقة مربوطة بدرسها
+   طَلَاقَة — رزمة بطاقات المنهاج (119 بطاقة)
+   مشتقة حرفياً من دروس المحطات الثلاث: كل بطاقة مربوطة بدرسها
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
 
@@ -121,6 +121,54 @@ export const SRS_DECK: DeckCard[] = [
   { id: 'c-l6-06', lessonId: 'l6-dialogue', front: 'كم عمر عمر في الحوار؟', back: '27', example: "I'm 27 years old.", note: 'I\'m 27 years old — لاحظ صيغة العمر' },
   { id: 'c-l6-07', lessonId: 'l6-dialogue', front: 'ماذا تقول قبل مغادرة الأكاديمية صباحاً؟', back: 'Goodbye / See you tomorrow', example: 'See you tomorrow at ten.', note: 'الودّع المناسب لكل سياق' },
   { id: 'c-l6-08', lessonId: 'l6-dialogue', front: 'رد مكتب القبول لما يسألك: What do you do?', back: "I'm a student.", example: "I'm a student. I study at Talaqa.", note: 'أثناء رحلتك — أنت طالب الآن' },
+
+  /* ── الدرس 13: الماضي المنتظم ── */
+  { id: 'c-l13-01', lessonId: 'l13-past-ed', front: 'ما ماضي الفعل work؟', back: 'worked', example: 'I worked late yesterday.', note: 'فعل منتظم: + ed' },
+  { id: 'c-l13-02', lessonId: 'l13-past-ed', front: 'ما ماضي الفعل study؟', back: 'studied', example: 'She studied English for two hours.', note: 'ساكن + y ← y تصبح i' },
+  { id: 'c-l13-03', lessonId: 'l13-past-ed', front: 'ما ماضي الفعل stop؟', back: 'stopped', example: 'They stopped at the station.', note: 'مقطع قصير مشدد ← نضاعف الحرف' },
+  { id: 'c-l13-04', lessonId: 'l13-past-ed', front: 'أي نهاية -ed تُنطق /ɪd/؟', back: 'بعد t أو d فقط', example: 'visited / wanted / needed', note: 'أما worked فـ/t/ وlived فـ/d/' },
+  { id: 'c-l13-05', lessonId: 'l13-past-ed', front: 'صحح: I did visited my aunt.', back: 'I visited my aunt.', example: 'I visited my aunt yesterday.', note: 'الماضي المنتظم لا يحتاج did' },
+  { id: 'c-l13-06', lessonId: 'l13-past-ed', front: 'أكمل: They ___ TV last night.', back: 'watched', example: 'They watched TV last night.', note: 'last night ← ماضٍ بسيط' },
+
+  /* ── الدرس 14: الأفعال الشاذة ── */
+  { id: 'c-l14-01', lessonId: 'l14-irregular', front: 'ما ماضي الفعل go؟', back: 'went', example: 'I went to the market yesterday.', note: 'go ← went ← gone' },
+  { id: 'c-l14-02', lessonId: 'l14-irregular', front: 'ما ماضي الفعل see؟', back: 'saw', example: 'She saw her friend at the café.', note: 'see ← saw ← seen' },
+  { id: 'c-l14-03', lessonId: 'l14-irregular', front: 'أكمل: I didn\'t ___ to school.', back: 'go', example: "I didn't go to school yesterday.", note: 'بعد didn\'t: الفعل المجرد' },
+  { id: 'c-l14-04', lessonId: 'l14-irregular', front: 'ما ماضي الفعل have؟', back: 'had', example: 'He had a busy day.', note: 'have ← had' },
+  { id: 'c-l14-05', lessonId: 'l14-irregular', front: 'ما ماضي الفعل make؟', back: 'made', example: 'They made a big cake.', note: 'make ← made' },
+  { id: 'c-l14-06', lessonId: 'l14-irregular', front: 'صحح: We didn\'t saw the film.', back: "We didn't see the film.", example: "We didn't see the film.", note: 'didn\'t + see — لا saw' },
+
+  /* ── الدرس 15: أسئلة الماضي ── */
+  { id: 'c-l15-01', lessonId: 'l15-did', front: 'اسأل: «هل زرت المتحف؟»', back: 'Did you visit the museum?', example: 'Did you visit the museum yesterday?', note: 'Did + فاعل + فعل مجرد' },
+  { id: 'c-l15-02', lessonId: 'l15-did', front: 'اسأل: «هل اتصلت بك؟»', back: 'Did she call you?', example: 'Did she call you last night?', note: 'لا Did she called' },
+  { id: 'c-l15-03', lessonId: 'l15-did', front: 'الرد المختصر على: Did they arrive?', back: 'Yes, they did.', example: 'Yes, they did. They arrived at nine.', note: 'الرد بالمساعد did' },
+  { id: 'c-l15-04', lessonId: 'l15-did', front: 'اسأل: «أين ذهبت؟»', back: 'Where did you go?', example: 'Where did you go last weekend?', note: 'wh + did + فاعل + فعل مجرد' },
+  { id: 'c-l15-05', lessonId: 'l15-did', front: 'صحح: Did you saw him?', back: 'Did you see him?', example: 'Did you see him at the party?', note: 'بعد Did: see لا saw' },
+  { id: 'c-l15-06', lessonId: 'l15-did', front: 'أكمل: When ___ you start?', back: 'did', example: 'When did you start learning English?', note: 'السؤال في الماضي يبدأ بـ did' },
+
+  /* ── الدرس 16: المستقبل ── */
+  { id: 'c-l16-01', lessonId: 'l16-future', front: 'عبّر عن خطة: «سأزور جدتي غداً»', back: "I'm going to visit my grandmother tomorrow.", example: "I'm going to visit my grandmother tomorrow.", note: 'خطة مسبقة ← going to' },
+  { id: 'c-l16-02', lessonId: 'l16-future', front: 'عبّر عن وعد: «سأساعدك»', back: "I'll help you.", example: "Don't worry — I'll help you.", note: 'وعد لحظي ← will' },
+  { id: 'c-l16-03', lessonId: 'l16-future', front: 'صحح: I will going to Cairo.', back: 'I am going to Cairo. / I will go to Cairo.', example: "I'm going to Cairo next week.", note: 'لا نجمع will مع going' },
+  { id: 'c-l16-04', lessonId: 'l16-future', front: 'انظر للسحب — ماذا تقول؟', back: "It's going to rain.", example: "Look at those clouds! It's going to rain.", note: 'دليل مرئي ← going to' },
+  { id: 'c-l16-05', lessonId: 'l16-future', front: 'انفِ: She will come tomorrow.', back: "She won't come tomorrow.", example: "She won't come tomorrow.", note: "won't = will not" },
+  { id: 'c-l16-06', lessonId: 'l16-future', front: 'اسأل: «هل ستسافر الأسبوع القادم؟»', back: 'Are you going to travel next week?', example: 'Are you going to travel next week?', note: 'going to تحتاج are' },
+
+  /* ── الدرس 17: المقارنة والتفضيل ── */
+  { id: 'c-l17-01', lessonId: 'l17-compare', front: 'ما مقارنة big؟', back: 'bigger', example: 'Cairo is bigger than Alexandria.', note: 'نضاعف g ثم نضيف er' },
+  { id: 'c-l17-02', lessonId: 'l17-compare', front: 'أكمل: Cairo is ___ than Alexandria.', back: 'bigger', example: 'Cairo is bigger than Alexandria.', note: 'مقارنة بين مدينتين' },
+  { id: 'c-l17-03', lessonId: 'l17-compare', front: 'ما تفضيل good؟', back: 'the best', example: 'She is the best teacher in the school.', note: 'good ← better ← the best' },
+  { id: 'c-l17-04', lessonId: 'l17-compare', front: 'صحح: This is more better.', back: 'This is better.', example: 'This phone is better than mine.', note: 'لا more مع better' },
+  { id: 'c-l17-05', lessonId: 'l17-compare', front: 'ما تفضيل beautiful؟', back: 'the most beautiful', example: 'This is the most beautiful place I have seen.', note: 'صفة طويلة ← the most' },
+  { id: 'c-l17-06', lessonId: 'l17-compare', front: 'ما مقارنة bad؟', back: 'worse', example: 'My old phone was worse than this one.', note: 'bad ← worse ← the worst' },
+
+  /* ── الدرس 18: حوار الرحلة ── */
+  { id: 'c-l18-01', lessonId: 'l18-trip', front: 'إلى أين سافر عمر؟', back: 'Luxor', example: 'How was your trip to Luxor?', note: 'من نص الحوار' },
+  { id: 'c-l18-02', lessonId: 'l18-trip', front: 'كيف كانت رحلة عمر؟', back: 'It was amazing!', example: 'It was amazing! We went by train.', note: 'was + went — ماضٍ بسيط' },
+  { id: 'c-l18-03', lessonId: 'l18-trip', front: 'كيف سافر عمر إلى الأقصر؟', back: 'by train', example: 'We went by train.', note: 'by + وسيلة النقل' },
+  { id: 'c-l18-04', lessonId: 'l18-trip', front: 'ماذا زار عمر هناك؟', back: 'Karnak Temple and the Valley of the Kings', example: 'We saw Karnak Temple and the Valley of the Kings.', note: 'saw = ماضي see' },
+  { id: 'c-l18-05', lessonId: 'l18-trip', front: 'ماذا سيفعل عمر السنة القادمة؟', back: "He's going to visit Aswan.", example: "Next year I'm going to visit Aswan.", note: 'خطة مستقبلية ← going to' },
+  { id: 'c-l18-06', lessonId: 'l18-trip', front: 'أي مدينة أهدأ: الأقصر أم أسوان؟', back: 'Aswan', example: 'Aswan is quieter than Luxor.', note: 'quiet ← quieter' },
 ];
 
 /** بطاقات درس معين — للإشعار «وُلدت بطاقات جديدة» */

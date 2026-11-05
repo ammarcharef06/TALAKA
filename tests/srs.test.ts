@@ -54,13 +54,13 @@ describe('الرزمة — نزاهة المحتوى', () => {
     expect(ok).toBe(true);
   });
 
-  it('كل الدروس الستة + الستة الثانية تملك بطاقات، والرزمة ≥ 80', () => {
+  it('كل دروس المحطات الثلاث تملك بطاقات، والرزمة ≥ 100', () => {
     for (const unit of UNITS) {
       for (const lesson of unit.lessons) {
         expect(cardsForLesson(lesson.id).length).toBeGreaterThanOrEqual(6);
       }
     }
-    expect(SRS_DECK.length).toBeGreaterThanOrEqual(80);
+    expect(SRS_DECK.length).toBeGreaterThanOrEqual(100);
   });
 
   it('countDueCards: البطاقة لا تستحق إلا بعد إتمام درسها، أو بدون حالة أو بموعد سابق', () => {

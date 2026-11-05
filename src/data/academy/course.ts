@@ -645,7 +645,324 @@ export const UNIT_02: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02];
+export const UNIT_03: Unit = {
+  id: 'm2-past-future',
+  order: 3,
+  title: 'المحطة الثالثة — الزمن يتكلم (A2)',
+  tagline: 'الماضي والمستقبل والمقارنة: تحكي ما حدث، تخطط لما سيأتي، وتختار الأفضل — وحوار رحلة ختماً',
+  forLevels: 'A2',
+  lessons: [
+    {
+      id: 'l13-past-ed',
+      order: 1,
+      title: 'البارحة — الماضي البسيط للأفعال المنتظمة',
+      estMinutes: 11,
+      objectives: [
+        'تحويل الفعل المنتظم إلى الماضي بإضافة -ed',
+        'إتقان قواعد الكتابة: lived / studied / stopped',
+        'تمييز نطق -ed الثلاثة: /t/ و/d/ و/ɪd/',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'الماضي البسيط: فعلٌ انتهى في وقت محدد',
+          body: 'الماضي البسيط يحكي فعلاً انتهى في وقت محدد: yesterday، last night، two days ago، in 2020. الأفعال المنتظمة تأخذ -ed: work ← worked. ولا نضع was/were قبل الفعل: لا «I was visit» بل «I visited».',
+        },
+        {
+          type: 'table',
+          title: 'من المضارع إلى الماضي',
+          head: ['المضارع', 'الماضي'],
+          rows: [
+            ['work', 'worked'],
+            ['live', 'lived'],
+            ['study', 'studied'],
+            ['stop', 'stopped'],
+            ['watch', 'watched'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'قبل -ed: ثلاث قواعد كتابة',
+          body: 'الفعل المنتهي بـ e يأخذ d فقط (live ← lived). والفعل المنتهي بحرف ساكن + y يقلبها إلى i (study ← studied). والمقطع القصير المشدد يضاعف الحرف الأخير (stop ← stopped).',
+        },
+        {
+          type: 'tip',
+          title: 'نطق -ed: ثلاثة أصوات لا صوت واحد',
+          body: '/t/ بعد الأصوات المهموسة: worked, watched, stopped. /d/ بعد الأصوات المجهورة والعلل: lived, played, opened. /ɪd/ بعد t أو d فقط: visited, wanted, needed. لا تنطق -ed مقطعين في كل مرة.',
+        },
+      ],
+      examples: [
+        { text: 'I visited my uncle last Friday.', note: 'visited — /ɪd/ لأن الفعل ينتهي بـ t' },
+        { text: 'She studied English for two hours.', note: 'studied — /d/ بعد صوت علة' },
+        { text: 'We watched a film last night.', note: 'watched — /t/ بعد ch' },
+        { text: 'They stopped at the station.', note: 'stopped — /t/ والحرف الأخير تضاعف' },
+        { text: 'He lived in Cairo in 2020.', note: 'lived — /d/ وe موجودة أصلاً' },
+        { text: 'I wanted to call you.', note: 'wanted — /ɪd/ لأن الفعل ينتهي بـ t' },
+      ],
+      practice: [
+        { id: 'l13q1', question: 'ما ماضي الفعل work؟', options: ['workd', 'worked', 'workied', 'working'], answer: 1, explanation: 'work فعل منتظم: نضيف -ed مباشرة ← worked.' },
+        { id: 'l13q2', question: 'ما ماضي الفعل study؟', options: ['studyed', 'studied', 'studed', 'study'], answer: 1, explanation: 'study ينتهي بساكن + y: نقلب y إلى i ثم نضيف ed ← studied.' },
+        { id: 'l13q3', question: 'ما ماضي الفعل stop؟', options: ['stoped', 'stopped', 'stopt', 'stopping'], answer: 1, explanation: 'stop مقطع قصير مشدد: نضاعف p ثم نضيف ed ← stopped.' },
+        { id: 'l13q4', question: 'أي كلمة ينتهي ماضيها بالصوت /ɪd/؟', options: ['worked', 'watched', 'visited', 'lived'], answer: 2, explanation: 'visited تنتهي بـ t، فتُنطق -ed مقطعاً كاملاً /ɪd/. أما worked وwatched فـ/t/ وlived فـ/d/.' },
+        { id: 'l13q5', question: 'أي جملة صحيحة؟', options: ['I did visited my aunt yesterday.', 'I was visit my aunt yesterday.', 'I visited my aunt yesterday.', 'I visit my aunt yesterday.'], answer: 2, explanation: 'الماضي المنتظم لا يحتاج did ولا was: I visited. did تأتي مع الفعل المجرد في النفي والسؤال فقط.' },
+        { id: 'l13q6', question: 'أكمل: They ___ TV last night.', options: ['watch', 'watched', 'watching', 'watches'], answer: 1, explanation: 'last night زمن ماضٍ محدد ← watched.' },
+      ],
+    },
+    {
+      id: 'l14-irregular',
+      order: 2,
+      title: 'ذهبتُ ورأيتُ وأكلتُ — الأفعال الشاذة',
+      estMinutes: 11,
+      objectives: [
+        'حفظ أشهر الأفعال الشاذة في الماضي',
+        'بناء النفي بـ didn\'t + الفعل المجرد',
+        'تجنب فخ «I didn\'t went»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'الشاذ لا يأخذ -ed — يتغير كاملاً',
+          body: 'كثير من أفعال الإنجليزية الأكثر استخداماً شاذة: go ← went، see ← saw، eat ← ate. لا نضيف -ed لها. وفي النفي نستخدم didn\'t + الفعل المجرد: «I didn\'t go» وليس «I didn\'t went».',
+        },
+        {
+          type: 'table',
+          title: 'أفعال لا بد من حفظها',
+          head: ['المضارع', 'الماضي'],
+          rows: [
+            ['go', 'went'],
+            ['see', 'saw'],
+            ['eat', 'ate'],
+            ['have', 'had'],
+            ['make', 'made'],
+            ['come', 'came'],
+            ['take', 'took'],
+            ['buy', 'bought'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'بعد didn\'t يعود الفعل إلى أصله',
+          body: 'didn\'t تحمل زمن الماضي بالفعل، لذا الفعل بعدها يبقى مجرداً: «She didn\'t come» لا «She didn\'t came». الخطأ نفسه في السؤال: «Did you see?» لا «Did you saw?».',
+        },
+      ],
+      examples: [
+        { text: 'I went to the market yesterday.', note: 'went = ماضي go' },
+        { text: 'She saw her friend at the café.', note: 'saw = ماضي see' },
+        { text: 'We ate fish for dinner.', note: 'ate = ماضي eat' },
+        { text: 'He had a busy day.', note: 'had = ماضي have' },
+        { text: 'They made a big cake.', note: 'made = ماضي make' },
+        { text: "I didn't buy anything.", note: 'بعد didn\'t: buy مجردة' },
+      ],
+      practice: [
+        { id: 'l14q1', question: 'ما ماضي الفعل go؟', options: ['goed', 'went', 'gone', 'going'], answer: 1, explanation: 'go شاذ: ماضيه went، وgone هي التصريف الثالث.' },
+        { id: 'l14q2', question: 'ما ماضي الفعل see؟', options: ['seed', 'saw', 'seen', 'sawed'], answer: 1, explanation: 'see ← saw ← seen. الماضي البسيط هو saw.' },
+        { id: 'l14q3', question: 'أكمل: I didn\'t ___ to school yesterday.', options: ['went', 'go', 'gone', 'going'], answer: 1, explanation: 'بعد didn\'t يأتي الفعل المجرد: didn\'t go.' },
+        { id: 'l14q4', question: 'أكمل: She ___ a great time in Alexandria.', options: ['have', 'has', 'had', 'having'], answer: 2, explanation: 'الجملة في الماضي ← had (ماضي have).' },
+        { id: 'l14q5', question: 'أي جملة نفي صحيحة؟', options: ["We didn't saw the film.", "We didn't see the film.", "We don't saw the film.", 'We not saw the film.'], answer: 1, explanation: 'didn\'t + see (الفعل المجرد) — لا saw بعد didn\'t.' },
+        { id: 'l14q6', question: 'أكمل: He ___ a mistake in the exam.', options: ['make', 'made', 'makes', 'making'], answer: 1, explanation: 'الحدث انتهى في الماضي ← made (ماضي make).' },
+      ],
+    },
+    {
+      id: 'l15-did',
+      order: 3,
+      title: 'هل فعلتَ؟ — أسئلة الماضي بـ Did',
+      estMinutes: 10,
+      objectives: [
+        'صياغة سؤال نعم/لا في الماضي',
+        'صياغة أسئلة wh بالماضي',
+        'الرد المختصر بـ did / didn\'t',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'السؤال في الماضي: Did + الفاعل + الفعل المجرد',
+          body: 'نبدأ بـ Did ثم الفاعل ثم الفعل المجرد: «Did you visit Luxor?». الزمن كله في Did، فلا نعيده في الفعل. الرد المختصر: «Yes, I did» أو «No, I didn\'t».',
+        },
+        {
+          type: 'table',
+          title: 'أسئلة وردود جاهزة',
+          head: ['السؤال', 'الرد'],
+          rows: [
+            ['Did you visit Luxor?', "Yes, I did. / No, I didn't."],
+            ['Where did you stay?', 'We stayed in a small hotel.'],
+            ['What did you eat?', 'I ate fish and rice.'],
+            ['When did she arrive?', 'She arrived at nine.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: Did you saw?',
+          body: 'بعد Did يبقى الفعل مجرداً دائماً: «Did you see him?» لا «Did you saw him?». وكذلك في السؤال بـ wh: «Where did you go?» لا «Where did you went?».',
+        },
+      ],
+      examples: [
+        { text: 'Did you go to Luxor last week?', note: 'Did + you + go' },
+        { text: 'Yes, I did. It was wonderful.', note: 'رد مختصر بالمساعد did' },
+        { text: 'Where did you stay?', note: 'wh + did + فاعل + فعل مجرد' },
+        { text: 'We stayed in a small hotel.', note: 'الرد في الماضي: stayed' },
+        { text: 'What did you eat there?', note: 'سؤال عن الطعام في الماضي' },
+        { text: 'I ate fish and rice.', note: 'ate ماضي eat — شاذ' },
+      ],
+      practice: [
+        { id: 'l15q1', question: 'أكمل: Did you ___ the museum?', options: ['visited', 'visit', 'visiting', 'visits'], answer: 1, explanation: 'بعد Did يأتي الفعل المجرد: Did you visit…؟' },
+        { id: 'l15q2', question: 'أي سؤال صحيح؟', options: ['Did she called you?', 'Did she call you?', 'Did she calls you?', 'Does she called you?'], answer: 1, explanation: 'Did + الفاعل + الفعل المجرد: Did she call you?' },
+        { id: 'l15q3', question: 'ما الرد الصحيح على: Did they arrive?', options: ['Yes, they are.', 'Yes, they did.', 'Yes, they do.', 'Yes, they arrived did.'], answer: 1, explanation: 'الرد المختصر يستخدم المساعد نفسه: Yes, they did.' },
+        { id: 'l15q4', question: 'أكمل: Where did you ___ last weekend?', options: ['went', 'go', 'going', 'gone'], answer: 1, explanation: 'بعد did: الفعل المجرد go، حتى مع where.' },
+        { id: 'l15q5', question: 'أي سؤال صحيح؟', options: ['Did you saw him?', 'Did you see him?', 'Did you seen him?', 'Do you saw him?'], answer: 1, explanation: 'Did + see — لا saw ولا seen بعد Did.' },
+        { id: 'l15q6', question: 'أكمل: When ___ you start learning English?', options: ['do', 'did', 'are', 'was'], answer: 1, explanation: 'start فعل في الماضي (بدأت سابقاً) ← When did you start…?' },
+      ],
+    },
+    {
+      id: 'l16-future',
+      order: 4,
+      title: 'الغد — will أم going to؟',
+      estMinutes: 11,
+      objectives: [
+        'الفرق بين will وbe going to',
+        'التحدث عن الخطط والوعود والتوقعات',
+        'تجنب فخ «I will going»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'طريقتان للمستقبل — ولكلٍّ وظيفتها',
+          body: 'will + الفعل المجرد: للقرار اللحظي، الوعد، والتوقع. be going to + الفعل المجرد: للخطة المسبقة أو الدليل المرئي. لا نقول «I will going»: إما «I will go» أو «I am going to go».',
+        },
+        {
+          type: 'table',
+          title: 'will أم going to؟',
+          head: ['الموقف', 'الجملة'],
+          rows: [
+            ['وعد', "I'll help you."],
+            ['خطة مسبقة', "I'm going to study tonight."],
+            ['توقع/حقيقة مستقبلية', 'She will be 20 next year.'],
+            ['دليل مرئي الآن', "Look! It's going to rain."],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تجمع will مع going',
+          body: 'will لا تتبعها to: «I will help you» لا «I will to help». وgoing to تسبقها am/is/are: «She is going to travel». الجمع بينهما: «I will going» خطأ مزدوج.',
+        },
+      ],
+      examples: [
+        { text: "I'm going to visit my grandmother tomorrow.", note: 'خطة مسبقة ← going to' },
+        { text: "Don't worry — I'll help you.", note: 'وعد لحظي ← will' },
+        { text: "She's going to start a new job next month.", note: 'خطة مرتبة ← going to' },
+        { text: "It's going to rain; look at the sky!", note: 'دليل مرئي ← going to' },
+        { text: "I won't forget your birthday.", note: "won't = will not" },
+        { text: 'Will you come to the party?', note: 'عرض/سؤال عن المستقبل بـ will' },
+      ],
+      practice: [
+        { id: 'l16q1', question: 'أكمل: I ___ visit my grandmother tomorrow. (خطة مسبقة)', options: ['will', 'am going to', 'going to', 'will to'], answer: 1, explanation: 'الخطة المسبقة تأخذ am/is/are + going to + فعل مجرد.' },
+        { id: 'l16q2', question: 'أكمل: Don\'t worry — I ___ help you. (وعد)', options: ['am going to', 'will', 'will to', 'going'], answer: 1, explanation: 'الوعد اللحظي يأخذ will + الفعل المجرد.' },
+        { id: 'l16q3', question: 'أي جملة صحيحة؟', options: ['I will going to Cairo.', 'I am going to Cairo.', 'I will to Cairo.', 'I am go to Cairo.'], answer: 1, explanation: 'إما I will go to Cairo أو I am going to Cairo — لا نجمع will مع going.' },
+        { id: 'l16q4', question: 'أكمل: Look at those clouds! It ___ rain.', options: ['will', 'is going to', 'goes to', 'going to'], answer: 1, explanation: 'دليل مرئي أمامك الآن ← is going to rain.' },
+        { id: 'l16q5', question: 'أكمل: She ___ come tomorrow. (نفي)', options: ["don't", "won't", "isn't go", "not will"], answer: 1, explanation: "نفي will هو won't: She won't come tomorrow." },
+        { id: 'l16q6', question: 'أكمل: ___ you going to travel next week?', options: ['Do', 'Are', 'Did', 'Will'], answer: 1, explanation: 'going to تحتاج فعل الكينونة: Are you going to travel…؟' },
+      ],
+    },
+    {
+      id: 'l17-compare',
+      order: 5,
+      title: 'أفضل من… — المقارنة والتفضيل',
+      estMinutes: 11,
+      objectives: [
+        'المقارنة بين شيئين بـ -er / more',
+        'التفضيل بـ the -est / the most',
+        'تجنب فخ «more better»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'المقارنة بين اثنين، والتفضيل بين الجميع',
+          body: 'للمقارنة بين شيئين: الصفة القصيرة + er + than (bigger than)، والصفة الطويلة more + الصفة + than (more beautiful than). للتفضيل: the + est (the biggest) أو the most + الصفة (the most beautiful).',
+        },
+        {
+          type: 'table',
+          title: 'الدرجات الثلاث',
+          head: ['الصفة', 'المقارنة / التفضيل'],
+          rows: [
+            ['big', 'bigger / the biggest'],
+            ['easy', 'easier / the easiest'],
+            ['beautiful', 'more beautiful / the most beautiful'],
+            ['good', 'better / the best'],
+            ['bad', 'worse / the worst'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ الأشهر: more better',
+          body: 'لا تجمع more مع -er: «more better» و«more easier» خطأ. الصواب «better» و«easier» وحدها. وإذا كانت الصفة طويلة، استخدم more فقط: «more interesting».',
+        },
+      ],
+      examples: [
+        { text: 'Cairo is bigger than Alexandria.', note: 'big ← bigger + than' },
+        { text: 'This book is more interesting than that one.', note: 'صفة طويلة ← more + صفة' },
+        { text: 'She is the best teacher in the school.', note: 'good ← better ← the best' },
+        { text: 'Today is hotter than yesterday.', note: 'hot ← hotter (تضعيف الحرف)' },
+        { text: 'This is the most beautiful place I have seen.', note: 'صفة طويلة ← the most' },
+        { text: 'My old phone was worse than this one.', note: 'bad ← worse ← the worst' },
+      ],
+      practice: [
+        { id: 'l17q1', question: 'ما صيغة المقارنة من big؟', options: ['bigger', 'more big', 'biggest', 'biger'], answer: 0, explanation: 'big صفة قصيرة: نضاعف g ونضيف er ← bigger.' },
+        { id: 'l17q2', question: 'أكمل: Cairo is ___ than Alexandria.', options: ['big', 'bigger', 'biggest', 'more big'], answer: 1, explanation: 'مقارنة بين مدينتين ← bigger than.' },
+        { id: 'l17q3', question: 'ما صيغة التفضيل من good؟', options: ['gooder', 'better', 'best', 'most good'], answer: 2, explanation: 'good ← better ← the best. التفضيل هو best.' },
+        { id: 'l17q4', question: 'أي عبارة صحيحة؟', options: ['more better', 'better than', 'more good', 'most better'], answer: 1, explanation: 'better هي المقارنة الصحيحة، وتتبعها than. لا more مع better.' },
+        { id: 'l17q5', question: 'ما تفضيل الصفة beautiful؟', options: ['the most beautiful', 'the beautifulest', 'more beautiful', 'most beautiful than'], answer: 0, explanation: 'صفة طويلة: the most + الصفة ← the most beautiful.' },
+        { id: 'l17q6', question: 'أكمل: This book is ___ than that one.', options: ['interesting', 'more interesting', 'most interesting', 'interestinger'], answer: 1, explanation: 'interesting صفة طويلة ← more interesting than.' },
+      ],
+    },
+    {
+      id: 'l18-trip',
+      order: 6,
+      title: 'حوار الرحلة — «كيف كانت رحلتك؟»',
+      estMinutes: 12,
+      objectives: [
+        'استخدام الماضي والمستقبل والمقارنة في حوار واحد',
+        'فهم حوار سفر كامل والإجابة عن أسئلته',
+        'التحدث عن رحلة حقيقية بثقة',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'في هذا الحوار ستسمع الماضي (كيف كانت الرحلة)، والمقارنة (أجمل مكان)، والمستقبل (ما ستفعله السنة القادمة). اقرأ كل جملة بصوت مسموع، ثم أجب عن الأسئلة دون النظر إلى النص.',
+        },
+        {
+          type: 'table',
+          title: 'عبارات الرحلة الجاهزة',
+          head: ['العبارة', 'المعنى'],
+          rows: [
+            ['How was your trip?', 'كيف كانت رحلتك؟'],
+            ['It was amazing!', 'كانت رائعة!'],
+            ['We went by train.', 'ذهبنا بالقطار.'],
+            ["Next year I'm going to visit Aswan.", 'السنة القادمة سأزور أسوان.'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Layla: Hi Omar! How was your trip to Luxor?', note: 'سؤال عن رحلة في الماضي' },
+        { text: 'Omar: It was amazing! We went by train.', note: 'was + went — ماضٍ بسيط' },
+        { text: 'Layla: What did you see there?', note: 'سؤال ماضٍ بـ did' },
+        { text: 'Omar: We saw Karnak Temple and the Valley of the Kings.', note: 'saw = ماضي see' },
+        { text: 'Layla: Which place was the most beautiful?', note: 'تفضيل: the most beautiful' },
+        { text: "Omar: Karnak, I think. Next year I'm going to visit Aswan.", note: 'مستقبل بخطة مسبقة' },
+        { text: 'Layla: Aswan is quieter than Luxor. You will love it.', note: 'مقارنة: quieter than' },
+      ],
+      practice: [
+        { id: 'l18q1', question: 'إلى أين سافر عمر؟', options: ['Aswan', 'Luxor', 'Cairo', 'Alexandria'], answer: 1, explanation: 'السؤال: How was your trip to Luxor? — الرحلة كانت إلى الأقصر.' },
+        { id: 'l18q2', question: 'كيف كانت الرحلة؟', options: ['سيئة', 'عادية', 'رائعة', 'متعبة'], answer: 2, explanation: 'It was amazing! = كانت رائعة.' },
+        { id: 'l18q3', question: 'كيف سافر عمر؟', options: ['بالطائرة', 'بالسيارة', 'بالقطار', 'بالسفينة'], answer: 2, explanation: 'We went by train = سافرنا بالقطار.' },
+        { id: 'l18q4', question: 'ماذا زار عمر في الأقصر؟', options: ['المتحف المصري', 'معبد الكرنك ووادي الملوك', 'برج القاهرة', 'مكتبة الإسكندرية'], answer: 1, explanation: 'We saw Karnak Temple and the Valley of the Kings.' },
+        { id: 'l18q5', question: 'ماذا سيفعل عمر السنة القادمة؟', options: ['سيزور أسوان', 'سيسافر إلى الأقصر', 'سيشتري سيارة', 'سيتعلم الفرنسية'], answer: 0, explanation: "Next year I'm going to visit Aswan." },
+        { id: 'l18q6', question: 'أي مدينة أهدأ حسب ليلى؟', options: ['الأقصر', 'القاهرة', 'أسوان', 'الإسكندرية'], answer: 2, explanation: 'Aswan is quieter than Luxor = أسوان أهدأ من الأقصر.' },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {
