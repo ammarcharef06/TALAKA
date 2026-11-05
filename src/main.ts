@@ -12,6 +12,7 @@ import './screens/building.ts';
 import './screens/classroom.ts';
 import './screens/lesson.ts';
 import './screens/review.ts';
+import './screens/cafe.ts';
 
 import { go } from './router';
 

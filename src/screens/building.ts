@@ -18,7 +18,7 @@ const HALLS: Hall[] = [
   { id: 'classroom', name: 'الفصل الافتراضي', desc: 'المحطتان الأولى والثانية — اثنا عشر درساً من الحروف حتى حوار المقهى وثقة الحديث', icon: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.5v4.8c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7v-4.8"/><path d="M21.5 9.5V15"/>' },
   { id: 'review', name: 'ردهة التكرار المتباعد', desc: 'بطاقات تُعيد لك معرفتك قبل نسيانها — بلا ضغط ولا نقاط، فقط تذكير في موعده', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>' },
   { id: 'library', name: 'المكتبة', desc: 'كتب ومنهج متدرج من S0 إلى C2 — تقرأ في أي ساعة تشاء', icon: '<path d="M4 6a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M19 14H6a2 2 0 0 0-2 2"/>' },
-  { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'سيناريوهات واقعية: مطار، مقهى، مقابلة — وطلاقة تتحدث بلا رهبة', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
+  { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'أول حوار صوتي حقيقي مع «بسام» — تحدث بميكروفونك أو اكتب، واختم الصورة في سجلك', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
   { id: 'transcript', name: 'السجل الأكاديمي', desc: 'Transcript كامل بدرجاتك — وثيقتك الرسمية للجامعة والمهنة', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9.5 8h5M9.5 12h5"/>' },
   { id: 'career', name: 'المسار المهني — Career Hub', desc: 'تدريب مكثف على مقابلات العمل بالإنجليزية حتى التوقيع', icon: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>' },
@@ -43,7 +43,7 @@ function renderBuilding(root: HTMLElement): void {
 
   <section class="building-hero">
     <h1 class="building-title">مبنى الأكاديمية</h1>
-    <p class="building-sub">اختر جناحاً. الأجنحة تُفتتح حين يكتمل بناؤها —<br/>واليوم، <b>قاعة الاختبارات</b> تنتظرك يا طالب طلاقة.</p>
+    <p class="building-sub">اختر جناحاً. الأجنحة تُفتتح حين يكتمل بناؤها —<br/>واليوم، <b>المقهى</b> يفتح أبوابه لصوتك، والفصل وردهة المراجعة ينتظرانك.</p>
   </section>
 
   <section class="halls-grid" id="hallsGrid" aria-label="أجنحة الأكاديمية"></section>
@@ -69,6 +69,7 @@ function renderBuilding(root: HTMLElement): void {
       if (h.id === 'exam') return examHallCard(student);
       if (h.id === 'classroom') return classroomHallCard();
       if (h.id === 'review') return reviewHallCard();
+      if (h.id === 'cafe') return cafeHallCard();
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -88,6 +89,7 @@ function renderBuilding(root: HTMLElement): void {
     });
     grid.querySelector<HTMLButtonElement>('#enterClassroomBtn')?.addEventListener('click', () => go('classroom'));
     grid.querySelector<HTMLButtonElement>('#enterReviewBtn')?.addEventListener('click', () => go('review'));
+    grid.querySelector<HTMLButtonElement>('#enterCafeBtn')?.addEventListener('click', () => go('cafe'));
 
     // عدّاد إتمام الوحدة الأولى + عدد البطاقات المستحقة
     void Promise.all([getProgressMap(), getAllSrsStates()]).then(([map, states]) => {
@@ -101,6 +103,13 @@ function renderBuilding(root: HTMLElement): void {
       if (reviewEl) {
         const due = countDueCards(states, map);
         reviewEl.textContent = due === 0 ? 'لا توجد بطاقات مستحقة الآن' : `${due} بطاقة تنتظرك اليوم`;
+      }
+      const cafeEl = grid.querySelector<HTMLElement>('#cafeDone');
+      if (cafeEl) {
+        const scene = map['scene-cafe-1'];
+        cafeEl.textContent = scene
+          ? `أفضل محاولة ${scene.bestScore}% — أعد الحوار متى شئت`
+          : 'صورة واحدة متاحة اليوم — بانتظار صوتك';
       }
     });
   });
@@ -148,6 +157,17 @@ function reviewHallCard(): string {
     <span class="hall-desc">بطاقات مولّدة من دروسك — تعاد لك قبل نسيانها بدقائق، بخوارزمية SM-2 الحقيقية</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg><span id="reviewDue">جارٍ حساب استحقاقاتك…</span></span>
     <button id="enterReviewBtn" class="btn btn-gold hall-enter-btn">ادخل الردهة — ذاكرتك أولاً</button>
+  </div>`;
+}
+
+function cafeHallCard(): string {
+  return `
+  <div class="hall hall-open" role="group" aria-label="مقهى طَلَاقَة">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'cafe')!.icon)}</span>
+    <span class="hall-name">مقهى طَلَاقَة</span>
+    <span class="hall-desc">أول حوار صوتي حقيقي: اطلب من «بسام» قهوة وساندويتشاً، وادفع — بميكروفونك أو بلوحة المفاتيح</span>
+    <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span id="cafeDone">جارٍ فتح المقهى…</span></span>
+    <button id="enterCafeBtn" class="btn btn-gold hall-enter-btn">ادخل المقهى — تحدث الآن</button>
   </div>`;
 }
 

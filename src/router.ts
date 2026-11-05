@@ -1,5 +1,5 @@
 /* طَلَاقَة — موجّه بسيط بين الشاشات (AA: كل شاشة تعرض، والتنقل صريح) */
-export type ScreenName = 'gate' | 'acceptance' | 'exam' | 'result' | 'card' | 'building' | 'classroom' | 'lesson' | 'review';
+export type ScreenName = 'gate' | 'acceptance' | 'exam' | 'result' | 'card' | 'building' | 'classroom' | 'lesson' | 'review' | 'cafe';
 
 type Renderer = (root: HTMLElement) => void;
 const renderers = new Map<ScreenName, Renderer>();
