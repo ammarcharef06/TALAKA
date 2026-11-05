@@ -1,8 +1,9 @@
 import { go, registerScreen } from '../router';
-import { getCurrentStudent, clearAllStudents, exportStudentFile } from '../store/db';
+import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap } from '../store/db';
 import { sealSVG, initialsOf } from '../ui/seal';
 import { showConfirm, toast } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
+import { UNIT_01 } from '../data/academy/course';
 import type { StudentRecord } from '../types';
 
 interface Hall {
@@ -13,7 +14,7 @@ interface Hall {
 }
 
 const HALLS: Hall[] = [
-  { id: 'classroom', name: 'الفصل الافتراضي', desc: '«المعلم» وكيل AI يشرح باختيارك — أنت من يحدد وتيرة كل درس', icon: '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/><path d="M7.5 9.5h6M7.5 12.5h9"/>' },
+  { id: 'classroom', name: 'الفصل الافتراضي', desc: '«المحطة الأولى — أول خطواتك»: ستة دروس من الحروف حتى حوار كامل', icon: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.5v4.8c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7v-4.8"/><path d="M21.5 9.5V15"/>' },
   { id: 'library', name: 'المكتبة', desc: 'كتب ومنهج متدرج من S0 إلى C2 — تقرأ في أي ساعة تشاء', icon: '<path d="M4 6a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M19 14H6a2 2 0 0 0-2 2"/>' },
   { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'سيناريوهات واقعية: مطار، مقهى، مقابلة — وطلاقة تتحدث بلا رهبة', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
@@ -64,6 +65,7 @@ function renderBuilding(root: HTMLElement): void {
 
     grid.innerHTML = HALLS.map((h) => {
       if (h.id === 'exam') return examHallCard(student);
+      if (h.id === 'classroom') return classroomHallCard();
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -80,6 +82,15 @@ function renderBuilding(root: HTMLElement): void {
       void showConfirm('إعادة تحديد المستوى تمحو تسجيلك الحالي وتبدأ كطالب جديد. متابعة؟', 'امسح وابدأ من جديد').then((ok) => {
         if (ok) void clearAllStudents().then(() => go('gate'));
       });
+    });
+    grid.querySelector<HTMLButtonElement>('#enterClassroomBtn')?.addEventListener('click', () => go('classroom'));
+
+    // عدّاد إتمام الوحدة الأولى
+    void getProgressMap().then((map) => {
+      const el = grid.querySelector<HTMLElement>('#classroomProgress');
+      if (!el) return;
+      const done = UNIT_01.lessons.filter((l) => map[l.id]).length;
+      el.textContent = done === 0 ? 'لم تبدأ بعد — الباب مفتوح' : `أتممت ${done} من ${UNIT_01.lessons.length} دروس`;
     });
   });
 
@@ -104,6 +115,17 @@ function examHallCard(student: StudentRecord): string {
     <span class="hall-desc">اختبار تحديد المستوى — أُنجز بتاريخ ${formatDate(student.estimatedAt)}</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>مكتمل — مستواك: <b>${escapeHtmlLocal(student.level)}</b> · ${escapeHtmlLocal(meta.ar.split('—')[0].trim())}</span>
     <button id="retakeBtn" class="btn btn-ghost btn-small">إعادة تحديد المستوى من الصفر</button>
+  </div>`;
+}
+
+function classroomHallCard(): string {
+  return `
+  <div class="hall hall-open" role="group" aria-label="الفصل الافتراضي">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS[0].icon)}</span>
+    <span class="hall-name">الفصل الافتراضي</span>
+    <span class="hall-desc">المحطة الأولى — ستة دروس حقيقية من «انطق أولاً» حتى حوار الانضمام الكامل</span>
+    <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="classroomProgress">جارٍ حساب التقدم…</span></span>
+    <button id="enterClassroomBtn" class="btn btn-gold hall-enter-btn">دخول الفصل — ابدأ التعلم</button>
   </div>`;
 }
 

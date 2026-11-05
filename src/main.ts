@@ -9,6 +9,8 @@ import './screens/exam.ts';
 import './screens/result.ts';
 import './screens/card.ts';
 import './screens/building.ts';
+import './screens/classroom.ts';
+import './screens/lesson.ts';
 
 import { go } from './router';
 

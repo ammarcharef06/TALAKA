@@ -2,9 +2,10 @@
 import type { StudentRecord } from '../types';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
+const STORE_PROGRESS = 'progress';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -13,6 +14,7 @@ function openDb(): Promise<IDBDatabase> {
       const db = req.result;
       if (!db.objectStoreNames.contains(STORE_STUDENTS)) db.createObjectStore(STORE_STUDENTS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_META)) db.createObjectStore(STORE_META, { keyPath: 'key' });
+      if (!db.objectStoreNames.contains(STORE_PROGRESS)) db.createObjectStore(STORE_PROGRESS, { keyPath: 'lessonId' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -64,6 +66,53 @@ export async function saveStudent(rec: StudentRecord): Promise<void> {
   }
 }
 
+/* ── تقدّم الدروس (المحتوى التأسيسي) ── */
+
+export async function getProgressMap(): Promise<Record<string, { completedAt: string; bestScore: number }>> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_PROGRESS, 'readonly');
+      const store = t.objectStore(STORE_PROGRESS);
+      const req = store.getAll();
+      req.onsuccess = () => {
+        const map: Record<string, { completedAt: string; bestScore: number }> = {};
+        for (const row of req.result as { lessonId: string; completedAt: string; bestScore: number }[]) {
+          map[row.lessonId] = { completedAt: row.completedAt, bestScore: row.bestScore };
+        }
+        resolve(map);
+      };
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة تقدم الدروس'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+/** تسجيل إتمام درس مع الحفاظ على أفضل درجة */
+export async function markLessonComplete(lessonId: string, score: number): Promise<void> {
+  const db = await openDb();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const t = db.transaction(STORE_PROGRESS, 'readwrite');
+      const store = t.objectStore(STORE_PROGRESS);
+      const getReq = store.get(lessonId);
+      getReq.onsuccess = () => {
+        const prev = getReq.result as { lessonId: string; completedAt: string; bestScore: number } | undefined;
+        store.put({
+          lessonId,
+          completedAt: new Date().toISOString(),
+          bestScore: Math.max(prev?.bestScore ?? 0, score),
+        });
+      };
+      t.oncomplete = () => resolve();
+      t.onerror = () => reject(t.error ?? new Error('تعذر حفظ تقدم الدرس'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -76,6 +125,7 @@ export async function clearAllStudents(): Promise<void> {
       });
     await done(STORE_STUDENTS);
     await done(STORE_META);
+    await done(STORE_PROGRESS);
   } finally {
     db.close();
   }

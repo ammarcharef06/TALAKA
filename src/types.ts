@@ -49,3 +49,51 @@ export interface StudentRecord {
   registeredAt: string;
   estimatedAt: string;
 }
+
+/* ── المحتوى المنهجي ── */
+
+export type LessonBlock =
+  | { type: 'rule'; title: string; body: string }
+  | { type: 'tip'; title: string; body: string }
+  | { type: 'table'; title?: string; head: [string, string]; rows: [string, string][] };
+
+export interface LessonExample {
+  /** الجملة الإنجليزية كما تُنطق */
+  text: string;
+  /** ملاحظة عربية اختيارية */
+  note?: string;
+}
+
+export interface PracticeItem {
+  id: string;
+  question: string;
+  options: [string, string, string, string];
+  answer: number;
+  explanation: string;
+}
+
+export interface Lesson {
+  id: string;
+  order: number;
+  title: string;
+  estMinutes: number;
+  objectives: string[];
+  blocks: LessonBlock[];
+  examples: LessonExample[];
+  practice: PracticeItem[];
+}
+
+export interface Unit {
+  id: string;
+  order: number;
+  title: string;
+  tagline: string;
+  forLevels: string;
+  lessons: Lesson[];
+}
+
+export interface LessonProgress {
+  lessonId: string;
+  completedAt: string;
+  bestScore: number; // 0..100
+}
