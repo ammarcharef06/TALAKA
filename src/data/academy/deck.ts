@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   طَلَاقَة — رزمة بطاقات المنهاج (227 بطاقة)
-   مشتقة حرفياً من دروس المحطات الست: كل بطاقة مربوطة بدرسها
+   طَلَاقَة — رزمة بطاقات المنهاج (263 بطاقة)
+   مشتقة حرفياً من دروس المحطات السبع: كل بطاقة مربوطة بدرسها
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
 
@@ -313,6 +313,54 @@ export const SRS_DECK: DeckCard[] = [
   { id: 'c-l36-04', lessonId: 'l36-archive-seminar', front: '«أوصت اللجنة بالإفراج عن الملفات»؟', back: 'The committee recommended that the files be released.', example: 'The committee recommended that the files be released.', note: 'subjunctive: be released' },
   { id: 'c-l36-05', lessonId: 'l36-archive-seminar', front: '«بعد فحص الوثائق، أستطيع تأكيد الفجوات»؟', back: 'Having examined the documents, I can confirm the gaps.', example: 'Having examined the documents, I can confirm the gaps.', note: 'شبه جملة: Having examined' },
   { id: 'c-l36-06', lessonId: 'l36-archive-seminar', front: '«لن ننشر الفهرس فحسب، بل سنحمي الأسماء الحساسة أيضاً»؟', back: 'Not only will we publish the index, but we will also protect sensitive names.', example: 'Not only will we publish the index, but we will also protect sensitive names.', note: 'قلب بعد Not only' },
+
+  /* ── الدرس 37: القلب الشرطي ── */
+  { id: 'c-l37-01', lessonId: 'l37-inversion-c2', front: '«لو كنت عرفت أبكر لفعلت» (بالقلب)؟', back: 'Had I known earlier, I would have acted.', example: 'Had I known earlier, I would have acted.', note: 'Had + I + pp = If I had known' },
+  { id: 'c-l37-02', lessonId: 'l37-inversion-c2', front: 'أكمل: Were she ___ the job, she would accept.', back: 'to offer', example: 'Were she to offer the job, she would accept.', note: 'Were + she + to + فعل' },
+  { id: 'c-l37-03', lessonId: 'l37-inversion-c2', front: '«إذا احتجت مساعدة فاتصل» (رسمي)؟', back: 'Should you require assistance, please call.', example: 'Should you require assistance, please call.', note: 'Should + you + فعل' },
+  { id: 'c-l37-04', lessonId: 'l37-inversion-c2', front: '«لا تغادر تحت أي ظرف» (بالقلب)؟', back: 'Under no circumstances should you leave.', example: 'Under no circumstances should you leave.', note: 'ظرف سلبي + قلب' },
+  { id: 'c-l37-05', lessonId: 'l37-inversion-c2', front: '«لم نرَ قبلها مثل هذه الشجاعة»؟', back: 'Never before had we seen such courage.', example: 'Never before had we seen such courage.', note: 'Never before + had + we' },
+  { id: 'c-l37-06', lessonId: 'l37-inversion-c2', front: 'صحح: Had I have known…', back: 'Had I known…', example: 'Had I known, I would have acted.', note: 'لا have بعد Had' },
+
+  /* ── الدرس 38: التركيز البلاغي ── */
+  { id: 'c-l38-01', lessonId: 'l38-cleft-c2', front: '«أنا المسؤول» (رسمي)؟', back: 'It is I who am responsible.', example: 'It is I who am responsible.', note: 'It is I who + am' },
+  { id: 'c-l38-02', lessonId: 'l38-cleft-c2', front: '«ما يحتاجه الآن هو راحة»؟', back: 'What he needs now is a good rest.', example: 'What he needs now is a good rest.', note: 'wh-cleft' },
+  { id: 'c-l38-03', lessonId: 'l38-cleft-c2', front: '«لم نصل حتى منتصف الليل» (بالتركيز)؟', back: 'It was not until midnight that we arrived.', example: 'It was not until midnight that we arrived.', note: 'not until … that' },
+  { id: 'c-l38-04', lessonId: 'l38-cleft-c2', front: '«كل ما يهم هو الحقيقة»؟', back: 'All that matters is the truth.', example: 'All that matters is the truth.', note: 'all-cleft' },
+  { id: 'c-l38-05', lessonId: 'l38-cleft-c2', front: 'صحح: What he needs are rest.', back: 'What he needs is rest.', example: 'What he needs is rest.', note: 'What he needs مفرد' },
+  { id: 'c-l38-06', lessonId: 'l38-cleft-c2', front: '«الأرشيف هو الذي قدّم الدليل»؟', back: 'It was the archive that provided the evidence.', example: 'It was the archive that provided the evidence.', note: 'it-cleft لشيء' },
+
+  /* ── الدرس 39: التنازل الرسمي ── */
+  { id: 'c-l39-01', lessonId: 'l39-concession', front: '«رغم محاولاته لم يقنعهم» (Much as)؟', back: 'Much as he tried, he could not persuade them.', example: 'Much as he tried, he could not persuade them.', note: 'Much as = Although' },
+  { id: 'c-l39-02', lessonId: 'l39-concession', front: '«رغم المطر استمرت المباراة» (رسمي)؟', back: 'Notwithstanding the rain, the match continued.', example: 'Notwithstanding the rain, the match continued.', note: 'Notwithstanding + اسم' },
+  { id: 'c-l39-03', lessonId: 'l39-concession', front: '«نجح وإن بصعوبة» (C2)؟', back: 'He passed, albeit narrowly.', example: 'He passed, albeit narrowly.', note: 'albeit + ظرف' },
+  { id: 'c-l39-04', lessonId: 'l39-concession', front: '«بينما الشمال بارد، الجنوب دافئ»؟', back: 'Whereas the north is cold, the south is warm.', example: 'Whereas the north is cold, the south is warm.', note: 'whereas للمقارنة' },
+  { id: 'c-l39-05', lessonId: 'l39-concession', front: '«مهما حاولت بجد فشلت»؟', back: 'However hard she tried, she failed.', example: 'However hard she tried, she failed.', note: 'However + صفة' },
+  { id: 'c-l39-06', lessonId: 'l39-concession', front: 'صحح: Notwithstanding of the rain…', back: 'Notwithstanding the rain…', example: 'Notwithstanding the rain, we continued.', note: 'بلا of' },
+
+  /* ── الدرس 40: الحذف الرسمي ── */
+  { id: 'c-l40-01', lessonId: 'l40-ellipsis-c2', front: 'أكمل: She can play the piano, and so ___ I.', back: 'can', example: 'She can play the piano, and so can I.', note: 'so + can + I' },
+  { id: 'c-l40-02', lessonId: 'l40-ellipsis-c2', front: 'أكمل: He didn\'t attend, and neither ___ she.', back: 'did', example: "He didn't attend, and neither did she.", note: 'neither + did + she' },
+  { id: 'c-l40-03', lessonId: 'l40-ellipsis-c2', front: '«قد أتأخر؛ فإن كان كذلك ابدأ بدوني»؟', back: 'I may be late; if so, start without me.', example: 'I may be late; if so, start without me.', note: 'if so' },
+  { id: 'c-l40-04', lessonId: 'l40-ellipsis-c2', front: 'أكمل: I\'ll take the blue ___.', back: 'one', example: "I'll take the blue one.", note: 'one تعوّض الاسم' },
+  { id: 'c-l40-05', lessonId: 'l40-ellipsis-c2', front: '«طلبوا مني المغادرة ففعلت»؟', back: 'They asked me to leave, and I did so.', example: 'They asked me to leave, and I did so.', note: 'did so' },
+  { id: 'c-l40-06', lessonId: 'l40-ellipsis-c2', front: 'صحح: neither she did.', back: 'neither did she', example: 'He was not ready, and neither did she want to wait.', note: 'مساعد + فاعل' },
+
+  /* ── الدرس 41: دقة المفردة ── */
+  { id: 'c-l41-01', lessonId: 'l41-lexical-precision', front: 'perspicacious = ؟', back: 'نافذ البصيرة / ثاقب الفهم', example: 'She is a perspicacious critic.', note: 'ليست مجرد «ذكي»' },
+  { id: 'c-l41-02', lessonId: 'l41-lexical-precision', front: 'fastidious = ؟', back: 'شديد الدقة والتدقيق', example: 'He pays fastidious attention to detail.', note: 'دقة متناهية' },
+  { id: 'c-l41-03', lessonId: 'l41-lexical-precision', front: 'ennui = ؟', back: 'ملل وجودي عميق', example: 'A sense of ennui settled over the room.', note: 'أعمق من الملل العادي' },
+  { id: 'c-l41-04', lessonId: 'l41-lexical-precision', front: 'sycophant = ؟', back: 'متملق انتهازي', example: 'The minister was surrounded by sycophants.', note: 'ليس مجرد مؤيد' },
+  { id: 'c-l41-05', lessonId: 'l41-lexical-precision', front: 'peremptory = ؟', back: 'حاسم آمر لا يقبل النقاش', example: 'His peremptory refusal ended all discussion.', note: 'رفض قطعي' },
+  { id: 'c-l41-06', lessonId: 'l41-lexical-precision', front: 'lucid وcandid = ؟', back: 'واضح وصريح', example: 'Her candid and lucid argument convinced us.', note: 'دقة الوصف' },
+
+  /* ── الدرس 42: المناقشة النهائية ── */
+  { id: 'c-l42-01', lessonId: 'l42-viva', front: '«لو تلقينا البيانات أبكر لكنا راجعناها»؟', back: 'Had we received the data earlier, we could have reviewed it.', example: 'Had we received the data earlier, we could have reviewed it.', note: 'قلب شرطي' },
+  { id: 'c-l42-02', lessonId: 'l42-viva', front: '«ما تُظهره دراستي هو علاقة بين الوصول والثقة»؟', back: 'What my study shows is a clear link between access and trust.', example: 'What my study shows is a clear link between access and trust.', note: 'wh-cleft' },
+  { id: 'c-l42-03', lessonId: 'l42-viva', front: '«رغم إعجابي بالمنهج، العينة صغيرة»؟', back: 'Much as I admire the method, the sample is small.', example: 'Much as I admire the method, the sample is small.', note: 'Much as' },
+  { id: 'c-l42-04', lessonId: 'l42-viva', front: '«رغم الحجم، النتائج متسقة»؟', back: 'Notwithstanding the size, the findings are consistent.', example: 'Notwithstanding the size, the findings are consistent.', note: 'Notwithstanding + اسم' },
+  { id: 'c-l42-05', lessonId: 'l42-viva', front: '«الأرشيف هو الذي يقدم أقوى دليل»؟', back: 'It is the archive that provides the strongest evidence.', example: 'It is the archive that provides the strongest evidence.', note: 'it-cleft' },
+  { id: 'c-l42-06', lessonId: 'l42-viva', front: '«الأرشيف ناقص، وكذلك السجل»؟', back: 'The archive is incomplete, and so is the record.', example: 'The archive is incomplete, and so is the record.', note: 'حذف: so is the record' },
 ];
 
 /** بطاقات درس معين — للإشعار «وُلدت بطاقات جديدة» */

@@ -1905,7 +1905,320 @@ export const UNIT_06: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05, UNIT_06];
+export const UNIT_07: Unit = {
+  id: 'm6-mastery-c2',
+  order: 7,
+  title: 'المحطة السابعة — الإتقان والبلاغة (C2)',
+  tagline: 'القلب الشرطي، التركيز البلاغي، التنازل الرسمي، الحذف، ودقة المفردة — ثم المناقشة النهائية ختماً',
+  forLevels: 'C2',
+  lessons: [
+    {
+      id: 'l37-inversion-c2',
+      order: 1,
+      title: 'القلب الشرطي — Had I / Were she / Should you',
+      estMinutes: 13,
+      objectives: [
+        'قلب الشرط الثالث بـ Had I known',
+        'قلب الشرط الثاني بـ Were she to offer',
+        'استخدام Should you need والظروف السلبية الرسمية',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'شرط بلا if — أسلوب C2',
+          body: 'في الأسلوب الرسمي يمكن حذف if وقلب الفعل المساعد: Had I known = If I had known، Were she to offer = If she were to offer، Should you need = If you should need. وكذلك بعد الظروف السلبية: Under no circumstances should you leave.',
+        },
+        {
+          type: 'table',
+          title: 'أشكال القلب الرسمي',
+          head: ['القلب', 'المعنى'],
+          rows: [
+            ['Had I known earlier, I would have acted.', 'لو كنت عرفت أبكر لفعلت'],
+            ['Were she to accept, we would be delighted.', 'لو قبلت لكنا سعداء'],
+            ['Should you require help, please call.', 'إذا احتجت مساعدة فاتصل'],
+            ['Under no circumstances should you leave.', 'لا تغادر تحت أي ظرف'],
+            ['Never before had we seen such courage.', 'لم نرَ قبلها مثل هذه الشجاعة'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا if ولا have بعد Had',
+          body: 'بعد Had في القلب لا نضع have: «Had I known» لا «Had I have known». ولا نضع if مع القلب: «Had I known» لا «If had I known». وWere تسبق to في الشرط المستقبلي الرسمي: «Were she to offer».',
+        },
+      ],
+      examples: [
+        { text: 'Had I known earlier, I would have acted.', note: 'Had + I + pp = If I had known' },
+        { text: 'Were she to accept, we would be delighted.', note: 'Were + she + to + فعل' },
+        { text: 'Should you require assistance, please call.', note: 'Should + you + فعل = If you should' },
+        { text: 'Under no circumstances should you leave.', note: 'ظرف سلبي + قلب' },
+        { text: 'Never before had we seen such courage.', note: 'Never before + had + we' },
+        { text: 'Were I you, I would apologize.', note: 'Were I you = If I were you' },
+      ],
+      practice: [
+        { id: 'l37q1', question: 'أكمل: Had I ___ earlier, I would have caught the train.', options: ['known', 'know', 'have known', 'knew'], answer: 0, explanation: 'Had + I + التصريف الثالث: Had I known.' },
+        { id: 'l37q2', question: 'أكمل: Were she ___ the job, she would accept.', options: ['to offer', 'offer', 'offered', 'to be offered'], answer: 0, explanation: 'Were + she + to + فعل: Were she to offer.' },
+        { id: 'l37q3', question: 'أكمل: Should you ___ help, call me.', options: ['need', 'needed', 'to need', 'have needed'], answer: 0, explanation: 'Should + you + فعل مجرد: Should you need.' },
+        { id: 'l37q4', question: 'أكمل: Under no circumstances ___ leave.', options: ['should you', 'you should', 'you will', 'do you should'], answer: 0, explanation: 'بعد الظرف السلبي: should + you + فعل.' },
+        { id: 'l37q5', question: 'صحح: Had I have known, I would have acted.', options: ['Had I known, I would have acted.', 'If had I known, I would have acted.', 'Had I have know, I would act.', 'I had known, I would have acted.'], answer: 0, explanation: 'لا have بعد Had في القلب: Had I known.' },
+        { id: 'l37q6', question: 'ماذا تعني: Were I you؟', options: ['لو كنت مكانك', 'كنت أنت', 'سأكون أنت', 'أنت كنت'], answer: 0, explanation: 'Were I you = If I were you — نصيحة رسمية.' },
+      ],
+    },
+    {
+      id: 'l38-cleft-c2',
+      order: 2,
+      title: 'التركيز البلاغي — It is I who…',
+      estMinutes: 12,
+      objectives: [
+        'استخدام it-cleft الرسمي مع who / that',
+        'التركيز على الزمن بـ It was not until … that',
+        'ضبط المطابقة بعد It is I who',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'جملة مشقوقة بأسلوب رسمي',
+          body: 'الـ it-cleft يضع المعلومة المراد تركيزها بعد It is/was: «It is I who am to blame». والـ wh-cleft يبدأ بـ What: «What he needs now is a good rest». ومن تراكيب C2: «It was not until midnight that we arrived».',
+        },
+        {
+          type: 'table',
+          title: 'تركيز C2',
+          head: ['التركيب', 'المثال'],
+          rows: [
+            ['It is I who + فعل', 'It is I who am to blame, not you.'],
+            ['What … is', 'What he needs now is a good rest.'],
+            ['It was not until … that', 'It was not until midnight that we arrived.'],
+            ['All that … is', 'All that matters is the truth.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'المطابقة بعد It is I who',
+          body: 'في الأسلوب الرسمي: «It is I who am responsible» — الفعل يطابق I. وفي غير الرسمي قد تسمع «It is me who is»، لكن C2 الرسمي يفضّل I مع am. ولا تكرر الضمير: «What he needs is rest» لا «What he needs he wants rest».',
+        },
+      ],
+      examples: [
+        { text: 'It is I who am to blame, not you.', note: 'رسمي: I + am' },
+        { text: 'What he needs now is a good rest.', note: 'wh-cleft' },
+        { text: 'It was not until midnight that we arrived.', note: 'تركيز على الزمن' },
+        { text: 'All that matters is the truth.', note: 'all-cleft' },
+        { text: 'It was the archive that provided the evidence.', note: 'it-cleft لشيء' },
+        { text: 'What concerns us is the lack of transparency.', note: 'wh-cleft للتركيز' },
+      ],
+      practice: [
+        { id: 'l38q1', question: 'أكمل: It is I ___ to blame.', options: ['who', 'which', 'where', 'whose'], answer: 0, explanation: 'للشخص I نستخدم who في it-cleft.' },
+        { id: 'l38q2', question: 'أكمل: What he needs now ___ a good rest.', options: ['is', 'are', 'be', 'were'], answer: 0, explanation: 'What he needs = مفرد ⇒ is.' },
+        { id: 'l38q3', question: 'أكمل: It was not until midnight ___ we arrived.', options: ['that', 'when', 'which', 'who'], answer: 0, explanation: 'التركيز على الزمن: It was not until … that.' },
+        { id: 'l38q4', question: 'أكمل: All ___ matters is the truth.', options: ['that', 'what', 'which', 'who'], answer: 0, explanation: 'All that matters = كل ما يهم.' },
+        { id: 'l38q5', question: 'صحح: What he needs are rest.', options: ['What he needs is rest.', 'What he need is rest.', 'What he needs were rest.', 'He needs what is rest.'], answer: 0, explanation: 'What he needs مفرد ⇒ is rest.' },
+        { id: 'l38q6', question: 'أي جملة رسمية صحيحة؟', options: ['It is I who am responsible.', 'It is me who is responsible.', 'It is I which am responsible.', 'It am I who responsible.'], answer: 0, explanation: 'الرسمي: It is I who am responsible.' },
+      ],
+    },
+    {
+      id: 'l39-concession',
+      order: 3,
+      title: 'التنازل الرسمي — Much as / Notwithstanding / Albeit',
+      estMinutes: 12,
+      objectives: [
+        'التنازل بـ Much as وHowever + صفة',
+        'استخدام Notwithstanding + اسم',
+        'التمييز بين albeit وwhereas',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'أسلوب التنازل في C2',
+          body: 'التنازل يعني: رغم كذا، حدث كذا. Much as + فاعل + فعل = although. Notwithstanding + اسم = despite. Albeit + صفة/عبارة = although it is. Whereas يقارن بين حالتين. However + صفة + فاعل + فعل = no matter how.',
+        },
+        {
+          type: 'table',
+          title: 'أدوات التنازل',
+          head: ['الأداة', 'المثال'],
+          rows: [
+            ['Much as', 'Much as he tried, he could not persuade them.'],
+            ['Notwithstanding', 'Notwithstanding the rain, the match continued.'],
+            ['Albeit', 'He passed, albeit narrowly.'],
+            ['Whereas', 'Whereas the north is cold, the south is warm.'],
+            ['However + صفة', 'However hard she tried, she failed.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'notwithstanding بلا of',
+          body: 'Notwithstanding تأخذ اسماً مباشرة: «Notwithstanding the rain» لا «Notwithstanding of the rain». وalbeit تتبعها صفة أو عبارة لا جملة كاملة: «albeit narrowly» لا «albeit he was narrow».',
+        },
+      ],
+      examples: [
+        { text: 'Much as he tried, he could not persuade them.', note: 'Much as = Although' },
+        { text: 'Notwithstanding the rain, the match continued.', note: 'Notwithstanding + اسم' },
+        { text: 'He passed, albeit narrowly.', note: 'albeit + ظرف' },
+        { text: 'Whereas the north is cold, the south is warm.', note: 'whereas للمقارنة' },
+        { text: 'However hard she tried, she failed.', note: 'However + صفة + فاعل + فعل' },
+        { text: 'The plan is risky; nevertheless, it is necessary.', note: 'nevertheless = however' },
+      ],
+      practice: [
+        { id: 'l39q1', question: 'أكمل: Much ___ he tried, he could not persuade them.', options: ['as', 'although', 'though', 'like'], answer: 0, explanation: 'Much as + فاعل + فعل = although.' },
+        { id: 'l39q2', question: 'أكمل: ___ the rain, the match continued.', options: ['Notwithstanding', 'Notwithstanding of', 'Although', 'However'], answer: 0, explanation: 'Notwithstanding + اسم مباشرة، بلا of.' },
+        { id: 'l39q3', question: 'أكمل: He passed, ___ narrowly.', options: ['albeit', 'although', 'however', 'whereas'], answer: 0, explanation: 'albeit + ظرف/صفة = although it was.' },
+        { id: 'l39q4', question: 'أكمل: ___ the north is cold, the south is warm.', options: ['Whereas', 'Albeit', 'Notwithstanding', 'Much'], answer: 0, explanation: 'whereas تقارن حالتين متضادتين.' },
+        { id: 'l39q5', question: 'صحح: Notwithstanding of the rain, we continued.', options: ['Notwithstanding the rain, we continued.', 'Although of the rain, we continued.', 'However the rain, we continued.', 'Much the rain, we continued.'], answer: 0, explanation: 'Notwithstanding لا تأخذ of.' },
+        { id: 'l39q6', question: 'ماذا تعني: However hard she tried, she failed؟', options: ['مهما حاولت بجد فشلت', 'لأنها حاولت فشلت', 'حاولت قليلاً فنجحت', 'لم تحاول أبداً'], answer: 0, explanation: 'However + صفة = مهما كان…' },
+      ],
+    },
+    {
+      id: 'l40-ellipsis-c2',
+      order: 4,
+      title: 'الحذف الرسمي — so / neither / if so',
+      estMinutes: 11,
+      objectives: [
+        'استخدام so / neither / nor مع القلب',
+        'الحذف بـ if so / if not / do so',
+        'التعويض بـ one / ones',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'لا تكرر ما يُفهم من السياق',
+          body: 'الحذف يحذف كلمات مكررة: «She can play the piano, and so can I». وneither/nor بعد النفي: «He didn\'t attend, and neither did she». وif so = إذا كان الأمر كذلك، do so = افعل ذلك، one/ones تعوّض الاسم.',
+        },
+        {
+          type: 'table',
+          title: 'أدوات الحذف',
+          head: ['الأداة', 'المثال'],
+          rows: [
+            ['so + aux + subject', 'She can play the piano, and so can I.'],
+            ['neither/nor + aux + subject', "He didn't attend, and neither did she."],
+            ['if so', 'I may be late; if so, start without me.'],
+            ['do so', 'They asked me to leave, and I did so.'],
+            ['one / ones', "I'll take the blue one."],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'القلب بعد so / neither',
+          body: 'بعد so وneither/nor نستخدم ترتيب السؤال: «so can I» لا «so I can»، و«neither did she» لا «neither she did». وif so تشير إلى الجملة كلها، لا إلى اسم واحد.',
+        },
+      ],
+      examples: [
+        { text: 'She can play the piano, and so can I.', note: 'so + can + I' },
+        { text: "He didn't attend, and neither did she.", note: 'neither + did + she' },
+        { text: 'I may be late; if so, start without me.', note: 'if so = إذا كان كذلك' },
+        { text: "I'll take the blue one.", note: 'one تعوّض الاسم' },
+        { text: 'They asked me to leave, and I did so.', note: 'did so = فعلت ذلك' },
+        { text: 'Some say yes; others say no.', note: 'حذف الفعل المكرر' },
+      ],
+      practice: [
+        { id: 'l40q1', question: 'أكمل: She can play the piano, and so ___ I.', options: ['can', 'do', 'am', 'will'], answer: 0, explanation: 'so + can + I — نفس الفعل المساعد.' },
+        { id: 'l40q2', question: 'أكمل: He didn\'t attend, and neither ___ she.', options: ['did', 'does', 'was', 'had'], answer: 0, explanation: 'neither + did + she (ماضٍ).' },
+        { id: 'l40q3', question: 'أكمل: I may be late; ___, start without me.', options: ['if so', 'if not', 'so that', 'even so'], answer: 0, explanation: 'if so = إذا كان الأمر كذلك.' },
+        { id: 'l40q4', question: 'أكمل: I\'ll take the blue ___.', options: ['one', 'ones', 'it', 'that'], answer: 0, explanation: 'one تعوّض اسماً مفرداً.' },
+        { id: 'l40q5', question: 'أكمل: They asked me to leave, and I ___.', options: ['did so', 'did it so', 'so did', 'do so did'], answer: 0, explanation: 'did so = فعلت ذلك.' },
+        { id: 'l40q6', question: 'صحح: neither she did.', options: ['neither did she', 'neither she does', 'so did she', 'nor she did'], answer: 0, explanation: 'بعد neither: مساعد + فاعل.' },
+      ],
+    },
+    {
+      id: 'l41-lexical-precision',
+      order: 5,
+      title: 'دقة المفردة — كلمة واحدة تصنع الفرق',
+      estMinutes: 12,
+      objectives: [
+        'التمييز بين المفردات المتقدمة الدقيقة',
+        'اختيار الكلمة بحسب السياق والنبرة',
+        'استخدام مفردات C2 في جمل طبيعية',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'C2 ليس كلمات أكبر — بل كلمات أدق',
+          body: 'في C2 لا يهم أن تعرف كلمات نادرة فقط، بل أن تختار الكلمة التي تحمل المعنى والنبرة الصحيحين. perspicacious = نافذ البصيرة، fastidious = شديد الدقة، ennui = ملل وجودي، sycophant = متملق، peremptory = حاسم لا يقبل النقاش.',
+        },
+        {
+          type: 'table',
+          title: 'مفردات C2 الأساسية',
+          head: ['الكلمة', 'المعنى الدقيق'],
+          rows: [
+            ['perspicacious', 'نافذ البصيرة / ثاقب الفهم'],
+            ['fastidious', 'شديد الدقة والتدقيق'],
+            ['ennui', 'ملل وجودي عميق'],
+            ['sycophant', 'متملق انتهازي'],
+            ['peremptory', 'حاسم آمر لا يقبل النقاش'],
+            ['candid', 'صريح بلا مواربة'],
+            ['lucid', 'واضح متماسك'],
+            ['obfuscate', 'يعتّم ويشوّش المعنى'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الدقة قبل الفخامة',
+          body: 'لا تستخدم كلمة نادرة لمجرد أنها نادرة. «fastidious attention to detail» = دقة متناهية، و«peremptory refusal» = رفض حاسم. اختيار الكلمة الخاطئة يفسد المعنى حتى لو كانت صحيحة المعجم.',
+        },
+      ],
+      examples: [
+        { text: 'She is a perspicacious critic.', note: 'نافذة البصيرة في النقد' },
+        { text: 'He pays fastidious attention to detail.', note: 'دقة متناهية' },
+        { text: 'A sense of ennui settled over the room.', note: 'ملل وجودي' },
+        { text: 'The minister was surrounded by sycophants.', note: 'متملقون' },
+        { text: 'His peremptory refusal ended all discussion.', note: 'رفض حاسم' },
+        { text: 'Her candid and lucid argument convinced us.', note: 'صريحة وواضحة' },
+      ],
+      practice: [
+        { id: 'l41q1', question: 'كلمة perspicacious تعني؟', options: ['ثرثار', 'نافذ البصيرة', 'عنيد', 'بخيل'], answer: 1, explanation: 'perspicacious = ثاقب النظر/نافذ البصيرة.' },
+        { id: 'l41q2', question: 'فعل obfuscate يعني؟', options: ['يوضّح', 'يعتّم ويشوّش', 'يختصر', 'يترجم'], answer: 1, explanation: 'obfuscate = يعتّم المعنى ويجعله غامضاً.' },
+        { id: 'l41q3', question: '«fastidious attention to detail» تعني؟', options: ['دقة مهملة', 'اهتمام مفرط بالدقة', 'اهتمام عابر', 'تجاهل التفاصيل'], answer: 1, explanation: 'fastidious = شديد التدقيق — دقة متناهية.' },
+        { id: 'l41q4', question: 'كلمة ennui تصف؟', options: ['حماساً كبيراً', 'مللاً وجودياً عميقاً', 'غضباً صامتاً', 'شوقاً'], answer: 1, explanation: 'ennui = ملل وجودي (فرنسية الأصل).' },
+        { id: 'l41q5', question: 'كلمة sycophant تعني؟', options: ['قائداً شجاعاً', 'متملقاً انتهازياً', 'خبيراً محايداً', 'منافساً شريفاً'], answer: 1, explanation: 'sycophant = متملق يتزلّف للمصلحة.' },
+        { id: 'l41q6', question: 'اختر الكلمة الأدق: His ___ refusal ended all discussion.', options: ['peremptory', 'tentative', 'gentle', 'slow'], answer: 0, explanation: 'peremptory = حاسم لا يقبل النقاش — يناسب «أنهى كل نقاش».' },
+      ],
+    },
+    {
+      id: 'l42-viva',
+      order: 6,
+      title: 'المناقشة النهائية — «أثبت حجتك»',
+      estMinutes: 14,
+      objectives: [
+        'استخدام تراكيب C2 في مناقشة أكاديمية نهائية',
+        'الدفاع عن حجة والرد على اعتراض',
+        'فهم القلب والتنازل والتركيز والحذف',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'هذه المناقشة النهائية لبحث نور. ستسمع القلب الشرطي (Had we received…)، والتركيز (What my study shows…)، والتنازل (Much as I admire… / Notwithstanding…)، والحذف (and so is the record)، ودقة المفردة (lucid, candid).',
+        },
+        {
+          type: 'table',
+          title: 'عبارات المناقشة الجاهزة',
+          head: ['العبارة', 'المعنى'],
+          rows: [
+            ['Had we received the data earlier, we could have …', 'لو تلقينا البيانات أبكر لكنا…'],
+            ['What my study shows is …', 'ما تُظهره دراستي هو…'],
+            ['Much as I admire the method, …', 'رغم إعجابي بالمنهج،…'],
+            ['Notwithstanding the size, the findings are …', 'رغم صغر العينة، النتائج…'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Karim: Had we received the data earlier, we could have reviewed it.', note: 'قلب شرطي: Had we received' },
+        { text: 'Nour: What my study shows is a clear link between access and trust.', note: 'wh-cleft للتركيز' },
+        { text: 'Hala: Much as I admire the method, the sample is small.', note: 'تنازل: Much as' },
+        { text: 'Nour: Notwithstanding the size, the findings are consistent.', note: 'تنازل: Notwithstanding + اسم' },
+        { text: 'Karim: It is the archive that provides the strongest evidence.', note: 'it-cleft' },
+        { text: 'Nour: I agree; the archive is incomplete, and so is the record.', note: 'حذف: so is the record' },
+        { text: 'Hala: Your argument is lucid and candid. Welcome to the final stage.', note: 'دقة المفردة' },
+      ],
+      practice: [
+        { id: 'l42q1', question: 'ماذا تُظهر دراسة نور؟', options: ['علاقة بين الوصول والثقة', 'انخفاض التمويل', 'فشل الأرشيف', 'تغير المناخ'], answer: 0, explanation: 'What my study shows is a clear link between access and trust.' },
+        { id: 'l42q2', question: 'ما الاعتراض الذي تطرحه هالة؟', options: ['المنهج ضعيف', 'العينة صغيرة', 'البيانات مزورة', 'الوقت قصير'], answer: 1, explanation: 'Much as I admire the method, the sample is small.' },
+        { id: 'l42q3', question: 'كيف ترد نور على الاعتراض؟', options: ['ترفضه تماماً', 'تقول إن النتائج متسقة رغم الحجم', 'تنسحب من المناقشة', 'تطلب وقتاً إضافياً'], answer: 1, explanation: 'Notwithstanding the size, the findings are consistent.' },
+        { id: 'l42q4', question: 'ما الذي يقدم أقوى دليل؟', options: ['المقابلات', 'الأرشيف', 'الاستبيان', 'الميزانية'], answer: 1, explanation: 'It is the archive that provides the strongest evidence.' },
+        { id: 'l42q5', question: 'أي جملة تستخدم القلب الشرطي؟', options: ['Had we received the data earlier…', 'What my study shows is…', 'Much as I admire the method…', 'It is the archive that…'], answer: 0, explanation: 'Had + we + received = قلب الشرط الثالث.' },
+        { id: 'l42q6', question: 'أي وصف يصف حجة نور في الختام؟', options: ['غامضة ومترددة', 'واضحة وصريحة', 'قصيرة وسطحية', 'عاطفية فقط'], answer: 1, explanation: 'Your argument is lucid and candid = واضحة وصريحة.' },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05, UNIT_06, UNIT_07];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {

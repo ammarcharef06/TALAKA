@@ -26,9 +26,9 @@ describe('بنية المنهاج', () => {
     }
   });
 
-  it('الترتيب العالمي عبر المحطات: 36 درساً فريداً مرتباً لكل درس تاليه', () => {
+  it('الترتيب العالمي عبر المحطات: 42 درساً فريداً مرتباً لكل درس تاليه', () => {
     const all = allLessonsInOrder();
-    expect(all.length).toBe(36);
+    expect(all.length).toBe(42);
     for (const { unit } of all) {
       expect(UNITS).toContain(unit);
     }
@@ -47,7 +47,7 @@ describe('بنية المنهاج', () => {
     expect(Object.values(oneDone).filter((v) => v === 'current')).toHaveLength(1);
   });
 
-  it('nextLessonAfter: تتابع عبر حدود المحطات (6 → 7 → 13 → 19 → 25 → 31) وينتهي عند 36', () => {
+  it('nextLessonAfter: تتابع عبر حدود المحطات حتى الدرس 42', () => {
     const l6 = allLessonsInOrder().find((x) => x.lesson.id === 'l6-dialogue');
     expect(nextLessonAfter(l6!.lesson.id)?.lesson.id).toBe('l7-dont');
     const l12 = allLessonsInOrder().find((x) => x.lesson.id === 'l12-cafe');
@@ -58,6 +58,8 @@ describe('بنية المنهاج', () => {
     expect(nextLessonAfter(l24!.lesson.id)?.lesson.id).toBe('l25-third-wish');
     const l30 = allLessonsInOrder().find((x) => x.lesson.id === 'l30-seminar');
     expect(nextLessonAfter(l30!.lesson.id)?.lesson.id).toBe('l31-inversion');
-    expect(nextLessonAfter('l36-archive-seminar')).toBeNull();
+    const l36 = allLessonsInOrder().find((x) => x.lesson.id === 'l36-archive-seminar');
+    expect(nextLessonAfter(l36!.lesson.id)?.lesson.id).toBe('l37-inversion-c2');
+    expect(nextLessonAfter('l42-viva')).toBeNull();
   });
 });
