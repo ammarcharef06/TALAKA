@@ -1282,7 +1282,320 @@ export const UNIT_04: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04];
+export const UNIT_05: Unit = {
+  id: 'm4-analysis-b2',
+  order: 5,
+  title: 'المحطة الخامسة — الدقة والتحليل (B2)',
+  tagline: 'الندم والشرط الثالث، الكلام غير المباشر، المجهول المتقدم، المستقبل التام، والوصل غير المحدد — ثم ندوة بحث ختماً',
+  forLevels: 'B2',
+  lessons: [
+    {
+      id: 'l25-third-wish',
+      order: 1,
+      title: 'لو حدث… — الشرط الثالث والندم',
+      estMinutes: 12,
+      objectives: [
+        'بناء الشرط الثالث: If + had + التصريف الثالث, would have + التصريف الثالث',
+        'التعبير عن الندم بـ wish + الماضي التام',
+        'تجنب فخ «If I would have»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'ماضٍ لا يمكن تغييره',
+          body: 'الشرط الثالث يحكي عن ماضٍ مستحيل التغيير: If + had + التصريف الثالث, would have + التصريف الثالث. «If I had studied, I would have passed» = لو كنت ذاكرت لنجحت (لكنني لم أذاكر). ولا نضع would بعد if.',
+        },
+        {
+          type: 'table',
+          title: 'الشرط الثالث في الاتجاهين',
+          head: ['الشرط', 'النتيجة'],
+          rows: [
+            ['If I had studied harder,', 'I would have passed the exam.'],
+            ['If she had left earlier,', "she wouldn't have missed the train."],
+            ['If we had known,', 'we would have helped.'],
+            ['If I hadn\'t forgotten my keys,', "I wouldn't have been late."],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'wish + الماضي التام = ندم',
+          body: 'I wish I had studied more = أتمنى لو كنت ذاكرت أكثر (ندم على الماضي). I wish I hadn\'t said that = أتمنى لو لم أقل ذلك. أما wish + الماضي البسيط فهو رغبة في الحاضر: I wish I had more time.',
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: If I would have',
+          body: 'لا نستخدم would في جملة if: «If I had known» لا «If I would have known». وwould have يأتي في النتيجة فقط: «I would have helped».',
+        },
+      ],
+      examples: [
+        { text: 'If I had studied harder, I would have passed the exam.', note: 'شرط ثالث كامل' },
+        { text: "If she had left earlier, she wouldn't have missed the train.", note: 'نتيجة منفية: wouldn\'t have' },
+        { text: 'If we had known, we would have helped.', note: 'الشرط أولاً ثم النتيجة' },
+        { text: 'I wish I had studied more.', note: 'ندم على الماضي: wish + had + pp' },
+        { text: "I wish I hadn't said that.", note: 'ندم على فعل حدث' },
+        { text: "If I hadn't forgotten my keys, I wouldn't have been late.", note: 'شرط منفي + نتيجة منفية' },
+      ],
+      practice: [
+        { id: 'l25q1', question: 'أكمل: If you had studied, you ___ the exam.', options: ['passed', 'would pass', 'would have passed', 'will pass'], answer: 2, explanation: 'الشرط الثالث: if + had + pp، والنتيجة would have + pp.' },
+        { id: 'l25q2', question: 'أكمل: If I ___ known, I would have helped.', options: ['have', 'had', 'would have', 'was'], answer: 1, explanation: 'جملة if تأخذ had + التصريف الثالث، لا would have.' },
+        { id: 'l25q3', question: 'صحح: If I would have seen him, I would have told him.', options: ['If I had seen him, I would have told him.', 'If I saw him, I would have told him.', 'If I have seen him, I would tell him.', 'If I would see him, I had told him.'], answer: 0, explanation: 'لا would بعد if: If I had seen him.' },
+        { id: 'l25q4', question: 'أكمل: I wish I ___ more time yesterday.', options: ['have', 'had', 'had had', 'would have'], answer: 2, explanation: 'الندم على الماضي: wish + had + التصريف الثالث (had had).' },
+        { id: 'l25q5', question: 'أكمل: She would have come if you ___ her.', options: ['invite', 'invited', 'had invited', 'would invite'], answer: 2, explanation: 'الشرط الثالث: if + had invited، والنتيجة would have come.' },
+        { id: 'l25q6', question: 'ماذا تعني: I wish I hadn\'t said that؟', options: ['أتمنى أن أقول ذلك غداً', 'أتمنى أنني لم أقل ذلك', 'قلت ذلك وسعيد به', 'سأقول ذلك لاحقاً'], answer: 1, explanation: 'wish + hadn\'t + pp = ندم على شيء قيل في الماضي.' },
+      ],
+    },
+    {
+      id: 'l26-reported',
+      order: 2,
+      title: 'قال إنه… — الكلام غير المباشر',
+      estMinutes: 12,
+      objectives: [
+        'نقل الكلام بـ say وtell',
+        'إرجاع الأزمنة والضمائر والظروف',
+        'نقل الأسئلة بـ asked if / asked where',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'ننقل المعنى لا الكلمات',
+          body: 'في الكلام غير المباشر يعود الزمن خطوة إلى الوراء: present ← past، will ← would، can ← could، past ← past perfect. ونغيّر الضمائر والظروف: today ← that day، tomorrow ← the next day، here ← there.',
+        },
+        {
+          type: 'table',
+          title: 'من المباشر إلى غير المباشر',
+          head: ['الكلام المباشر', 'الكلام غير المباشر'],
+          rows: [
+            ['"I am tired."', 'He said (that) he was tired.'],
+            ['"I will call you."', 'She said she would call me.'],
+            ['"I can swim."', 'He said he could swim.'],
+            ['"I saw her."', 'She said she had seen her.'],
+            ['"Do you like tea?"', 'She asked if I liked tea.'],
+            ['"Where do you live?"', 'He asked where I lived.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'say أم tell؟',
+          body: 'tell تحتاج مفعولاً شخصياً: «He told me he was busy». say لا تأخذ مفعولاً شخصياً مباشرة: «He said he was busy» لا «He said me». وفي السؤال المنقول نستخدم ترتيب الجملة العادية: «He asked where I lived» لا «where did I live».',
+        },
+      ],
+      examples: [
+        { text: 'He said (that) he was tired.', note: 'am ← was' },
+        { text: 'She told me she would call me.', note: 'will ← would، وtell + me' },
+        { text: 'They said they had finished the project.', note: 'past ← past perfect' },
+        { text: 'She asked if I liked tea.', note: 'سؤال نعم/لا: asked if' },
+        { text: 'He asked where I lived.', note: 'سؤال wh بترتيب الجملة' },
+        { text: 'The teacher told us we could leave early.', note: 'can ← could' },
+      ],
+      practice: [
+        { id: 'l26q1', question: 'انقل: "I am tired." — He said he ___ tired.', options: ['is', 'was', 'were', 'be'], answer: 1, explanation: 'present ← past: am ← was.' },
+        { id: 'l26q2', question: 'انقل: "I will come." — She told me she ___ come.', options: ['will', 'would', 'can', 'did'], answer: 1, explanation: 'will ← would في الكلام غير المباشر.' },
+        { id: 'l26q3', question: 'صحح: He said me he was busy.', options: ['He told me he was busy.', 'He said to me he is busy.', 'He told he was busy me.', 'He says me he was busy.'], answer: 0, explanation: 'tell + مفعول شخصي: told me. say لا تتبعها me مباشرة.' },
+        { id: 'l26q4', question: 'انقل السؤال: "Where do you live?" — He asked me where I ___.', options: ['live', 'lived', 'do live', 'did live'], answer: 1, explanation: 'السؤال المنقول: where + فاعل + فعل، والزمن يعود للماضي: lived.' },
+        { id: 'l26q5', question: 'انقل: "We have finished." — They said they ___ finished.', options: ['have', 'had', 'has', 'will have'], answer: 1, explanation: 'present perfect ← past perfect: had finished.' },
+        { id: 'l26q6', question: 'انقل: "Are you ready?" — She asked me if I ___ ready.', options: ['am', 'was', 'will be', 'be'], answer: 1, explanation: 'سؤال نعم/لا: asked if + جملة، وare ← was.' },
+      ],
+    },
+    {
+      id: 'l27-passive-advanced',
+      order: 3,
+      title: 'المجهول المتقدم — حين يختفي الفاعل',
+      estMinutes: 12,
+      objectives: [
+        'المبني للمجهول في الأزمنة التامة: has/had been + pp',
+        'المجهول مع الأفعال الناقصة: must/can/should be + pp',
+        'المستقبل المجهول: will be + pp',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'be يتصرف، والفعل يبقى تصريفاً ثالثاً',
+          body: 'المبني للمجهول المتقدم يوسّع قاعدة B1: has/have been + pp (مضارع تام)، had been + pp (ماضٍ تام)، will be + pp (مستقبل)، وmust/can/should be + pp (مع الناقصة). الفاعل يأتي بعد by إن لزم.',
+        },
+        {
+          type: 'table',
+          title: 'أشكال متقدمة',
+          head: ['المعلوم', 'المجهول'],
+          rows: [
+            ['They have finished the report.', 'The report has been finished.'],
+            ['They had cancelled the flight.', 'The flight had been cancelled.'],
+            ['You must do it today.', 'It must be done today.'],
+            ['They will open the bridge.', 'The bridge will be opened.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تنسَ been / be',
+          body: 'في التام نحتاج been: «has been finished» لا «has finished» (هذه تعني أن الفاعل أنهى). وفي الناقصة نحتاج be: «must be done» لا «must done». والتصريف الثالث دائماً: done لا did.',
+        },
+      ],
+      examples: [
+        { text: 'The report has been finished.', note: 'مضارع تام مجهول: has been + pp' },
+        { text: 'The flight had been cancelled before we arrived.', note: 'ماضٍ تام مجهول: had been + pp' },
+        { text: 'It must be done today.', note: 'must be + pp' },
+        { text: 'The bridge will be opened next year.', note: 'will be + pp' },
+        { text: 'The problem has been solved by the team.', note: 'by + الفاعل' },
+        { text: 'This rule should be followed.', note: 'should be + pp' },
+      ],
+      practice: [
+        { id: 'l27q1', question: 'أكمل: The project ___ already been finished.', options: ['have', 'has', 'is', 'had been'], answer: 1, explanation: 'project مفرد ⇒ has been finished (مضارع تام مجهول).' },
+        { id: 'l27q2', question: 'أكمل: The report ___ by the manager yesterday.', options: ['was written', 'was wrote', 'is wrote', 'has wrote'], answer: 0, explanation: 'ماضٍ مجهول: was + written.' },
+        { id: 'l27q3', question: 'أكمل: This must ___ before Friday.', options: ['do', 'be done', 'been done', 'did'], answer: 1, explanation: 'مع must: be + التصريف الثالث ⇒ must be done.' },
+        { id: 'l27q4', question: 'أكمل: The new bridge will ___ next year.', options: ['open', 'be opened', 'been opened', 'opened'], answer: 1, explanation: 'مستقبل مجهول: will be + opened.' },
+        { id: 'l27q5', question: 'صحح: The work has been did.', options: ['The work has been done.', 'The work has did.', 'The work is did.', 'The work has done been.'], answer: 0, explanation: 'بعد been يأتي التصريف الثالث done لا did.' },
+        { id: 'l27q6', question: 'حوّل: They have solved the problem.', options: ['The problem has solved.', 'The problem has been solved.', 'The problem is solve.', 'The problem have been solved.'], answer: 1, explanation: 'مضارع تام مجهول: has been + solved.' },
+      ],
+    },
+    {
+      id: 'l28-future-perfect',
+      order: 4,
+      title: 'بحلول 2030 — المستقبل التام والمستمر',
+      estMinutes: 12,
+      objectives: [
+        'المستقبل التام: will have + pp',
+        'المستقبل المستمر: will be + -ing',
+        'التمييز بين «ينتهي قبل» و«يجري في» وقت مستقبلي',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'قبل موعد مستقبلي أم أثناءه؟',
+          body: 'المستقبل التام (will have + pp) يصف فعلاً سينتهي قبل وقت مستقبلي: «By 2030, I will have finished my studies». والمستقبل المستمر (will be + -ing) يصف فعلاً سيجري في لحظة مستقبلية: «This time tomorrow, I will be flying to Paris».',
+        },
+        {
+          type: 'table',
+          title: 'علامات كل زمن',
+          head: ['الزمن', 'المثال'],
+          rows: [
+            ['will have + pp', 'By next June, she will have worked here for ten years.'],
+            ['will have + pp', 'By the time you arrive, we will have finished dinner.'],
+            ['will be + -ing', 'This time tomorrow, I will be flying to Paris.'],
+            ['will be + -ing', "Don't call at 8 — I will be having dinner."],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'by / by the time',
+          body: 'by + وقت = بحلول. by the time + جملة = بحلول الوقت الذي… ويأتي بعدها مضارع بسيط عادة: «By the time you arrive, we will have finished». لا تقل «will have finish» — التصريف الثالث دائماً.',
+        },
+      ],
+      examples: [
+        { text: 'By 2030, she will have worked here for ten years.', note: 'will have + worked' },
+        { text: 'By the time you arrive, we will have finished dinner.', note: 'by the time + مضارع' },
+        { text: 'This time tomorrow, I will be flying to Paris.', note: 'will be + -ing' },
+        { text: "Don't call at 8 — I will be having dinner.", note: 'فعل يجري في لحظة مستقبلية' },
+        { text: 'By next month, they will have completed the project.', note: 'إتمام قبل موعد' },
+        { text: 'At 10 tomorrow, we will be taking the exam.', note: 'امتحان يجري في تلك اللحظة' },
+      ],
+      practice: [
+        { id: 'l28q1', question: 'أكمل: By 2030, she ___ here for ten years.', options: ['will work', 'will have worked', 'will be working', 'worked'], answer: 1, explanation: 'إتمام قبل 2030 ⇒ will have + worked.' },
+        { id: 'l28q2', question: 'أكمل: This time tomorrow, I ___ to Paris.', options: ['will fly', 'will have flown', 'will be flying', 'fly'], answer: 2, explanation: 'فعل يجري في لحظة مستقبلية ⇒ will be flying.' },
+        { id: 'l28q3', question: 'أكمل: By the time you arrive, we ___ dinner.', options: ['will finish', 'will have finished', 'will be finishing', 'finished'], answer: 1, explanation: 'سينتهي قبل وصولك ⇒ will have finished.' },
+        { id: 'l28q4', question: 'صحح: By 2030, he will worked here.', options: ['By 2030, he will have worked here.', 'By 2030, he will work here.', 'By 2030, he will be worked here.', 'By 2030, he has worked here.'], answer: 0, explanation: 'المستقبل التام: will have + التصريف الثالث worked.' },
+        { id: 'l28q5', question: 'أكمل: Don\'t call at 8 — I ___ dinner.', options: ['will have', 'will be having', 'have', 'will had'], answer: 1, explanation: 'فعل مستمر في لحظة مستقبلية ⇒ will be having.' },
+        { id: 'l28q6', question: 'أكمل: By next month, they ___ the project.', options: ['will complete', 'will have completed', 'will be complete', 'completed'], answer: 1, explanation: 'إتمام قبل الشهر القادم ⇒ will have completed.' },
+      ],
+    },
+    {
+      id: 'l29-relative-nondefining',
+      order: 5,
+      title: 'بين فاصلتين — جمل الوصل غير المحددة',
+      estMinutes: 11,
+      objectives: [
+        'الفرق بين جملة الوصل المحددة وغير المحددة',
+        'استخدام الفواصل مع who / which / whose',
+        'عدم استخدام that في الجملة غير المحددة',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'معلومة إضافية أم ضرورية؟',
+          body: 'الجملة المحددة تحدد الاسم ولا فواصل: «The man who lives next door is a doctor». الجملة غير المحددة تضيف معلومة إضافية بين فاصلتين، ويمكن حذفها دون تغيير المعنى الأساسي: «My brother, who lives in Paris, is a lawyer».',
+        },
+        {
+          type: 'table',
+          title: 'الواصلة في الجملة غير المحددة',
+          head: ['الاسم', 'الواصلة'],
+          rows: [
+            ['شخص', 'who'],
+            ['شيء', 'which'],
+            ['ملكية', 'whose'],
+            ['مكان', 'where'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا that بين فاصلتين',
+          body: 'في الجملة غير المحددة لا نستخدم that: «My father, who works in Cairo, is a doctor» لا «My father, that works…». والفواصل ليست تزييناً — حذفها يغيّر المعنى من معلومة إضافية إلى تحديد.',
+        },
+      ],
+      examples: [
+        { text: 'My brother, who lives in Paris, is a lawyer.', note: 'معلومة إضافية بين فاصلتين' },
+        { text: 'The book, which was published in 2020, became a bestseller.', note: 'which لشيء' },
+        { text: 'Mr. Ali, whose company is huge, is retiring.', note: 'whose للملكية' },
+        { text: 'Cairo, which is the capital of Egypt, is very crowded.', note: 'which لمكان أيضاً' },
+        { text: 'My sister who lives in Cairo is a doctor.', note: 'محددة: تحدد أي أخت' },
+        { text: 'My sister, who lives in Cairo, is a doctor.', note: 'غير محددة: معلومة إضافية' },
+      ],
+      practice: [
+        { id: 'l29q1', question: 'أكمل: My brother, ___ lives in Paris, is a lawyer.', options: ['which', 'who', 'where', 'whose'], answer: 1, explanation: 'شخص + جملة غير محددة ⇒ who.' },
+        { id: 'l29q2', question: 'أكمل: The book, ___ was published in 2020, became a bestseller.', options: ['who', 'which', 'where', 'whose'], answer: 1, explanation: 'شيء ⇒ which، ولا نستخدم that بين فاصلتين.' },
+        { id: 'l29q3', question: 'أكمل: Mr. Ali, ___ company is huge, is retiring.', options: ['who', 'which', 'whose', 'where'], answer: 2, explanation: 'ملكية (شركته) ⇒ whose.' },
+        { id: 'l29q4', question: 'صحح: My father, that works in Cairo, is a doctor.', options: ['My father, who works in Cairo, is a doctor.', 'My father, which works in Cairo, is a doctor.', 'My father, whose works in Cairo, is a doctor.', 'My father, where works in Cairo, is a doctor.'], answer: 0, explanation: 'الجملة غير المحددة تأخذ who للشخص، ولا تأخذ that.' },
+        { id: 'l29q5', question: 'أكمل: Cairo, ___ is the capital of Egypt, is very crowded.', options: ['who', 'which', 'where', 'whose'], answer: 1, explanation: 'المدينة كشيء/مكان في الجملة غير المحددة ⇒ which.' },
+        { id: 'l29q6', question: 'أي جملة تستخدم جملة وصل غير محددة؟', options: ['My sister who lives in Cairo is a doctor.', 'My sister, who lives in Cairo, is a doctor.', 'My sister that lives in Cairo is a doctor.', 'My sister which lives in Cairo is a doctor.'], answer: 1, explanation: 'الفواصل حول الجملة تجعلها معلومة إضافية غير محددة.' },
+      ],
+    },
+    {
+      id: 'l30-seminar',
+      order: 6,
+      title: 'حوار الندوة — «لو أعدنا التجربة»',
+      estMinutes: 13,
+      objectives: [
+        'استخدام تراكيب B2 في نقاش أكاديمي',
+        'فهم الندم والكلام المنقول والمجهول والمستقبل التام',
+        'التحدث عن بحث ونتائجه بثقة',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'هذه ندوة بحثية في طَلَاقَة. ستسمع الشرط الثالث (لو بدأنا أبكر)، والكلام غير المباشر (قالت إن…)، والمجهول (تم تسليم التقرير)، والمستقبل التام (بحلول يونيو سنكون أكملنا)، والوصل غير المحدد (النتائج، التي تبدو واعدة،…).',
+        },
+        {
+          type: 'table',
+          title: 'عبارات الندوة الجاهزة',
+          head: ['العبارة', 'المعنى'],
+          rows: [
+            ['If we had started earlier, we would have …', 'لو بدأنا أبكر لكنا…'],
+            ['The report has been submitted.', 'تم تسليم التقرير.'],
+            ['By next June, we will have completed …', 'بحلول يونيو القادم سنكون أكملنا…'],
+            ['The findings, which are promising, will be presented …', 'النتائج، التي تبدو واعدة، ستُعرض…'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Hana: Welcome. Today we will discuss the solar project, which started last year.', note: 'وصل غير محدد: which' },
+        { text: 'Salma: If we had started earlier, we would have collected more data.', note: 'شرط ثالث: ندم على البداية' },
+        { text: 'Youssef: The first report has been submitted to the ministry.', note: 'مجهول تام: has been submitted' },
+        { text: 'Hana: Good. By next June, we will have completed phase two.', note: 'مستقبل تام: will have completed' },
+        { text: 'Salma: The professor said the results would be published in September.', note: 'كلام غير مباشر: said … would' },
+        { text: 'Youssef: I wish we had had more time, but the team is working well.', note: 'ندم: wish + had had' },
+        { text: 'Hana: The findings, which are very promising, will be presented at the conference.', note: 'وصل غير محدد + مستقبل مجهول' },
+      ],
+      practice: [
+        { id: 'l30q1', question: 'عن أي مشروع تتحدث الندوة؟', options: ['مشروع الطاقة الشمسية', 'مشروع مياه', 'مشروع تعليمي', 'مشروع طبي'], answer: 0, explanation: 'the solar project — مشروع الطاقة الشمسية.' },
+        { id: 'l30q2', question: 'ماذا كانت سلمى تتمنى لو فعلوا؟', options: ['أنهوا أبكر', 'بدأوا أبكر', 'سافروا أكثر', 'غيّروا الفريق'], answer: 1, explanation: 'If we had started earlier… = لو بدأنا أبكر.' },
+        { id: 'l30q3', question: 'ماذا تم تسليمه للوزارة؟', options: ['النتائج النهائية', 'التقرير الأول', 'الميزانية', 'خطة السنة القادمة'], answer: 1, explanation: 'The first report has been submitted to the ministry.' },
+        { id: 'l30q4', question: 'ماذا سيحدث بحلول يونيو القادم؟', options: ['سيبدأ المشروع', 'سيكتمل المرحلة الثانية', 'ستُنشر النتائج', 'سيتوقف التمويل'], answer: 1, explanation: 'By next June, we will have completed phase two.' },
+        { id: 'l30q5', question: 'ماذا قال الأستاذ عن النتائج؟', options: ['ستُنشر في سبتمبر', 'رُفضت', 'لم تُكتب بعد', 'ستُنشر في يونيو'], answer: 0, explanation: 'The professor said the results would be published in September.' },
+        { id: 'l30q6', question: 'أي جملة في الحوار مبني للمجهول؟', options: ['If we had started earlier…', 'The first report has been submitted…', 'I wish we had had more time…', 'The team is working well.'], answer: 1, explanation: 'has been submitted = مضارع تام مبني للمجهول.' },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {

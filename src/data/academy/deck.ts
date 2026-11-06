@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   طَلَاقَة — رزمة بطاقات المنهاج (155 بطاقة)
-   مشتقة حرفياً من دروس المحطات الأربع: كل بطاقة مربوطة بدرسها
+   طَلَاقَة — رزمة بطاقات المنهاج (191 بطاقة)
+   مشتقة حرفياً من دروس المحطات الخمس: كل بطاقة مربوطة بدرسها
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
 
@@ -217,6 +217,54 @@ export const SRS_DECK: DeckCard[] = [
   { id: 'c-l24-04', lessonId: 'l24-interview', front: '«لماذا تريد هذه الوظيفة؟» وأجب بشرط', back: 'If I get this job, I will help students.', example: 'If I get this job, I will help students who need confidence.', note: 'شرط أول + who' },
   { id: 'c-l24-05', lessonId: 'l24-interview', front: '«ما نقاط قوتك؟» — بداية مناسبة؟', back: 'I am good at … / I am a person who …', example: 'I am a person who learns quickly.', note: 'استخدم who لوصف نفسك' },
   { id: 'c-l24-06', lessonId: 'l24-interview', front: '«قُبل طلبك» بالمجهول؟', back: 'Your application was accepted.', example: 'Your application was accepted. Welcome to Talaqa.', note: 'was + accepted' },
+
+  /* ── الدرس 25: الشرط الثالث والندم ── */
+  { id: 'c-l25-01', lessonId: 'l25-third-wish', front: 'تركيب الشرط الثالث؟', back: 'If + had + التصريف الثالث, would have + التصريف الثالث', example: 'If I had studied, I would have passed.', note: 'ماضٍ مستحيل التغيير' },
+  { id: 'c-l25-02', lessonId: 'l25-third-wish', front: 'أكمل: If you had studied, you ___ the exam.', back: 'would have passed', example: 'If you had studied, you would have passed the exam.', note: 'النتيجة: would have + pp' },
+  { id: 'c-l25-03', lessonId: 'l25-third-wish', front: 'صحح: If I would have known…', back: 'If I had known…', example: 'If I had known, I would have helped.', note: 'لا would بعد if' },
+  { id: 'c-l25-04', lessonId: 'l25-third-wish', front: '«أتمنى لو كنت ذاكرت أكثر»؟', back: 'I wish I had studied more.', example: 'I wish I had studied more.', note: 'wish + had + pp = ندم' },
+  { id: 'c-l25-05', lessonId: 'l25-third-wish', front: '«أتمنى لو لم أقل ذلك»؟', back: "I wish I hadn't said that.", example: "I wish I hadn't said that.", note: 'ندم على فعل حدث' },
+  { id: 'c-l25-06', lessonId: 'l25-third-wish', front: 'أكمل: She would have come if you ___ her.', back: 'had invited', example: 'She would have come if you had invited her.', note: 'if + had + pp' },
+
+  /* ── الدرس 26: الكلام غير المباشر ── */
+  { id: 'c-l26-01', lessonId: 'l26-reported', front: 'انقل: "I am tired."', back: 'He said he was tired.', example: 'He said he was tired.', note: 'am ← was' },
+  { id: 'c-l26-02', lessonId: 'l26-reported', front: 'انقل: "I will call you."', back: 'She said she would call me.', example: 'She said she would call me.', note: 'will ← would' },
+  { id: 'c-l26-03', lessonId: 'l26-reported', front: 'say أم tell مع الشخص؟', back: 'tell + شخص: He told me… / say بلا شخص: He said…', example: 'He told me he was busy.', note: 'لا تقل He said me' },
+  { id: 'c-l26-04', lessonId: 'l26-reported', front: 'انقل السؤال: "Where do you live?"', back: 'He asked where I lived.', example: 'He asked where I lived.', note: 'ترتيب جملة عادي بلا did' },
+  { id: 'c-l26-05', lessonId: 'l26-reported', front: 'انقل: "We have finished."', back: 'They said they had finished.', example: 'They said they had finished the project.', note: 'present perfect ← past perfect' },
+  { id: 'c-l26-06', lessonId: 'l26-reported', front: 'انقل: "Are you ready?"', back: 'She asked me if I was ready.', example: 'She asked me if I was ready.', note: 'asked if + جملة' },
+
+  /* ── الدرس 27: المجهول المتقدم ── */
+  { id: 'c-l27-01', lessonId: 'l27-passive-advanced', front: 'المضارع التام المجهول؟', back: 'has/have been + التصريف الثالث', example: 'The report has been finished.', note: 'has been finished' },
+  { id: 'c-l27-02', lessonId: 'l27-passive-advanced', front: 'أكمل: This must ___ before Friday.', back: 'be done', example: 'This must be done before Friday.', note: 'must be + pp' },
+  { id: 'c-l27-03', lessonId: 'l27-passive-advanced', front: 'المستقبل المجهول؟', back: 'will be + التصريف الثالث', example: 'The bridge will be opened next year.' },
+  { id: 'c-l27-04', lessonId: 'l27-passive-advanced', front: 'صحح: The work has been did.', back: 'The work has been done.', example: 'The work has been done.', note: 'بعد been: done لا did' },
+  { id: 'c-l27-05', lessonId: 'l27-passive-advanced', front: 'حوّل: They have solved the problem.', back: 'The problem has been solved.', example: 'The problem has been solved.', note: 'has been + solved' },
+  { id: 'c-l27-06', lessonId: 'l27-passive-advanced', front: 'الماضي التام المجهول؟', back: 'had been + التصريف الثالث', example: 'The flight had been cancelled before we arrived.' },
+
+  /* ── الدرس 28: المستقبل التام ── */
+  { id: 'c-l28-01', lessonId: 'l28-future-perfect', front: 'تركيب المستقبل التام؟', back: 'will have + التصريف الثالث', example: 'By 2030, she will have worked here for ten years.', note: 'ينتهي قبل موعد مستقبلي' },
+  { id: 'c-l28-02', lessonId: 'l28-future-perfect', front: 'تركيب المستقبل المستمر؟', back: 'will be + -ing', example: 'This time tomorrow, I will be flying to Paris.', note: 'يجري في لحظة مستقبلية' },
+  { id: 'c-l28-03', lessonId: 'l28-future-perfect', front: 'أكمل: By the time you arrive, we ___ dinner.', back: 'will have finished', example: 'By the time you arrive, we will have finished dinner.', note: 'انتهاء قبل الوصول' },
+  { id: 'c-l28-04', lessonId: 'l28-future-perfect', front: 'صحح: He will worked here by 2030.', back: 'He will have worked here by 2030.', example: 'He will have worked here by 2030.', note: 'will have + pp' },
+  { id: 'c-l28-05', lessonId: 'l28-future-perfect', front: 'أكمل: Don\'t call at 8 — I ___ dinner.', back: 'will be having', example: "Don't call at 8 — I will be having dinner." },
+  { id: 'c-l28-06', lessonId: 'l28-future-perfect', front: '«بحلول الشهر القادم سيكونون أكملوا المشروع»؟', back: 'By next month, they will have completed the project.', example: 'By next month, they will have completed the project.', note: 'by + موعد' },
+
+  /* ── الدرس 29: الوصل غير المحدد ── */
+  { id: 'c-l29-01', lessonId: 'l29-relative-nondefining', front: 'كيف نعرف الجملة غير المحددة؟', back: 'بين فاصلتين، ومعلومتها إضافية', example: 'My brother, who lives in Paris, is a lawyer.', note: 'يمكن حذفها دون تغيير المعنى الأساسي' },
+  { id: 'c-l29-02', lessonId: 'l29-relative-nondefining', front: 'الواصلة للشخص في جملة غير محددة؟', back: 'who', example: 'My father, who works in Cairo, is a doctor.', note: 'لا that بين فاصلتين' },
+  { id: 'c-l29-03', lessonId: 'l29-relative-nondefining', front: 'الواصلة للشيء في جملة غير محددة؟', back: 'which', example: 'The book, which was published in 2020, became a bestseller.' },
+  { id: 'c-l29-04', lessonId: 'l29-relative-nondefining', front: 'الواصلة للملكية؟', back: 'whose', example: 'Mr. Ali, whose company is huge, is retiring.' },
+  { id: 'c-l29-05', lessonId: 'l29-relative-nondefining', front: 'صحح: My father, that works in Cairo, is a doctor.', back: 'My father, who works in Cairo, is a doctor.', example: 'My father, who works in Cairo, is a doctor.', note: 'الجملة غير المحددة لا تأخذ that' },
+  { id: 'c-l29-06', lessonId: 'l29-relative-nondefining', front: 'ما الفرق: My sister who lives in Cairo… / My sister, who lives in Cairo,…؟', back: 'الأولى تحدد أي أخت، والثانية معلومة إضافية', example: 'My sister, who lives in Cairo, is a doctor.', note: 'الفواصل تغيّر المعنى' },
+
+  /* ── الدرس 30: حوار الندوة ── */
+  { id: 'c-l30-01', lessonId: 'l30-seminar', front: 'عن أي مشروع تتحدث الندوة؟', back: 'the solar project', example: 'Today we will discuss the solar project.', note: 'مشروع الطاقة الشمسية' },
+  { id: 'c-l30-02', lessonId: 'l30-seminar', front: '«لو بدأنا أبكر لجمعنا بيانات أكثر»؟', back: 'If we had started earlier, we would have collected more data.', example: 'If we had started earlier, we would have collected more data.', note: 'شرط ثالث' },
+  { id: 'c-l30-03', lessonId: 'l30-seminar', front: '«تم تسليم التقرير الأول»؟', back: 'The first report has been submitted.', example: 'The first report has been submitted to the ministry.', note: 'مجهول تام' },
+  { id: 'c-l30-04', lessonId: 'l30-seminar', front: '«بحلول يونيو سنكون أكملنا المرحلة الثانية»؟', back: 'By next June, we will have completed phase two.', example: 'By next June, we will have completed phase two.', note: 'مستقبل تام' },
+  { id: 'c-l30-05', lessonId: 'l30-seminar', front: '«قالت الأستاذة إن النتائج ستُنشر في سبتمبر»؟', back: 'The professor said the results would be published in September.', example: 'The professor said the results would be published in September.', note: 'will ← would في الكلام غير المباشر' },
+  { id: 'c-l30-06', lessonId: 'l30-seminar', front: '«النتائج، التي تبدو واعدة، ستُعرض في المؤتمر»؟', back: 'The findings, which are very promising, will be presented at the conference.', example: 'The findings, which are very promising, will be presented at the conference.', note: 'وصل غير محدد + مجهول مستقبلي' },
 ];
 
 /** بطاقات درس معين — للإشعار «وُلدت بطاقات جديدة» */
