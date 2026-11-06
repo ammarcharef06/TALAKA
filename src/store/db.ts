@@ -4,7 +4,7 @@ import type { SignedCertificate } from '../engine/certificate';
 import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 5;
+const DB_VERSION = 6;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
@@ -12,6 +12,7 @@ const STORE_SRS = 'srs-cards';
 const STORE_EXAMS = 'exams';
 const STORE_KEYS = 'keys';
 const STORE_CERTS = 'certificates';
+const STORE_LIBRARY = 'library';
 
 export interface CertificateSigningKeyRecord {
   id: 'cert-signing';
@@ -33,6 +34,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_EXAMS)) db.createObjectStore(STORE_EXAMS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_KEYS)) db.createObjectStore(STORE_KEYS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_CERTS)) db.createObjectStore(STORE_CERTS, { keyPath: 'payload.id' });
+      if (!db.objectStoreNames.contains(STORE_LIBRARY)) db.createObjectStore(STORE_LIBRARY, { keyPath: 'readerId' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -264,6 +266,52 @@ export async function getLatestCertificate(studentId: string, level: Cefr): Prom
   return own[0] ?? null;
 }
 
+/* ── المكتبة المتدرّجة ── */
+
+export async function getLibraryProgressMap(): Promise<Record<string, { completedAt: string; bestScore: number }>> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_LIBRARY, 'readonly');
+      const req = t.objectStore(STORE_LIBRARY).getAll();
+      req.onsuccess = () => {
+        const map: Record<string, { completedAt: string; bestScore: number }> = {};
+        for (const row of req.result as { readerId: string; completedAt: string; bestScore: number }[]) {
+          map[row.readerId] = { completedAt: row.completedAt, bestScore: row.bestScore };
+        }
+        resolve(map);
+      };
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة تقدم المكتبة'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+/** تسجيل قراءة نص مع الحفاظ على أفضل نتيجة */
+export async function markReaderComplete(readerId: string, score: number): Promise<void> {
+  const db = await openDb();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const t = db.transaction(STORE_LIBRARY, 'readwrite');
+      const store = t.objectStore(STORE_LIBRARY);
+      const getReq = store.get(readerId);
+      getReq.onsuccess = () => {
+        const prev = getReq.result as { readerId: string; completedAt: string; bestScore: number } | undefined;
+        store.put({
+          readerId,
+          completedAt: new Date().toISOString(),
+          bestScore: Math.max(prev?.bestScore ?? 0, Math.round(score)),
+        });
+      };
+      t.oncomplete = () => resolve();
+      t.onerror = () => reject(t.error ?? new Error('تعذر حفظ تقدم القراءة'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -281,6 +329,7 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_EXAMS);
     await done(STORE_KEYS);
     await done(STORE_CERTS);
+    await done(STORE_LIBRARY);
   } finally {
     db.close();
   }

@@ -19,6 +19,7 @@ import './screens/examResult.ts';
 import './screens/transcript.ts';
 import './screens/certificate.ts';
 import './screens/verify.ts';
+import './screens/library.ts';
 
 import { go } from './router';
 

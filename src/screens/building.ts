@@ -1,5 +1,5 @@
 import { go, registerScreen } from '../router';
-import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults } from '../store/db';
+import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap } from '../store/db';
 import { sealSVG, initialsOf } from '../ui/seal';
 import { showConfirm, toast } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
@@ -22,6 +22,7 @@ const HALLS: Hall[] = [
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
   { id: 'transcript', name: 'السجل الأكاديمي', desc: 'Transcript حيّ: درجاتك واعتماداتك ومحاضر امتحاناتك — وثيقتك الرسمية للجامعة والمهنة', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9.5 8h5M9.5 12h5"/>' },
   { id: 'certificate', name: 'الشهادة والتوثيق', desc: 'شهادة موقعة رقمياً بمفتاح ECDSA — تُصدَّر من أعلى اعتماد وتُتحقق من ملفها', icon: '<circle cx="12" cy="9" r="5"/><path d="M9 13.5 8 21l4-2 4 2-1-7.5"/><path d="M10.5 9l1 1 2-2"/>' },
+  { id: 'library', name: 'المكتبة المتدرّجة', desc: 'نصوص إنجليزية حقيقية من S0 إلى C2 — بمسرد عربي وأسئلة فهم — اقرأ بمستواك', icon: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5V5.5"/><path d="M8 7h8M8 11h6"/>' },
   { id: 'career', name: 'المسار المهني — Career Hub', desc: 'تدريب مكثف على مقابلات العمل بالإنجليزية حتى التوقيع', icon: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>' },
   { id: 'clinic', name: 'عيادة أخطاء العرب', desc: 'جلسات مركزة على أكثر أخطاء العرب تكراراً — نطقاً وقواعد وأسلوباً', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>' },
   { id: 'mirror', name: 'بوابة النسخ اللامركزية', desc: 'طلاقة تعيش على GitHub Pages وCloudflare Pages وIPFS — تنزيل نسخة كاملة من الأكاديمية', icon: '<circle cx="5" cy="12" r="2.4"/><circle cx="12" cy="5" r="2.4"/><circle cx="19" cy="12" r="2.4"/><circle cx="12" cy="19" r="2.4"/><path d="M7.3 10.9 9.7 7.1M14.3 7.1l2.4 3.8M16.7 13.1 14.3 16.9M9.7 16.9l-2.4-3.8"/>' },
@@ -73,6 +74,7 @@ function renderBuilding(root: HTMLElement): void {
       if (h.id === 'cafe') return cafeHallCard();
       if (h.id === 'transcript') return transcriptHallCard();
       if (h.id === 'certificate') return certificateHallCard(student);
+      if (h.id === 'library') return libraryHallCard();
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -91,6 +93,7 @@ function renderBuilding(root: HTMLElement): void {
     grid.querySelector<HTMLButtonElement>('#enterExamHallBtn')?.addEventListener('click', () => go('examHall'));
     grid.querySelector<HTMLButtonElement>('#enterTranscriptBtn')?.addEventListener('click', () => go('transcript'));
     grid.querySelector<HTMLButtonElement>('#enterCertificateBtn')?.addEventListener('click', () => go('certificate'));
+    grid.querySelector<HTMLButtonElement>('#enterLibraryBtn')?.addEventListener('click', () => go('library'));
 
     // عدّاد إتمام الوحدة الأولى + عدد البطاقات المستحقة
     void Promise.all([getProgressMap(), getAllSrsStates(), getAllLevelExamResults()]).then(([map, states, examResults]) => {
@@ -123,6 +126,15 @@ function renderBuilding(root: HTMLElement): void {
             : `${done} من ${total} درساً · بانتظار أول اعتماد`;
       }
     });
+
+    void getLibraryProgressMap().then((lib) => {
+      const el = grid.querySelector<HTMLElement>('#libraryStatus');
+      if (!el) return;
+      const doneCount = Object.keys(lib).length;
+      el.innerHTML = doneCount === 0
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>14 نصاً — اثنان لكل مستوى، وأبوابك مفتوحة'
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>قرأت <b dir="ltr">&nbsp;${doneCount}&nbsp;</b> من 14 نصاً`;
+    }).catch(() => {});
   });
 
   root.querySelector('#exportBtn')!.addEventListener('click', () => {
@@ -202,6 +214,17 @@ function certificateHallCard(student: StudentRecord): string {
     <span class="hall-desc">شهادة موقعة رقمياً بمفتاح ECDSA — تُصدَّر من أعلى اعتماد، وتُصدَّر كملف قابل للتحقق في أي نسخة</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>${student.certifiedLevel ? `جاهزة — أعلى اعتماد <b dir="ltr">${escapeHtmlLocal(student.certifiedLevel)}</b>` : 'تُصدر بعد أول اعتماد'}</span>
     <button id="enterCertificateBtn" class="btn btn-gold hall-enter-btn">افتح الشهادة والتوثيق</button>
+  </div>`;
+}
+
+function libraryHallCard(): string {
+  return `
+  <div class="hall hall-open" role="group" aria-label="المكتبة المتدرّجة">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'library')!.icon)}</span>
+    <span class="hall-name">المكتبة المتدرّجة</span>
+    <span class="hall-desc">نصوص إنجليزية حقيقية من S0 إلى C2 — مسرد عربي وأسئلة فهم بملاحظات عربية — تُحفظ قراءاتك في سجلك</span>
+    <span class="hall-complete" id="libraryStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>14 نصاً — اثنان لكل مستوى، وأبوابك مفتوحة</span>
+    <button id="enterLibraryBtn" class="btn btn-gold hall-enter-btn">افتح المكتبة</button>
   </div>`;
 }
 
