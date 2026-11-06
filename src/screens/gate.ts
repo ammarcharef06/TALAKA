@@ -26,6 +26,7 @@ function renderGate(root: HTMLElement): void {
     <div class="gate-actions">
       <button id="enterBtn" class="btn btn-primary btn-xl">ادخل بوابة الأكاديمية</button>
       <button id="importBtn" class="btn btn-ghost">استعادة بطاقة طالب — من ملف JSON</button>
+      <button id="verifyCertBtn" class="btn btn-ghost">التحقق من شهادة — من ملف JSON</button>
       <button id="aboutBtn" class="btn btn-ghost">عن «طَلَاقَة» — وثيقة التأسيس</button>
       <input type="file" id="importFile" accept="application/json,.json" hidden />
     </div>
@@ -82,6 +83,7 @@ function renderGate(root: HTMLElement): void {
   // استعادة الهوية من ملف البطاقة — السيادة تعني أنك تحمل هويتك معك
   const importBtn = root.querySelector<HTMLButtonElement>('#importBtn')!;
   const importFile = root.querySelector<HTMLInputElement>('#importFile')!;
+  root.querySelector('#verifyCertBtn')!.addEventListener('click', () => go('verify'));
   importBtn.addEventListener('click', () => importFile.click());
   importFile.addEventListener('change', () => {
     const file = importFile.files?.[0];

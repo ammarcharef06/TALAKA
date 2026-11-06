@@ -17,6 +17,8 @@ import './screens/examHall.ts';
 import './screens/levelExam.ts';
 import './screens/examResult.ts';
 import './screens/transcript.ts';
+import './screens/certificate.ts';
+import './screens/verify.ts';
 
 import { go } from './router';
 

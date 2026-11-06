@@ -134,6 +134,7 @@ function renderTranscript(root: HTMLElement): void {
 
     <div class="result-actions transcript-actions">
       <button id="backToBuildingBtn2" class="btn btn-primary btn-xl">العودة إلى المبنى</button>
+      <button id="openCertificateBtn" class="btn btn-gold">الشهادة والتوثيق</button>
       <button id="openExamHallBtn" class="btn btn-ghost">قاعة الامتحانات</button>
     </div>
   </main>
@@ -142,6 +143,7 @@ function renderTranscript(root: HTMLElement): void {
       root.querySelector('#printTranscriptBtn')!.addEventListener('click', () => window.print());
       root.querySelector('#backToBuildingBtn')!.addEventListener('click', () => go('building'));
       root.querySelector('#backToBuildingBtn2')!.addEventListener('click', () => go('building'));
+      root.querySelector('#openCertificateBtn')!.addEventListener('click', () => go('certificate'));
       root.querySelector('#openExamHallBtn')!.addEventListener('click', () => go('examHall'));
     }
   );

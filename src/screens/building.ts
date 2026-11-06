@@ -21,6 +21,7 @@ const HALLS: Hall[] = [
   { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'أول حوار صوتي حقيقي مع «بسام» — تحدث بميكروفونك أو اكتب، واختم الصورة في سجلك', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
   { id: 'transcript', name: 'السجل الأكاديمي', desc: 'Transcript حيّ: درجاتك واعتماداتك ومحاضر امتحاناتك — وثيقتك الرسمية للجامعة والمهنة', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9.5 8h5M9.5 12h5"/>' },
+  { id: 'certificate', name: 'الشهادة والتوثيق', desc: 'شهادة موقعة رقمياً بمفتاح ECDSA — تُصدَّر من أعلى اعتماد وتُتحقق من ملفها', icon: '<circle cx="12" cy="9" r="5"/><path d="M9 13.5 8 21l4-2 4 2-1-7.5"/><path d="M10.5 9l1 1 2-2"/>' },
   { id: 'career', name: 'المسار المهني — Career Hub', desc: 'تدريب مكثف على مقابلات العمل بالإنجليزية حتى التوقيع', icon: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>' },
   { id: 'clinic', name: 'عيادة أخطاء العرب', desc: 'جلسات مركزة على أكثر أخطاء العرب تكراراً — نطقاً وقواعد وأسلوباً', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>' },
   { id: 'mirror', name: 'بوابة النسخ اللامركزية', desc: 'طلاقة تعيش على GitHub Pages وCloudflare Pages وIPFS — تنزيل نسخة كاملة من الأكاديمية', icon: '<circle cx="5" cy="12" r="2.4"/><circle cx="12" cy="5" r="2.4"/><circle cx="19" cy="12" r="2.4"/><circle cx="12" cy="19" r="2.4"/><path d="M7.3 10.9 9.7 7.1M14.3 7.1l2.4 3.8M16.7 13.1 14.3 16.9M9.7 16.9l-2.4-3.8"/>' },
@@ -71,6 +72,7 @@ function renderBuilding(root: HTMLElement): void {
       if (h.id === 'review') return reviewHallCard();
       if (h.id === 'cafe') return cafeHallCard();
       if (h.id === 'transcript') return transcriptHallCard();
+      if (h.id === 'certificate') return certificateHallCard(student);
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -88,6 +90,7 @@ function renderBuilding(root: HTMLElement): void {
     grid.querySelector<HTMLButtonElement>('#enterCafeBtn')?.addEventListener('click', () => go('cafe'));
     grid.querySelector<HTMLButtonElement>('#enterExamHallBtn')?.addEventListener('click', () => go('examHall'));
     grid.querySelector<HTMLButtonElement>('#enterTranscriptBtn')?.addEventListener('click', () => go('transcript'));
+    grid.querySelector<HTMLButtonElement>('#enterCertificateBtn')?.addEventListener('click', () => go('certificate'));
 
     // عدّاد إتمام الوحدة الأولى + عدد البطاقات المستحقة
     void Promise.all([getProgressMap(), getAllSrsStates(), getAllLevelExamResults()]).then(([map, states, examResults]) => {
@@ -188,6 +191,17 @@ function transcriptHallCard(): string {
     <span class="hall-desc">سجل حيّ: درجات الدروس، محاضر الامتحانات، والاعتمادات — وثيقة رسمية قابلة للطباعة</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg><span id="transcriptStatus">جارٍ تجميع سجلك…</span></span>
     <button id="enterTranscriptBtn" class="btn btn-gold hall-enter-btn">افتح السجل الأكاديمي</button>
+  </div>`;
+}
+
+function certificateHallCard(student: StudentRecord): string {
+  return `
+  <div class="hall hall-open" role="group" aria-label="الشهادة والتوثيق">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'certificate')!.icon)}</span>
+    <span class="hall-name">الشهادة والتوثيق</span>
+    <span class="hall-desc">شهادة موقعة رقمياً بمفتاح ECDSA — تُصدَّر من أعلى اعتماد، وتُصدَّر كملف قابل للتحقق في أي نسخة</span>
+    <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>${student.certifiedLevel ? `جاهزة — أعلى اعتماد <b dir="ltr">${escapeHtmlLocal(student.certifiedLevel)}</b>` : 'تُصدر بعد أول اعتماد'}</span>
+    <button id="enterCertificateBtn" class="btn btn-gold hall-enter-btn">افتح الشهادة والتوثيق</button>
   </div>`;
 }
 

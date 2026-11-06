@@ -1,14 +1,25 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
 import type { Cefr, LevelExamResult, StudentRecord } from '../types';
+import type { SignedCertificate } from '../engine/certificate';
 import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
 const STORE_SRS = 'srs-cards';
 const STORE_EXAMS = 'exams';
+const STORE_KEYS = 'keys';
+const STORE_CERTS = 'certificates';
+
+export interface CertificateSigningKeyRecord {
+  id: 'cert-signing';
+  privateKey: CryptoKey;
+  publicKeyJwk: JsonWebKey;
+  fingerprint: string;
+  createdAt: string;
+}
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -20,6 +31,8 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_PROGRESS)) db.createObjectStore(STORE_PROGRESS, { keyPath: 'lessonId' });
       if (!db.objectStoreNames.contains(STORE_SRS)) db.createObjectStore(STORE_SRS, { keyPath: 'cardId' });
       if (!db.objectStoreNames.contains(STORE_EXAMS)) db.createObjectStore(STORE_EXAMS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_KEYS)) db.createObjectStore(STORE_KEYS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_CERTS)) db.createObjectStore(STORE_CERTS, { keyPath: 'payload.id' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -199,6 +212,58 @@ export async function certifyStudent(level: Cefr): Promise<StudentRecord | null>
   }
 }
 
+/* ── مفاتيح توقيع الشهادات والشهادات الصادرة ── */
+
+export async function getSigningKey(): Promise<CertificateSigningKeyRecord | null> {
+  const db = await openDb();
+  try {
+    const row = await tx<CertificateSigningKeyRecord | undefined>(db, STORE_KEYS, 'readonly', (s) => s.get('cert-signing'));
+    return row ?? null;
+  } finally {
+    db.close();
+  }
+}
+
+export async function saveSigningKey(rec: CertificateSigningKeyRecord): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_KEYS, 'readwrite', (s) => s.put(rec));
+  } finally {
+    db.close();
+  }
+}
+
+export async function saveCertificate(cert: SignedCertificate): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_CERTS, 'readwrite', (s) => s.put(cert));
+  } finally {
+    db.close();
+  }
+}
+
+export async function getAllCertificates(): Promise<SignedCertificate[]> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_CERTS, 'readonly');
+      const req = t.objectStore(STORE_CERTS).getAll();
+      req.onsuccess = () => resolve(req.result as SignedCertificate[]);
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة الشهادات'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+export async function getLatestCertificate(studentId: string, level: Cefr): Promise<SignedCertificate | null> {
+  const all = await getAllCertificates();
+  const own = all
+    .filter((c) => c.payload.studentId === studentId && c.payload.level === level)
+    .sort((a, b) => Date.parse(b.payload.issuedAt) - Date.parse(a.payload.issuedAt));
+  return own[0] ?? null;
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -214,6 +279,8 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_PROGRESS);
     await done(STORE_SRS);
     await done(STORE_EXAMS);
+    await done(STORE_KEYS);
+    await done(STORE_CERTS);
   } finally {
     db.close();
   }
