@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   طَلَاقَة — رزمة بطاقات المنهاج (119 بطاقة)
-   مشتقة حرفياً من دروس المحطات الثلاث: كل بطاقة مربوطة بدرسها
+   طَلَاقَة — رزمة بطاقات المنهاج (155 بطاقة)
+   مشتقة حرفياً من دروس المحطات الأربع: كل بطاقة مربوطة بدرسها
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
 
@@ -169,6 +169,54 @@ export const SRS_DECK: DeckCard[] = [
   { id: 'c-l18-04', lessonId: 'l18-trip', front: 'ماذا زار عمر هناك؟', back: 'Karnak Temple and the Valley of the Kings', example: 'We saw Karnak Temple and the Valley of the Kings.', note: 'saw = ماضي see' },
   { id: 'c-l18-05', lessonId: 'l18-trip', front: 'ماذا سيفعل عمر السنة القادمة؟', back: "He's going to visit Aswan.", example: "Next year I'm going to visit Aswan.", note: 'خطة مستقبلية ← going to' },
   { id: 'c-l18-06', lessonId: 'l18-trip', front: 'أي مدينة أهدأ: الأقصر أم أسوان؟', back: 'Aswan', example: 'Aswan is quieter than Luxor.', note: 'quiet ← quieter' },
+
+  /* ── الدرس 19: المضارع التام ── */
+  { id: 'c-l19-01', lessonId: 'l19-perfect', front: 'تركيب المضارع التام؟', back: 'have / has + التصريف الثالث', example: 'I have visited Luxor twice.', note: 'he/she/it تأخذ has' },
+  { id: 'c-l19-02', lessonId: 'l19-perfect', front: 'التصريف الثالث لـ go؟', back: 'gone', example: 'He has gone home.', note: 'لا تقل has went' },
+  { id: 'c-l19-03', lessonId: 'l19-perfect', front: '«هل زرت أسوان من قبل؟» بالإنجليزية؟', back: 'Have you ever been to Aswan?', example: 'Have you ever been to Aswan?', note: 'have been to = زرت' },
+  { id: 'c-l19-04', lessonId: 'l19-perfect', front: 'أين نضع already وyet؟', back: 'already في الإثبات، yet في النفي والسؤال', example: "We have already eaten. They haven't left yet.", note: 'كلاهما مع المضارع التام' },
+  { id: 'c-l19-05', lessonId: 'l19-perfect', front: 'صحح: I have finished yesterday.', back: 'I finished yesterday.', example: 'I finished yesterday.', note: 'زمن محدد ⇒ ماضٍ بسيط' },
+  { id: 'c-l19-06', lessonId: 'l19-perfect', front: '«فقدت مفاتيحي» (والنتيجة الآن)؟', back: 'I have lost my keys.', example: "I have lost my keys, so I can't open the door.", note: 'نتيجة مستمرة الآن' },
+
+  /* ── الدرس 20: used to ── */
+  { id: 'c-l20-01', lessonId: 'l20-used-to', front: 'تركيب used to؟', back: 'used to + الفعل المجرد', example: 'I used to live in Cairo.', note: 'عادة أو حالة ماضية انتهت' },
+  { id: 'c-l20-02', lessonId: 'l20-used-to', front: 'انفِ: She used to drink coffee.', back: "She didn't use to drink coffee.", example: "She didn't use to drink coffee.", note: 'didn\'t use to — بلا d' },
+  { id: 'c-l20-03', lessonId: 'l20-used-to', front: 'اسأل: «هل كنت تلعب التنس؟»', back: 'Did you use to play tennis?', example: 'Did you use to play tennis?', note: 'بعد Did: use to' },
+  { id: 'c-l20-04', lessonId: 'l20-used-to', front: 'الفرق: used to مقابل be used to؟', back: 'used to + مجرد = كنت أفعل، be used to + -ing = معتاد على', example: 'I used to walk. / I am used to walking.', note: 'ماضٍ انتهى مقابل حاضر مستمر' },
+  { id: 'c-l20-05', lessonId: 'l20-used-to', front: '«كان يوجد متجر صغير هنا»؟', back: 'There used to be a small shop here.', example: 'There used to be a small shop here.', note: 'used to be = كان يوجد' },
+  { id: 'c-l20-06', lessonId: 'l20-used-to', front: 'صحح: I used to playing tennis.', back: 'I used to play tennis.', example: 'I used to play tennis every Friday.', note: 'بعد used to فعل مجرد' },
+
+  /* ── الدرس 21: الشرط ── */
+  { id: 'c-l21-01', lessonId: 'l21-conditionals', front: 'تركيب الشرط الأول؟', back: 'If + مضارع بسيط, will + فعل مجرد', example: 'If it rains, we will stay home.', note: 'احتمال واقعي' },
+  { id: 'c-l21-02', lessonId: 'l21-conditionals', front: 'تركيب الشرط الثاني؟', back: 'If + ماضٍ بسيط, would + فعل مجرد', example: 'If I were rich, I would travel.', note: 'خيال أو غير محتمل الآن' },
+  { id: 'c-l21-03', lessonId: 'l21-conditionals', front: 'صحح: If I will see him, I will tell him.', back: 'If I see him, I will tell him.', example: 'If I see him, I will tell him.', note: 'لا will بعد if' },
+  { id: 'c-l21-04', lessonId: 'l21-conditionals', front: '«لو كنت مكانك لاعتذرت»؟', back: 'If I were you, I would apologize.', example: 'If I were you, I would apologize.', note: 'were مع كل الضمائر في النصيحة' },
+  { id: 'c-l21-05', lessonId: 'l21-conditionals', front: 'أكمل: She would come if you ___ her.', back: 'asked', example: 'She would come if you asked her.', note: 'would + مجرد، if + ماضٍ' },
+  { id: 'c-l21-06', lessonId: 'l21-conditionals', front: '«إذا ذاكرت ستنجح»؟', back: 'If you study, you will pass.', example: 'If you study hard, you will pass.', note: 'شرط أول واقعي' },
+
+  /* ── الدرس 22: المبني للمجهول ── */
+  { id: 'c-l22-01', lessonId: 'l22-passive', front: 'تركيب المبني للمجهول؟', back: 'be + التصريف الثالث', example: 'English is spoken here.', note: 'be يتصرف، والفعل يبقى تصريفاً ثالثاً' },
+  { id: 'c-l22-02', lessonId: 'l22-passive', front: '«تُبنى الأهرامات…» بالمجهول؟', back: 'The pyramids were built long ago.', example: 'The pyramids were built long ago.', note: 'ماضٍ مجهول: were + built' },
+  { id: 'c-l22-03', lessonId: 'l22-passive', front: 'صحح: The letter was wrote by Sara.', back: 'The letter was written by Sara.', example: 'The letter was written by Sara.', note: 'written لا wrote' },
+  { id: 'c-l22-04', lessonId: 'l22-passive', front: 'حوّل: They clean the office every day.', back: 'The office is cleaned every day.', example: 'The office is cleaned every day.', note: 'مضارع مجهول: is + cleaned' },
+  { id: 'c-l22-05', lessonId: 'l22-passive', front: '«ستُعلن النتائج غداً»؟', back: 'The results will be announced tomorrow.', example: 'The results will be announced tomorrow.', note: 'will be + التصريف الثالث' },
+  { id: 'c-l22-06', lessonId: 'l22-passive', front: 'متى نستخدم by؟', back: 'عندما يكون الفاعل مهماً: written by Naguib Mahfouz', example: 'The novel was written by Naguib Mahfouz.', note: 'وإن لم يكن مهماً نحذفه' },
+
+  /* ── الدرس 23: جمل الوصل ── */
+  { id: 'c-l23-01', lessonId: 'l23-relative', front: 'الواصلة للأشخاص؟', back: 'who', example: 'The woman who lives next door is a teacher.' },
+  { id: 'c-l23-02', lessonId: 'l23-relative', front: 'الواصلة للأشياء؟', back: 'which / that', example: 'This is the book which I told you about.' },
+  { id: 'c-l23-03', lessonId: 'l23-relative', front: 'الواصلة للأماكن؟', back: 'where', example: 'The café where we met is closed.' },
+  { id: 'c-l23-04', lessonId: 'l23-relative', front: 'الواصلة للملكية؟', back: 'whose', example: 'The girl whose bag was stolen called the police.' },
+  { id: 'c-l23-05', lessonId: 'l23-relative', front: 'صحح: The man which helped me was kind.', back: 'The man who helped me was kind.', example: 'The man who helped me was kind.', note: 'الأشخاص ⇒ who' },
+  { id: 'c-l23-06', lessonId: 'l23-relative', front: 'صحح: The book which I bought it was expensive.', back: 'The book which I bought was expensive.', example: 'The book which I bought was expensive.', note: 'لا نكرر it بعد which' },
+
+  /* ── الدرس 24: حوار المقابلة ── */
+  { id: 'c-l24-01', lessonId: 'l24-interview', front: '«حدّثني عن نفسك» بالإنجليزية؟', back: 'Tell me about yourself.', example: 'Tell me about yourself.', note: 'افتتاحية المقابلة الكلاسيكية' },
+  { id: 'c-l24-02', lessonId: 'l24-interview', front: '«عملت معلماً لثلاث سنوات»؟', back: 'I have worked as a teacher for three years.', example: 'I have worked as a teacher for three years.', note: 'مضارع تام + for' },
+  { id: 'c-l24-03', lessonId: 'l24-interview', front: '«كنت أعمل في المبيعات»؟', back: 'I used to work in sales.', example: 'I used to work in sales, but I wanted to teach.', note: 'used to + مجرد' },
+  { id: 'c-l24-04', lessonId: 'l24-interview', front: '«لماذا تريد هذه الوظيفة؟» وأجب بشرط', back: 'If I get this job, I will help students.', example: 'If I get this job, I will help students who need confidence.', note: 'شرط أول + who' },
+  { id: 'c-l24-05', lessonId: 'l24-interview', front: '«ما نقاط قوتك؟» — بداية مناسبة؟', back: 'I am good at … / I am a person who …', example: 'I am a person who learns quickly.', note: 'استخدم who لوصف نفسك' },
+  { id: 'c-l24-06', lessonId: 'l24-interview', front: '«قُبل طلبك» بالمجهول؟', back: 'Your application was accepted.', example: 'Your application was accepted. Welcome to Talaqa.', note: 'was + accepted' },
 ];
 
 /** بطاقات درس معين — للإشعار «وُلدت بطاقات جديدة» */

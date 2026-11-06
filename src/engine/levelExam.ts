@@ -39,9 +39,17 @@ export const LEVEL_EXAM_CONFIG: Record<ExamLevel, LevelExamConfig> = {
     requiredUnits: [3],
     prerequisite: 'A1',
   },
+  B1: {
+    level: 'B1',
+    passMark: 80,
+    timeLimitSec: 20 * 60,
+    blueprint: { rules: 7, vocab: 5, reading: 4 },
+    requiredUnits: [4],
+    prerequisite: 'A2',
+  },
 };
 
-export const EXAM_LEVELS: ExamLevel[] = ['A1', 'A2'];
+export const EXAM_LEVELS: ExamLevel[] = ['A1', 'A2', 'B1'];
 const SECTION_ORDER: SectionId[] = ['rules', 'vocab', 'reading'];
 
 export function examQuestionCount(level: ExamLevel): number {

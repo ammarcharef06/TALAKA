@@ -962,7 +962,327 @@ export const UNIT_03: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03];
+export const UNIT_04: Unit = {
+  id: 'm3-bridge-b1',
+  order: 4,
+  title: 'المحطة الرابعة — لغة الحياة (B1)',
+  tagline: 'الخبرة، العادات الماضية، الشرط، المبني للمجهول، وجمل الوصل — ثم مقابلة عمل حقيقية ختماً',
+  forLevels: 'B1',
+  lessons: [
+    {
+      id: 'l19-perfect',
+      order: 1,
+      title: 'الخبرة والنتيجة — المضارع التام',
+      estMinutes: 12,
+      objectives: [
+        'بناء المضارع التام: have/has + التصريف الثالث',
+        'التحدث عن خبرات الحياة ونتائجها المستمرة',
+        'التمييز بينه وبين الماضي البسيط مع الزمن المحدد',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'ماضٍ يلامس الحاضر',
+          body: 'المضارع التام يربط الماضي بالحاضر: خبرة في حياتك أو نتيجة مستمرة الآن. التكوين: have/has + التصريف الثالث (visited / gone / eaten). ولا نستخدمه مع زمن ماضٍ محدد: لا «I have visited yesterday» بل «I visited yesterday».',
+        },
+        {
+          type: 'table',
+          title: 'أشهر التصريفات الثالثة',
+          head: ['المصدر', 'التصريف الثالث'],
+          rows: [
+            ['go', 'gone'],
+            ['see', 'seen'],
+            ['eat', 'eaten'],
+            ['write', 'written'],
+            ['do', 'done'],
+            ['be', 'been'],
+            ['take', 'taken'],
+            ['have', 'had'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'ever / never / just / already / yet',
+          body: 'Have you ever been to Aswan? (خبرة في حياتك) · I have never eaten sushi. · She has just arrived. · We have already finished. · They haven\'t left yet. هذه الكلمات تسكن مع المضارع التام.',
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: I have went',
+          body: 'بعد have/has يأتي التصريف الثالث لا الماضي: «He has gone home» لا «He has went home». وإذا ذكرت الزمن بدقة (yesterday, last week, in 2020) انتقل إلى الماضي البسيط.',
+        },
+      ],
+      examples: [
+        { text: 'I have visited Luxor twice.', note: 'خبرة في الحياة — لا زمن محدد' },
+        { text: 'She has just finished her homework.', note: 'just + المضارع التام' },
+        { text: 'Have you ever been to Aswan?', note: 'ever في السؤال عن الخبرة' },
+        { text: 'We have already eaten, thanks.', note: 'already في الإثبات' },
+        { text: "They haven't arrived yet.", note: 'yet في النفي' },
+        { text: 'I visited Luxor in 2020.', note: 'زمن محدد ⇒ ماضٍ بسيط' },
+      ],
+      practice: [
+        { id: 'l19q1', question: 'أكمل: She ___ visited London twice.', options: ['have', 'has', 'is', 'did'], answer: 1, explanation: 'she مفرد غائب ⇒ has + التصريف الثالث.' },
+        { id: 'l19q2', question: 'أكمل: Have you ever ___ to Aswan?', options: ['go', 'went', 'been', 'being'], answer: 2, explanation: 'have been to = زرت/ذهبت إلى (خبرة). لا نستخدم went بعد have.' },
+        { id: 'l19q3', question: 'أي جملة صحيحة؟', options: ['I have finished my homework.', 'I have finished my homework yesterday.', 'I has finished my homework.', 'I have finish my homework.'], answer: 0, explanation: 'المضارع التام بلا زمن ماضٍ محدد، وI تأخذ have، وبعده التصريف الثالث finished.' },
+        { id: 'l19q4', question: 'أكمل: We ___ already eaten.', options: ['have', 'has', 'are', 'did'], answer: 0, explanation: 'we تأخذ have، وalready علامة المضارع التام.' },
+        { id: 'l19q5', question: 'صحح: He has went home.', options: ['He has go home.', 'He has gone home.', 'He have gone home.', 'He did gone home.'], answer: 1, explanation: 'التصريف الثالث لـ go هو gone، وhe تأخذ has.' },
+        { id: 'l19q6', question: 'أكمل: I ___ my keys, so I can\'t open the door.', options: ['lose', 'lost', 'have lost', 'had lost'], answer: 2, explanation: 'النتيجة مستمرة الآن (لا أستطيع فتح الباب) ⇒ المضارع التام have lost.' },
+      ],
+    },
+    {
+      id: 'l20-used-to',
+      order: 2,
+      title: '«كنت أفعل» — used to والعادات الماضية',
+      estMinutes: 11,
+      objectives: [
+        'التعبير عن عادة أو حالة ماضية بـ used to',
+        'النفي والسؤال: didn\'t use to / Did you use to؟',
+        'التمييز بين used to وbe used to + -ing',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'عادة لم تستمر',
+          body: 'used to + الفعل المجرد = عادة أو حالة في الماضي لم تستمر. «I used to smoke» = كنت أدخن (ثم توقفت). النفي: didn\'t use to. السؤال: Did you use to…? ولا نقول «I used to smoking».',
+        },
+        {
+          type: 'table',
+          title: 'النمط كاملاً',
+          head: ['الجملة', 'المعنى'],
+          rows: [
+            ['I used to live in Cairo.', 'كنت أعيش في القاهرة'],
+            ['She used to walk to school.', 'كانت تمشي إلى المدرسة'],
+            ["They didn't use to have a car.", 'لم يكن لديهم سيارة'],
+            ['Did you use to play football?', 'هل كنت تلعب كرة القدم؟'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تخلط بين الصيغتين',
+          body: 'used to + فعل مجرد = كنت أفعل (ماضٍ). be used to + -ing = معتاد على (حاضر). «I used to wake up early» ≠ «I am used to waking up early». الأولى عادة انتهت، والثانية عادة مستمرة.',
+        },
+      ],
+      examples: [
+        { text: 'I used to live in Alexandria when I was a child.', note: 'حالة ماضية انتهت' },
+        { text: 'She used to walk to school every day.', note: 'عادة ماضية' },
+        { text: "They didn't use to have a car.", note: 'النفي: didn\'t use to' },
+        { text: 'Did you use to play tennis?', note: 'السؤال: Did … use to' },
+        { text: 'There used to be a small shop here.', note: 'used to be = كان يوجد' },
+        { text: 'I am used to working late now.', note: 'be used to + -ing = معتاد على (حاضر)' },
+      ],
+      practice: [
+        { id: 'l20q1', question: 'أكمل: I ___ live in Alexandria when I was a child.', options: ['used to', 'use to', 'am used to', 'used'], answer: 0, explanation: 'حالة ماضية انتهت ⇒ used to + فعل مجرد.' },
+        { id: 'l20q2', question: 'أكمل: She ___ use to drink coffee.', options: ["doesn't", "didn't", "isn't", "wasn't"], answer: 1, explanation: 'نفي العادة الماضية: didn\'t use to (بلا d في use).' },
+        { id: 'l20q3', question: 'أي جملة صحيحة؟', options: ['I used to playing tennis.', 'I used to play tennis.', 'I use to played tennis.', 'I am used to play tennis.'], answer: 1, explanation: 'used to + الفعل المجرد: used to play.' },
+        { id: 'l20q4', question: 'ماذا تعني: I am used to working late؟', options: ['كنت أعمل متأخراً ثم توقفت', 'أنا معتاد على العمل متأخراً الآن', 'سأعمل متأخراً غداً', 'لا أحب العمل متأخراً'], answer: 1, explanation: 'be used to + -ing = معتاد على شيء في الحاضر.' },
+        { id: 'l20q5', question: 'أي سؤال صحيح عن عادة ماضية؟', options: ['Did you used to have a bike?', 'Did you use to have a bike?', 'Do you used to have a bike?', 'Are you use to have a bike?'], answer: 1, explanation: 'بعد Did يعود الفعل إلى use: Did you use to…؟' },
+        { id: 'l20q6', question: 'أكمل: There ___ a small shop here years ago.', options: ['used to be', 'use to be', 'used to was', 'used be'], answer: 0, explanation: 'used to + be = كان يوجد في الماضي.' },
+      ],
+    },
+    {
+      id: 'l21-conditionals',
+      order: 3,
+      title: 'لو… — الشرط الأول والثاني',
+      estMinutes: 12,
+      objectives: [
+        'الشرط الأول: احتمال واقعي في المستقبل',
+        'الشرط الثاني: خيال أو احتمال غير واقعي الآن',
+        'تجنب will / would بعد if',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'شرطان — عالمان مختلفان',
+          body: 'الشرط الأول (واقعي محتمل): If + مضارع بسيط, will + فعل مجرد. الشرط الثاني (خيالي أو غير محتمل الآن): If + ماضٍ بسيط, would + فعل مجرد. لا نضع will أو would بعد if.',
+        },
+        {
+          type: 'table',
+          title: 'الشرطان جنباً إلى جنب',
+          head: ['الشرط', 'المثال'],
+          rows: [
+            ['الأول — احتمال', 'If it rains, we will stay home.'],
+            ['الأول — احتمال', 'If you study, you will pass.'],
+            ['الثاني — خيال', 'If I were rich, I would travel the world.'],
+            ['الثاني — خيال', 'She would come if you asked her.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: If I will…',
+          body: 'بعد if لا نستخدم will في الشرط الأول: «If I see him, I will tell him» لا «If I will see him». وفي الثاني لا نستخدم would بعد if: «If I had time, I would help» لا «If I would have time».',
+        },
+        {
+          type: 'tip',
+          title: 'If I were you…',
+          body: 'في النصيحة نستخدم were مع كل الضمائر: «If I were you, I would apologize» = لو كنت مكانك لاعتذرت. وهي من أشهر تراكيب B1.',
+        },
+      ],
+      examples: [
+        { text: 'If it rains tomorrow, we will stay home.', note: 'شرط أول واقعي' },
+        { text: 'If you study hard, you will pass the exam.', note: 'If + مضارع, will + مجرد' },
+        { text: 'If I were rich, I would travel the world.', note: 'شرط ثانٍ خيالي' },
+        { text: 'She would come if you asked her.', note: 'would + مجرد، if + ماضٍ' },
+        { text: 'If I were you, I would apologize.', note: 'نصيحة بـ were' },
+        { text: 'I will call you if I see him.', note: 'الشرط يمكن أن يأتي في النهاية' },
+      ],
+      practice: [
+        { id: 'l21q1', question: 'أكمل: If it ___ tomorrow, we will stay home.', options: ['will rain', 'rains', 'rained', 'would rain'], answer: 1, explanation: 'الشرط الأول: if + مضارع بسيط (rains)، والنتيجة will + مجرد.' },
+        { id: 'l21q2', question: 'أكمل: If I ___ rich, I would travel the world.', options: ['am', 'were', 'will be', 'be'], answer: 1, explanation: 'الشرط الثاني الخيالي: if + ماضٍ بسيط، ومع I نستخدم were في هذا التركيب.' },
+        { id: 'l21q3', question: 'صحح: If I will see him, I will tell him.', options: ['If I see him, I will tell him.', 'If I would see him, I will tell him.', 'If I saw him, I will tell him.', 'If I will saw him, I tell him.'], answer: 0, explanation: 'لا will بعد if في الشرط الأول: If I see him.' },
+        { id: 'l21q4', question: 'أكمل: She would come if you ___ her.', options: ['ask', 'asked', 'will ask', 'would ask'], answer: 1, explanation: 'الشرط الثاني: would + مجرد، وif + ماضٍ بسيط (asked).' },
+        { id: 'l21q5', question: 'أكمل: If you study hard, you ___ pass.', options: ['would', 'will', 'are', 'did'], answer: 1, explanation: 'شرط أول واقعي ⇒ will + فعل مجرد.' },
+        { id: 'l21q6', question: 'أكمل: If I were you, I ___ apologize.', options: ['will', 'would', 'am', 'do'], answer: 1, explanation: 'النصيحة بـ If I were you تأخذ would + فعل مجرد.' },
+      ],
+    },
+    {
+      id: 'l22-passive',
+      order: 4,
+      title: 'المبني للمجهول — عندما يهمنا الحدث',
+      estMinutes: 12,
+      objectives: [
+        'بناء المبني للمجهول: be + التصريف الثالث',
+        'استخدامه في المضارع والماضي',
+        'تجنب فخ «was wrote»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'الحدث أولاً، والفاعل إن لزم',
+          body: 'المبني للمجهول: be (am/is/are/was/were) + التصريف الثالث. المضارع: English is spoken here. الماضي: The book was written in 1990. الفاعل يأتي بعد by إن كان مهماً: The letter was written by Sara.',
+        },
+        {
+          type: 'table',
+          title: 'من المعلوم إلى المجهول',
+          head: ['المعلوم', 'المجهول'],
+          rows: [
+            ['They clean the office every day.', 'The office is cleaned every day.'],
+            ['Someone built the pyramids long ago.', 'The pyramids were built long ago.'],
+            ['Naguib Mahfouz wrote the novel.', 'The novel was written by Naguib Mahfouz.'],
+            ['They will announce the results tomorrow.', 'The results will be announced tomorrow.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تنسَ be ولا تحوّل الفعل إلى ماضٍ',
+          body: '«The book written» ناقصة — تحتاج was. و«was wrote» خطأ لأن wrote ماضٍ وليس تصريفاً ثالثاً؛ الصواب «was written». القاعدة: be يتصرف، والفعل يبقى تصريفاً ثالثاً.',
+        },
+      ],
+      examples: [
+        { text: 'English is spoken all over the world.', note: 'مضارع مجهول: is + spoken' },
+        { text: 'The pyramids were built thousands of years ago.', note: 'ماضٍ مجهول: were + built' },
+        { text: 'The novel was written by Naguib Mahfouz.', note: 'by + الفاعل' },
+        { text: 'The office is cleaned every day.', note: 'from active: They clean…' },
+        { text: 'The results will be announced tomorrow.', note: 'مستقبل مجهول: will be + announced' },
+        { text: 'Arabic is spoken in Egypt.', note: 'حقيقة عامة' },
+      ],
+      practice: [
+        { id: 'l22q1', question: 'أكمل: English ___ all over the world.', options: ['speaks', 'is spoken', 'is speaking', 'spoken'], answer: 1, explanation: 'مضارع مجهول: is + التصريف الثالث spoken.' },
+        { id: 'l22q2', question: 'أكمل: The pyramids ___ thousands of years ago.', options: ['built', 'were built', 'are built', 'was built'], answer: 1, explanation: 'جمع + ماضٍ ⇒ were built.' },
+        { id: 'l22q3', question: 'أكمل: The book was ___ by Naguib Mahfouz.', options: ['write', 'wrote', 'written', 'writing'], answer: 2, explanation: 'بعد was في المجهول: التصريف الثالث written.' },
+        { id: 'l22q4', question: 'صحح: The letter was wrote by Sara.', options: ['The letter was write by Sara.', 'The letter was written by Sara.', 'The letter wrote by Sara.', 'The letter is wrote by Sara.'], answer: 1, explanation: 'was + written (التصريف الثالث) — لا wrote.' },
+        { id: 'l22q5', question: 'حوّل: They clean the office every day.', options: ['The office cleans every day.', 'The office is cleaned every day.', 'The office was clean every day.', 'The office is cleaning every day.'], answer: 1, explanation: 'المضارع المجهول: is + cleaned.' },
+        { id: 'l22q6', question: 'أكمل: The results ___ tomorrow.', options: ['will announce', 'will be announced', 'are announce', 'announced'], answer: 1, explanation: 'مستقبل مجهول: will be + announced.' },
+      ],
+    },
+    {
+      id: 'l23-relative',
+      order: 5,
+      title: 'الذي… — جمل الوصل',
+      estMinutes: 11,
+      objectives: [
+        'استخدام who / which / that / where / whose',
+        'وصل جملتين بجملة واصلة طبيعية',
+        'تجنب تكرار الضمير بعد الواصلة',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'واصلة واحدة تختصر جملتين',
+          body: 'who للأشخاص، which/that للأشياء، where للأماكن، whose للملكية. الجملة الواصلة تأتي بعد الاسم مباشرة: The man who lives next door is a doctor.',
+        },
+        {
+          type: 'table',
+          title: 'الواصلة المناسبة',
+          head: ['الاسم', 'الواصلة'],
+          rows: [
+            ['a man / a teacher', 'who'],
+            ['a book / a car', 'which / that'],
+            ['a city / a café', 'where'],
+            ['a girl / her bag', 'whose'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'لا تكرر الضمير',
+          body: '«The book which I bought it» خطأ — الضمير it مكرر لأن which يقوم مقامه. الصواب: «The book which I bought». وكذلك لا تخلط who للأشياء أو which للأشخاص.',
+        },
+      ],
+      examples: [
+        { text: 'The woman who lives next door is a teacher.', note: 'who للشخص' },
+        { text: 'This is the book which I told you about.', note: 'which للشيء' },
+        { text: 'The café where we met is closed now.', note: 'where للمكان' },
+        { text: 'The girl whose bag was stolen called the police.', note: 'whose للملكية' },
+        { text: 'That is the house that we bought last year.', note: 'that للشيء' },
+        { text: 'People who learn languages live longer.', note: 'who للجمع' },
+      ],
+      practice: [
+        { id: 'l23q1', question: 'أكمل: The woman ___ lives next door is a teacher.', options: ['which', 'who', 'where', 'whose'], answer: 1, explanation: 'الاسم شخص (woman) ⇒ who.' },
+        { id: 'l23q2', question: 'أكمل: This is the book ___ I told you about.', options: ['who', 'which', 'where', 'whose'], answer: 1, explanation: 'الاسم شيء (book) ⇒ which/that.' },
+        { id: 'l23q3', question: 'أكمل: The café ___ we met is closed.', options: ['which', 'who', 'where', 'whose'], answer: 2, explanation: 'الاسم مكان (café) ⇒ where.' },
+        { id: 'l23q4', question: 'صحح: The man which helped me was kind.', options: ['The man who helped me was kind.', 'The man where helped me was kind.', 'The man whose helped me was kind.', 'The man which help me was kind.'], answer: 0, explanation: 'الأشخاص يأخذون who لا which.' },
+        { id: 'l23q5', question: 'أكمل: The girl ___ bag was stolen called the police.', options: ['who', 'which', 'where', 'whose'], answer: 3, explanation: 'الملكية (حقيبتها) ⇒ whose.' },
+        { id: 'l23q6', question: 'صحح: The book which I bought it was expensive.', options: ['The book which I bought was expensive.', 'The book who I bought was expensive.', 'The book which I bought it expensive.', 'The book where I bought was expensive.'], answer: 0, explanation: 'لا نكرر it بعد which؛ الواصلة تقوم مقام المفعول.' },
+      ],
+    },
+    {
+      id: 'l24-interview',
+      order: 6,
+      title: 'حوار المقابلة — «Tell me about yourself»',
+      estMinutes: 13,
+      objectives: [
+        'استخدام تراكيب B1 في مقابلة عمل حقيقية',
+        'فهم أسئلة الخبرة والعادات والخطط',
+        'الإجابة بثقة عن النفس والمهارات',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'هذه أول مقابلة عمل في طَلَاقَة. ستسمع المضارع التام (الخبرة)، وused to (ما كنت تفعله)، والشرط (خططك)، وجمل الوصل (وصف نفسك). اقرأ الحوار بصوت مسموع، ثم أجب عن الأسئلة دون النظر.',
+        },
+        {
+          type: 'table',
+          title: 'عبارات المقابلة الجاهزة',
+          head: ['السؤال', 'بداية الإجابة'],
+          rows: [
+            ['Tell me about yourself.', 'I have worked as a … for … years.'],
+            ['What did you use to do?', 'I used to work in …'],
+            ['Why do you want this job?', 'If I get this job, I will …'],
+            ['What are your strengths?', 'I am good at … / I am a person who …'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Nadia: Good morning, Omar. Tell me about yourself.', note: 'افتتاحية المقابلة الكلاسيكية' },
+        { text: "Omar: I have worked as a teacher for three years.", note: 'خبرة بالمضارع التام + for' },
+        { text: 'Nadia: What did you use to do before that?', note: 'عادة/عمل في الماضي' },
+        { text: 'Omar: I used to work in sales, but I wanted to teach.', note: 'used to + مجرد' },
+        { text: 'Nadia: Why do you want this job?', note: 'سؤال الدافع' },
+        { text: 'Omar: If I get this job, I will help students who need confidence.', note: 'شرط أول + جملة وصل' },
+        { text: 'Nadia: Your application was accepted. Welcome to Talaqa.', note: 'مبني للمجهول' },
+      ],
+      practice: [
+        { id: 'l24q1', question: 'كم سنة عمل عمر معلماً؟', options: ['سنتان', 'ثلاث سنوات', 'خمس سنوات', 'عشر سنوات'], answer: 1, explanation: 'I have worked as a teacher for three years.' },
+        { id: 'l24q2', question: 'ماذا كان يعمل قبل التعليم؟', options: ['في المبيعات', 'في الطب', 'في الهندسة', 'في السياحة'], answer: 0, explanation: 'I used to work in sales.' },
+        { id: 'l24q3', question: 'ماذا سيفعل عمر إذا حصل على الوظيفة؟', options: ['سيسافر', 'سيساعد الطلاب الذين يحتاجون الثقة', 'سيترك العمل', 'سيفتح مقهى'], answer: 1, explanation: 'If I get this job, I will help students who need confidence.' },
+        { id: 'l24q4', question: 'ماذا حدث لطلب عمر في النهاية؟', options: ['رُفض', 'قُبل', 'أُجّل', 'ضاع'], answer: 1, explanation: 'Your application was accepted = قُبل طلبك (مبني للمجهول).' },
+        { id: 'l24q5', question: 'أي تركيب استخدمه عمر للحديث عن خبرته؟', options: ['الماضي البسيط فقط', 'المضارع التام: have worked', 'المستقبل will', 'الأمر'], answer: 1, explanation: 'I have worked as a teacher… = مضارع تام للخبرة.' },
+        { id: 'l24q6', question: 'أي جملة وصل صحيحة في الحوار؟', options: ['students which need confidence', 'students who need confidence', 'students where need confidence', 'students whose need confidence'], answer: 1, explanation: 'الأشخاص (students) يأخذون who.' },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {

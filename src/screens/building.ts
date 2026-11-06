@@ -140,7 +140,7 @@ function examHallCard(student: StudentRecord): string {
   <div class="hall hall-open" role="group" aria-label="قاعة الامتحانات">
     <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'exam')!.icon)}</span>
     <span class="hall-name">قاعة الامتحانات</span>
-    <span class="hall-desc">امتحانات A1 وA2 المعتمدة — درجة نجاح 80%، واعتماد يُسجَّل في سجلك الأكاديمي</span>
+    <span class="hall-desc">امتحانات A1 · A2 · B1 المعتمدة — درجة نجاح 80%، واعتماد يُسجَّل في سجلك الأكاديمي</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>${student.certifiedLevel ? `معتمد: <b dir="ltr">${escapeHtmlLocal(student.certifiedLevel)}</b>` : `التعيين: <b dir="ltr">${escapeHtmlLocal(student.level)}</b> · بانتظار أول اعتماد`}</span>
     <button id="enterExamHallBtn" class="btn btn-gold hall-enter-btn">ادخل قاعة الامتحانات — اعتمد مستواك</button>
     <p class="hall-mini-note">اختبار تحديد المستوى الأصلي: ${formatDate(student.estimatedAt)} · ${escapeHtmlLocal(meta.ar.split('—')[0].trim())}</p>

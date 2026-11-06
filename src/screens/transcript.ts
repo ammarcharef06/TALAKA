@@ -6,7 +6,7 @@ import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
 import { escapeHtml } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
-import { passedLevels } from '../engine/levelExam';
+import { EXAM_LEVELS, passedLevels } from '../engine/levelExam';
 import { getAllLevelExamResults, getAllSrsStates, getCurrentStudent, getProgressMap } from '../store/db';
 import { UNITS, allLessonsInOrder } from '../data/academy/course';
 import { SRS_DECK, countDueCards } from '../data/academy/deck';
@@ -103,7 +103,7 @@ function renderTranscript(root: HTMLElement): void {
         <div><span>المستوى المبدئي</span><b dir="ltr">${escapeHtml(student.level)}</b></div>
         <div><span>المستوى المعتمد</span><b dir="ltr">${certifiedLevel ? escapeHtml(certifiedLevel) : '—'}</b></div>
         <div><span>الدروس المكتملة</span><b dir="ltr">${completed}/${totalLessons}</b></div>
-        <div><span>الامتحانات المجتازة</span><b dir="ltr">${examsPassed}/2</b></div>
+        <div><span>الامتحانات المجتازة</span><b dir="ltr">${examsPassed}/${EXAM_LEVELS.length}</b></div>
       </section>
 
       ${certifiedLevel ? `<p class="transcript-cert">◆ اعتماد حالي: <b dir="ltr">${escapeHtml(certifiedLevel)}</b> — ${escapeHtml(LEVEL_META[certifiedLevel].ar)} · مسجّل محلياً في هذا السجل.</p>` : '<p class="transcript-cert transcript-cert-none">◆ لا اعتماد مستوى بعد — اجتز امتحان A1 لتظهر أول شهادة في سجلك.</p>'}

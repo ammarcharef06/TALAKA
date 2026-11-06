@@ -26,9 +26,9 @@ describe('بنية المنهاج', () => {
     }
   });
 
-  it('الترتيب العالمي عبر المحطات: 18 درساً فريداً مرتباً لكل درس تاليه', () => {
+  it('الترتيب العالمي عبر المحطات: 24 درساً فريداً مرتباً لكل درس تاليه', () => {
     const all = allLessonsInOrder();
-    expect(all.length).toBe(18);
+    expect(all.length).toBe(24);
     for (const { unit } of all) {
       expect(UNITS).toContain(unit);
     }
@@ -47,11 +47,13 @@ describe('بنية المنهاج', () => {
     expect(Object.values(oneDone).filter((v) => v === 'current')).toHaveLength(1);
   });
 
-  it('nextLessonAfter: تتابع عبر حدود المحطات (6 → 7 → 13) وينتهي عند 18', () => {
+  it('nextLessonAfter: تتابع عبر حدود المحطات (6 → 7 → 13 → 19) وينتهي عند 24', () => {
     const l6 = allLessonsInOrder().find((x) => x.lesson.id === 'l6-dialogue');
     expect(nextLessonAfter(l6!.lesson.id)?.lesson.id).toBe('l7-dont');
     const l12 = allLessonsInOrder().find((x) => x.lesson.id === 'l12-cafe');
     expect(nextLessonAfter(l12!.lesson.id)?.lesson.id).toBe('l13-past-ed');
-    expect(nextLessonAfter('l18-trip')).toBeNull();
+    const l18 = allLessonsInOrder().find((x) => x.lesson.id === 'l18-trip');
+    expect(nextLessonAfter(l18!.lesson.id)?.lesson.id).toBe('l19-perfect');
+    expect(nextLessonAfter('l24-interview')).toBeNull();
   });
 });

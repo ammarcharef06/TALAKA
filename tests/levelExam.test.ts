@@ -52,6 +52,16 @@ describe('بناء ورقة الامتحان', () => {
     expect(questions.every((q) => q.cefr === 'A2')).toBe(true);
   });
 
+  it('B1: 16 سؤالاً بتوزيع 7/5/4 وكلها من مستوى B1', () => {
+    const questions = createLevelExam('B1', () => 0.23);
+    expect(questions).toHaveLength(16);
+    expect(questions.filter((q) => q.section === 'rules')).toHaveLength(7);
+    expect(questions.filter((q) => q.section === 'vocab')).toHaveLength(5);
+    expect(questions.filter((q) => q.section === 'reading')).toHaveLength(4);
+    expect(questions.every((q) => q.cefr === 'B1')).toBe(true);
+    expect(new Set(questions.map((q) => q.itemId)).size).toBe(16);
+  });
+
   it('الورقة لا تعتمد على ترتيب الخيارات الأصلي', () => {
     const a = createLevelExam('A1', () => 0.9);
     const b = createLevelExam('A1', () => 0.1);
@@ -94,6 +104,19 @@ describe('تصحيح الامتحان', () => {
     expect(result.passed).toBe(true);
   });
 
+  it('B1: 13/16 تنجح، و12/16 لا تنجح', () => {
+    const qs = createLevelExam('B1', () => 0.4);
+    const thirteen = qs.map((q, i) => (i < 13 ? q.answer : (q.answer + 1) % 4));
+    const pass = scoreLevelExam('B1', qs, thirteen, { studentId: 'T' });
+    expect(pass.score).toBe(81);
+    expect(pass.passed).toBe(true);
+
+    const twelve = qs.map((q, i) => (i < 12 ? q.answer : (q.answer + 1) % 4));
+    const fail = scoreLevelExam('B1', qs, twelve, { studentId: 'T' });
+    expect(fail.score).toBe(75);
+    expect(fail.passed).toBe(false);
+  });
+
   it('أولويات العلاج تُجمع من وسوم الأخطاء', () => {
     const qs = createLevelExam('A1', () => 0.5);
     const result = scoreLevelExam('A1', qs, qs.map(() => null), { studentId: 'T' });
@@ -105,12 +128,15 @@ describe('تصحيح الامتحان', () => {
 describe('أهلية الامتحان', () => {
   const a1Lessons = requiredLessonsFor('A1');
   const a2Lessons = requiredLessonsFor('A2');
+  const b1Lessons = requiredLessonsFor('B1');
   const progressAll = (ids: string[]) => Object.fromEntries(ids.map((id) => [id, { bestScore: 100 }]));
 
-  it('دروس الامتحان: A1 اثنا عشر درساً، وA2 ستة', () => {
+  it('دروس الامتحان: A1 اثنا عشر درساً، A2 ستة، وB1 ستة', () => {
     expect(a1Lessons).toHaveLength(12);
     expect(a2Lessons).toHaveLength(6);
+    expect(b1Lessons).toHaveLength(6);
     expect(a2Lessons[0]).toBe('l13-past-ed');
+    expect(b1Lessons[0]).toBe('l19-perfect');
   });
 
   it('A1 مغلق قبل إتمام المحطتين، ومتاح بعدهما', () => {
@@ -136,12 +162,26 @@ describe('أهلية الامتحان', () => {
     expect(ready.status).toBe('available');
   });
 
+  it('B1 لا يُفتح إلا بإتمام المحطة الرابعة واجتياز A2', () => {
+    const a1a2 = [fakeResult('A1', true, 90), fakeResult('A2', true, 90, '2026-11-06T11:00:00.000Z')];
+    const onlyLessons = examAvailability('B1', progressAll(b1Lessons), [fakeResult('A1', true, 90)]);
+    expect(onlyLessons.status).toBe('locked');
+    expect(onlyLessons.reason).toContain('A2');
+
+    const ready = examAvailability('B1', progressAll(b1Lessons), a1a2);
+    expect(ready.status).toBe('available');
+    expect(ready.lessonsTotal).toBe(6);
+  });
+
   it('بعد الاجتياز: الحالة معتمدة وأفضل درجة محفوظة', () => {
     const results = [fakeResult('A1', false, 70), fakeResult('A1', true, 85, '2026-11-06T11:00:00.000Z')];
     const a = examAvailability('A1', progressAll(a1Lessons), results);
     expect(a.status).toBe('passed');
     expect(a.bestScore).toBe(85);
     expect(highestCertifiedLevel(results)).toBe('A1');
+
+    const all = [fakeResult('A1', true, 90), fakeResult('A2', true, 85, '2026-11-07T10:00:00.000Z'), fakeResult('B1', true, 88, '2026-11-08T10:00:00.000Z')];
+    expect(highestCertifiedLevel(all)).toBe('B1');
   });
 });
 
@@ -149,8 +189,11 @@ describe('إعدادات المستويات', () => {
   it('كل مستوى: مدة ودرجة نجاح وعدد أسئلة متسقة', () => {
     expect(examQuestionCount('A1')).toBe(12);
     expect(examQuestionCount('A2')).toBe(15);
+    expect(examQuestionCount('B1')).toBe(16);
     expect(LEVEL_EXAM_CONFIG.A1.passMark).toBe(80);
     expect(LEVEL_EXAM_CONFIG.A2.passMark).toBe(80);
+    expect(LEVEL_EXAM_CONFIG.B1.passMark).toBe(80);
     expect(LEVEL_EXAM_CONFIG.A2.prerequisite).toBe('A1');
+    expect(LEVEL_EXAM_CONFIG.B1.prerequisite).toBe('A2');
   });
 });
