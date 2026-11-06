@@ -13,6 +13,10 @@ import './screens/classroom.ts';
 import './screens/lesson.ts';
 import './screens/review.ts';
 import './screens/cafe.ts';
+import './screens/examHall.ts';
+import './screens/levelExam.ts';
+import './screens/examResult.ts';
+import './screens/transcript.ts';
 
 import { go } from './router';
 

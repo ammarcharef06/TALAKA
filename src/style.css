@@ -397,7 +397,7 @@ body {
   .id-card { position: absolute; top: 0; left: 0; max-width: none; width: 100%; }
   .id-card-inner { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .result-document, .registration-document { position: absolute; top: 0; left: 0; width: 100%; max-width: none; box-shadow: none; border: 2px solid var(--gold-deep); border-radius: 0; }
-  .result-actions, .registration-wrap .btn, .card-actions, .result-screen .topbar, .card-screen .topbar .icon-btn { display: none !important; }
+  .result-actions, .registration-wrap .btn, .card-actions, .result-screen .topbar, .exam-result-screen .topbar, .transcript-screen .topbar, .card-screen .topbar .icon-btn { display: none !important; }
   .doc-watermark { opacity: .18; }
 }
 
@@ -598,4 +598,111 @@ body {
   .barista-id { display: none; }
   .scene-chat .msg { max-width: 88%; }
   .done-actions-row { grid-template-columns: 1fr; }
+}
+
+/* ══════════ قاعة الامتحانات المعتمدة ══════════ */
+.exam-hall-screen { background: linear-gradient(180deg, var(--emerald-deep), var(--emerald) 300px, var(--paper) 300px); }
+.exam-hall-hero { text-align: center; color: #F7F3E9; padding: 1.6rem 1rem 3.6rem; }
+.exam-hall-title { font-family: var(--font-display); font-size: clamp(1.9rem, 6.5vw, 2.8rem); margin: .35rem 0 .5rem; color: #FFE98A; text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+.exam-hall-sub { max-width: 640px; margin: 0 auto; color: rgba(247,243,233,.88); line-height: 1.95; font-size: .93rem; }
+.exam-hall-wrap { width: 100%; max-width: 980px; margin: -2.7rem auto 0; padding: 0 1rem 1.6rem; display: flex; flex-direction: column; gap: .9rem; }
+
+.cert-banner { display: flex; align-items: center; gap: .8rem; background: linear-gradient(160deg, var(--emerald-2), var(--emerald-deep)); color: #F7F3E9; border: 1.5px solid var(--gold); border-radius: var(--radius); padding: .7rem .9rem; box-shadow: var(--shadow-md); }
+.cert-banner-seal { flex: none; }
+.cert-banner b { display: block; font-family: var(--font-display); color: var(--gold-light); font-size: 1.05rem; }
+.cert-banner small { display: block; font-size: .7rem; color: rgba(247,243,233,.78); margin-top: .15rem; }
+.cert-banner .btn { margin-inline-start: auto; flex: none; }
+
+.level-exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: .9rem; }
+.level-exam-card { background: var(--paper-doc); border: 1.5px solid rgba(14,59,44,.22); border-block-start: 4px solid var(--gold); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1rem 1.05rem .9rem; display: flex; flex-direction: column; gap: .55rem; }
+.level-exam-card.status-passed { border-block-start-color: var(--success); }
+.level-exam-card.status-locked { border-style: dashed; filter: saturate(.6); opacity: .9; }
+.level-exam-card.status-failed { border-block-start-color: var(--brick); }
+.level-exam-head { display: flex; align-items: center; gap: .7rem; }
+.level-exam-code { flex: none; width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(160deg, var(--emerald-2), var(--emerald-deep)); color: var(--gold-light); font-family: var(--font-display); font-size: 1.45rem; font-weight: 700; border: 1px solid rgba(201,162,39,.55); }
+.status-passed .level-exam-code { background: linear-gradient(160deg, var(--gold-light), var(--gold-deep)); color: #241a05; }
+.status-locked .level-exam-code { background: #E4DFD0; color: #7d7867; border-color: #c9c4b2; }
+.level-exam-title { min-width: 0; }
+.level-exam-title h2 { font-family: var(--font-display); color: var(--emerald); font-size: 1.15rem; margin: 0; line-height: 1.4; }
+.level-exam-title p { margin: .1rem 0 0; font-size: .6rem; letter-spacing: .12em; color: var(--gold-deep); }
+.level-exam-badge { margin-inline-start: auto; flex: none; font-size: .68rem; font-weight: 800; border-radius: 999px; padding: .2rem .6rem; border: 1px solid rgba(14,59,44,.25); color: var(--emerald); background: rgba(14,59,44,.06); }
+.status-passed .level-exam-badge { color: var(--success); border-color: var(--success); background: #E9F5EC; }
+.status-failed .level-exam-badge { color: var(--brick); border-color: var(--brick); background: #FBEDE4; }
+.status-locked .level-exam-badge { color: var(--muted); }
+.level-exam-desc { font-size: .8rem; color: var(--muted); line-height: 1.8; margin: 0; min-height: 2.8em; }
+.level-exam-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin: .1rem 0; }
+.level-exam-facts div { background: rgba(14,59,44,.05); border: 1px solid rgba(14,59,44,.12); border-radius: 9px; padding: .35rem .4rem; text-align: center; }
+.level-exam-facts dt { font-size: .6rem; color: var(--muted); margin: 0; }
+.level-exam-facts dd { margin: .1rem 0 0; font-size: .82rem; font-weight: 800; color: var(--emerald); }
+.level-exam-status { font-size: .76rem; line-height: 1.8; margin: 0; color: var(--ink); background: #FBF7E8; border-inline-start: 3px solid var(--gold); border-radius: 6px; padding: .35rem .55rem; }
+.status-locked .level-exam-status { background: #F1EEE5; border-inline-start-color: #b3ae9d; color: var(--muted); }
+.status-passed .level-exam-status { background: #E9F5EC; border-inline-start-color: var(--success); }
+.status-failed .level-exam-status { background: #FBEDE4; border-inline-start-color: var(--brick); }
+.level-exam-actions { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-top: auto; }
+.level-exam-actions .btn { flex: 1; min-width: 150px; }
+
+.exam-placement { background: var(--paper-doc); border: 1px solid rgba(14,59,44,.22); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1rem 1.05rem; display: flex; flex-direction: column; gap: .55rem; }
+.exam-placement-head h2 { font-family: var(--font-display); color: var(--emerald); font-size: 1.15rem; margin: .15rem 0 .3rem; }
+.exam-placement-head p { margin: 0; font-size: .8rem; color: var(--muted); line-height: 1.9; }
+.exam-placement-info { display: flex; justify-content: space-between; align-items: center; gap: .7rem; flex-wrap: wrap; background: rgba(14,59,44,.05); border-radius: 10px; padding: .5rem .7rem; }
+.exam-placement-info > div:first-child { display: flex; align-items: baseline; gap: .5rem; }
+.placement-level { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--gold-deep); }
+.placement-meta { font-size: .72rem; color: var(--muted); }
+.exam-placement .btn { align-self: flex-start; }
+.exam-hall-note { text-align: center; font-size: .72rem; color: var(--muted); line-height: 1.8; margin: .1rem 0 0; }
+
+.hall-mini-note { font-size: .68rem; color: rgba(247,243,233,.7); margin: .1rem 0 0; line-height: 1.7; }
+
+/* ══════════ جلسة الامتحان ══════════ */
+.exam-timer { font-family: var(--font-body); font-variant-numeric: tabular-nums; font-weight: 800; font-size: .9rem; color: var(--emerald); background: rgba(14,59,44,.07); border: 1.5px solid rgba(14,59,44,.3); border-radius: 999px; padding: .3rem .75rem; min-width: 66px; text-align: center; }
+.exam-timer-low { color: #fff; background: var(--brick); border-color: #6e2a1d; animation: blink 1s infinite; }
+.level-exam-instructions { width: 100%; max-width: 720px; text-align: center; font-size: .76rem; color: var(--muted); background: #FBF7E8; border: 1px solid rgba(201,162,39,.4); border-radius: 10px; padding: .4rem .7rem; margin-bottom: .6rem; line-height: 1.8; }
+.exam-selected { border-color: var(--gold-deep) !important; background: #FDF6E3 !important; box-shadow: 0 0 0 2px rgba(201,162,39,.35); }
+.exam-selected .option-letter { background: var(--gold); color: #241a05; border-color: var(--gold-deep); }
+
+/* ══════════ محضر نتيجة الامتحان ══════════ */
+.exam-verdict { gap: 1rem; }
+.exam-verdict.is-pass { border-color: rgba(30,107,79,.55); background: #F1F8F2; }
+.exam-verdict.is-fail { border-color: rgba(150,66,47,.45); background: #FDF3EC; }
+.exam-verdict-center { text-align: center; display: flex; flex-direction: column; gap: .2rem; }
+.exam-big-score { font-family: var(--font-display); font-size: clamp(2.4rem, 9vw, 3.4rem); font-weight: 700; line-height: 1; color: var(--emerald); }
+.exam-big-score small { font-size: 1.2rem; }
+.exam-pass-line { font-size: .7rem; color: var(--muted); }
+.exam-stamp { flex: none; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; border: 2.5px double currentColor; border-radius: 8px; padding: .45rem .8rem; transform: rotate(-6deg); letter-spacing: .05em; }
+.stamp-pass { color: var(--success); }
+.stamp-fail { color: var(--brick); }
+.exam-decision { font-size: .85rem; line-height: 2; border-radius: 10px; padding: .6rem .8rem; margin: 0 0 .9rem; }
+.decision-pass { background: #E9F5EC; border: 1px solid rgba(30,107,79,.35); color: #14503a; }
+.decision-fail { background: #FBEDE4; border: 1px solid rgba(150,66,47,.35); color: #6e2a1d; }
+.exam-section-row { grid-template-columns: 74px 1fr 52px; }
+.exam-result-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+
+/* ══════════ السجل الأكاديمي ══════════ */
+.transcript-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: .2rem 0 .8rem; }
+.transcript-summary div { background: rgba(14,59,44,.05); border: 1px solid rgba(14,59,44,.15); border-radius: 9px; padding: .45rem .5rem; text-align: center; }
+.transcript-summary span { display: block; font-size: .62rem; color: var(--muted); }
+.transcript-summary b { display: block; margin-top: .15rem; font-family: var(--font-display); font-size: 1.25rem; color: var(--emerald); }
+.transcript-cert { font-size: .8rem; color: var(--emerald); background: #FBF7E8; border: 1px solid rgba(201,162,39,.45); border-inline-start: 3px solid var(--gold); border-radius: 8px; padding: .4rem .65rem; margin: 0 0 .9rem; line-height: 1.9; }
+.transcript-cert-none { color: var(--muted); background: #F1EEE5; border-inline-start-color: #b3ae9d; }
+.transcript-section { margin-bottom: .9rem; }
+.transcript-section h3 { font-family: var(--font-display); font-size: .95rem; color: var(--emerald); border-bottom: 1px solid rgba(14,59,44,.25); padding-bottom: .3rem; margin: 0 0 .5rem; }
+.transcript-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+.transcript-table th { background: var(--emerald); color: var(--gold-light); font-weight: 700; text-align: start; padding: .35rem .5rem; }
+.transcript-table td { padding: .38rem .5rem; border-bottom: 1px solid rgba(14,59,44,.14); color: var(--ink); }
+.transcript-table tbody tr:nth-child(even) { background: rgba(14,59,44,.035); }
+.transcript-pass { color: var(--success); font-weight: 800; }
+.transcript-fail { color: var(--brick); font-weight: 800; }
+.transcript-empty { text-align: center; color: var(--muted); font-size: .78rem; padding: .8rem .5rem !important; }
+.transcript-note { font-size: .78rem; color: var(--muted); line-height: 1.95; margin: 0; }
+.transcript-actions { display: grid; grid-template-columns: 1fr auto; gap: .6rem; }
+
+@media (max-width: 640px) {
+  .level-exam-grid { grid-template-columns: 1fr; }
+  .level-exam-facts { grid-template-columns: repeat(2, 1fr); }
+  .cert-banner { flex-wrap: wrap; }
+  .cert-banner .btn { margin-inline-start: 0; width: 100%; }
+  .transcript-summary { grid-template-columns: repeat(2, 1fr); }
+  .exam-result-actions-row, .transcript-actions { grid-template-columns: 1fr; }
+  .exam-verdict { flex-wrap: wrap; justify-content: center; text-align: center; }
+  .exam-stamp { order: 3; }
 }

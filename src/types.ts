@@ -48,6 +48,45 @@ export interface StudentRecord {
   weakAreas: { tag: string; count: number }[];
   registeredAt: string;
   estimatedAt: string;
+  /** أعلى مستوى اجتاز امتحانه المعتمد (محلياً على هذا الجهاز) */
+  certifiedLevel?: Cefr;
+  certifiedAt?: string;
+}
+
+/* ── امتحانات المستويات المعتمدة ── */
+export type ExamLevel = 'A1' | 'A2';
+
+export interface LevelExamQuestion {
+  itemId: string;
+  section: SectionId;
+  cefr: Cefr;
+  difficulty: number;
+  tags: string[];
+  question: string;
+  passage?: string;
+  options: string[];
+  answer: number; // بعد خلط الخيارات
+  explanation: string;
+}
+
+export interface ExamSectionScore {
+  correct: number;
+  total: number;
+}
+
+export interface LevelExamResult {
+  id: string;
+  studentId: string;
+  level: ExamLevel;
+  score: number; // 0..100
+  correctCount: number;
+  totalQuestions: number;
+  passMark: number; // 0..100
+  passed: boolean;
+  sectionScores: Record<SectionId, ExamSectionScore>;
+  weakAreas: { tag: string; count: number }[];
+  takenAt: string;
+  durationSeconds: number;
 }
 
 /* ── المحتوى المنهجي ── */

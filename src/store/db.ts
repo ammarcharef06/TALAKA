@@ -1,13 +1,14 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
-import type { StudentRecord } from '../types';
+import type { Cefr, LevelExamResult, StudentRecord } from '../types';
 import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
 const STORE_SRS = 'srs-cards';
+const STORE_EXAMS = 'exams';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -18,6 +19,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_META)) db.createObjectStore(STORE_META, { keyPath: 'key' });
       if (!db.objectStoreNames.contains(STORE_PROGRESS)) db.createObjectStore(STORE_PROGRESS, { keyPath: 'lessonId' });
       if (!db.objectStoreNames.contains(STORE_SRS)) db.createObjectStore(STORE_SRS, { keyPath: 'cardId' });
+      if (!db.objectStoreNames.contains(STORE_EXAMS)) db.createObjectStore(STORE_EXAMS, { keyPath: 'id' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -149,6 +151,54 @@ export async function recordReview(cardId: string, state: SrsState): Promise<voi
   }
 }
 
+/* ── محاضر امتحانات المستويات المعتمدة ── */
+
+export async function saveLevelExamResult(rec: LevelExamResult): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_EXAMS, 'readwrite', (s) => s.put(rec));
+  } finally {
+    db.close();
+  }
+}
+
+/** كل محاضر الامتحانات — مرتبة من الأقدم إلى الأحدث */
+export async function getAllLevelExamResults(): Promise<LevelExamResult[]> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_EXAMS, 'readonly');
+      const req = t.objectStore(STORE_EXAMS).getAll();
+      req.onsuccess = () => {
+        const rows = (req.result as LevelExamResult[]).sort((a, b) => Date.parse(a.takenAt) - Date.parse(b.takenAt));
+        resolve(rows);
+      };
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة محاضر الامتحانات'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+/** تحديث اعتماد الطالب — لا ينزل أبداً بمستواه المعتمد */
+export async function certifyStudent(level: Cefr): Promise<StudentRecord | null> {
+  const db = await openDb();
+  try {
+    const currentId = await getMeta(db, 'currentStudentId');
+    if (!currentId) return null;
+    const rec = await tx<StudentRecord | undefined>(db, STORE_STUDENTS, 'readonly', (s) => s.get(currentId));
+    if (!rec) return null;
+    const order: Cefr[] = ['S0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const currentRank = order.indexOf(rec.certifiedLevel ?? 'S0');
+    if (order.indexOf(level) <= currentRank) return rec;
+    const updated: StudentRecord = { ...rec, certifiedLevel: level, certifiedAt: new Date().toISOString() };
+    await tx(db, STORE_STUDENTS, 'readwrite', (s) => s.put(updated));
+    return updated;
+  } finally {
+    db.close();
+  }
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -163,6 +213,7 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_META);
     await done(STORE_PROGRESS);
     await done(STORE_SRS);
+    await done(STORE_EXAMS);
   } finally {
     db.close();
   }
@@ -215,6 +266,8 @@ export async function importStudentFile(file: File): Promise<StudentRecord> {
     weakAreas: Array.isArray(s.weakAreas) ? s.weakAreas : [],
     registeredAt: s.registeredAt,
     estimatedAt: typeof s.estimatedAt === 'string' ? s.estimatedAt : s.registeredAt,
+    ...(typeof s.certifiedLevel === 'string' ? { certifiedLevel: s.certifiedLevel as StudentRecord['certifiedLevel'] } : {}),
+    ...(typeof s.certifiedAt === 'string' ? { certifiedAt: s.certifiedAt } : {}),
   };
   await saveStudent(rec);
   return rec;
