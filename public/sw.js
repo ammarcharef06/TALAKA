@@ -4,7 +4,7 @@
    - الأصول الثابتة (JS/CSS/fonts/svg): cache-first مع تحديث في الخلفية
    - لا طلبات خارجية إطلاقاً
 */
-const CACHE = 'talaqa-v9';
+const CACHE = 'talaqa-v10';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon.svg'];
 
 self.addEventListener('install', (e) => {

@@ -1595,7 +1595,317 @@ export const UNIT_05: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05];
+export const UNIT_06: Unit = {
+  id: 'm5-style-c1',
+  order: 6,
+  title: 'المحطة السادسة — الأسلوب والقوة (C1)',
+  tagline: 'القلب، التركيز، الصيغة الرسمية، شبه الجمل، والحذف — ثم ندوة الأرشيف ختماً',
+  forLevels: 'C1',
+  lessons: [
+    {
+      id: 'l31-inversion',
+      order: 1,
+      title: 'القلب — حين يبدأ النفي بالجملة',
+      estMinutes: 12,
+      objectives: [
+        'قلب الفعل المساعد والفاعل بعد ظروف النفي',
+        'استخدام Never / Rarely / Not only / So / Hardly',
+        'تجنب فخ «Never I have»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'ظرف نفي في البداية ⇒ قلب الترتيب',
+          body: 'في الإنجليزية الرسمية، إذا بدأت الجملة بظرف نفي أو شبه نفي، يُقلب ترتيب الفعل المساعد والفاعل: Never have I seen… / Rarely does she… / Not only did he… . القلب يحدث في الجملة الرئيسية فقط، ويحتاج فعلًا مساعدًا.',
+        },
+        {
+          type: 'table',
+          title: 'أشهر أدوات القلب',
+          head: ['البداية', 'المثال'],
+          rows: [
+            ['Never', 'Never have I seen such a view.'],
+            ['Rarely', 'Rarely does she complain.'],
+            ['Not only', 'Not only did he win, but he also broke the record.'],
+            ['So + صفة/ظرف', 'So loudly did he shout that the police arrived.'],
+            ['Hardly … when', 'Hardly had I arrived when it started to rain.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: Never I have seen',
+          body: 'بعد الظرف يأتي الفعل المساعد ثم الفاعل: «Never have I seen» لا «Never I have seen». وإذا لم يوجد مساعد، نستخدم do/does/did: «Rarely does she complain» لا «Rarely she complains».',
+        },
+      ],
+      examples: [
+        { text: 'Never have I seen such a view.', note: 'Never + have + I' },
+        { text: 'Rarely does she complain.', note: 'Rarely + does + she' },
+        { text: 'Not only did he win the race, but he also broke the record.', note: 'Not only + did + he' },
+        { text: 'So loudly did he shout that the police arrived.', note: 'So + ظرف + did + he' },
+        { text: 'Hardly had I arrived when it started to rain.', note: 'Hardly + had + I … when' },
+        { text: 'Little did we know that the decision would change everything.', note: 'Little + did + we' },
+      ],
+      practice: [
+        { id: 'l31q1', question: 'أكمل: Never ___ such a view.', options: ['have I seen', 'I have seen', 'did I saw', 'I saw'], answer: 0, explanation: 'بعد Never: فعل مساعد + فاعل + فعل ⇒ have I seen.' },
+        { id: 'l31q2', question: 'أكمل: Rarely ___ complain.', options: ['does she', 'she does', 'did she complained', 'she did'], answer: 0, explanation: 'القلب: Rarely + does + she + فعل مجرد.' },
+        { id: 'l31q3', question: 'أكمل: Not only ___ the race, but he also broke the record.', options: ['did he win', 'he won', 'he did win', 'won he'], answer: 0, explanation: 'Not only + did + he + win (فعل مجرد).' },
+        { id: 'l31q4', question: 'أكمل: So loudly ___ that the police arrived.', options: ['did he shout', 'he shouted', 'he did shout', 'shouted he'], answer: 0, explanation: 'So + ظرف + did + he + فعل مجرد.' },
+        { id: 'l31q5', question: 'صحح: Never I have seen such a view.', options: ['Never have I seen such a view.', 'Never I saw such a view.', 'Never did I have seen such a view.', 'Never have seen I such a view.'], answer: 0, explanation: 'القلب يضع المساعد قبل الفاعل: Never have I seen.' },
+        { id: 'l31q6', question: 'أكمل: Hardly ___ arrived when it started to rain.', options: ['had I', 'I had', 'did I', 'I did'], answer: 0, explanation: 'Hardly + had + I + arrived … when.' },
+      ],
+    },
+    {
+      id: 'l32-cleft',
+      order: 2,
+      title: 'التركيز — «هو الذي…»',
+      estMinutes: 11,
+      objectives: [
+        'استخدام it-cleft للتركيز على الفاعل أو المكان',
+        'استخدام wh-cleft للتركيز على المفعول أو الفكرة',
+        'تجنب الواصلة الخاطئة في it-cleft',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'جملة مشقوقة لتركيز المعلومة',
+          body: 'الـ it-cleft: It is/was + المعلومة + that/who + بقية الجملة. والـ wh-cleft: What + فاعل + فعل + is/was + المعلومة. نستخدمهما لتسليط الضوء على جزء واحد من الجملة.',
+        },
+        {
+          type: 'table',
+          title: 'الصيغتان',
+          head: ['النوع', 'المثال'],
+          rows: [
+            ['it-cleft', 'It was Tom who broke the window.'],
+            ['it-cleft', 'It was in Cairo that we met.'],
+            ['wh-cleft', 'What I need is a good night\'s sleep.'],
+            ['wh-cleft', 'What she said was surprising.'],
+            ['all-cleft', 'All I want is a chance.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'who للأشخاص وthat للأشياء',
+          body: 'في it-cleft نستخدم who إذا كان المعلومة شخصاً: «It was Tom who broke…»، وthat للأشياء أو المكان: «It was in Cairo that we met». لا تقل «It was Tom which broke…».',
+        },
+      ],
+      examples: [
+        { text: 'It was Tom who broke the window.', note: 'تركيز على الفاعل' },
+        { text: 'It was in Cairo that we met.', note: 'تركيز على المكان' },
+        { text: 'What I need is a good night\'s sleep.', note: 'wh-cleft: التركيز على الحاجة' },
+        { text: 'What she said was surprising.', note: 'wh-cleft: التركيز على القول' },
+        { text: 'It wasn\'t the money that mattered; it was the principle.', note: 'نفي + تركيز' },
+        { text: 'All I want is a chance.', note: 'all-cleft' },
+      ],
+      practice: [
+        { id: 'l32q1', question: 'أكمل: It was Tom ___ broke the window.', options: ['who', 'which', 'where', 'whose'], answer: 0, explanation: 'Tom شخص ⇒ who في it-cleft.' },
+        { id: 'l32q2', question: 'أكمل: ___ I need is more time.', options: ['What', 'That', 'It', 'Which'], answer: 0, explanation: 'wh-cleft: What I need is…' },
+        { id: 'l32q3', question: 'أكمل: It was in Cairo ___ we met.', options: ['that', 'who', 'where', 'which'], answer: 0, explanation: 'it-cleft للمكان: It was in Cairo that…' },
+        { id: 'l32q4', question: 'أي جملة wh-cleft صحيحة؟', options: ['What she wants is a new job.', 'What she wants it is a new job.', 'It is what she wants a new job.', 'She wants what is a new job.'], answer: 0, explanation: 'What + فاعل + فعل + is + المعلومة، بلا تكرار الضمير.' },
+        { id: 'l32q5', question: 'صحح: It was Tom which broke the window.', options: ['It was Tom who broke the window.', 'It was Tom that broke the window?', 'It was Tom where broke the window.', 'It was Tom whose broke the window.'], answer: 0, explanation: 'للأشخاص who في it-cleft، لا which.' },
+        { id: 'l32q6', question: 'ماذا تعني: All I want is a chance؟', options: ['كل ما أريده فرصة', 'أريد كل الفرص', 'لم أرد فرصة', 'الفرصة ليست مهمة'], answer: 0, explanation: 'all-cleft: All I want is… = كل ما أريده هو…' },
+      ],
+    },
+    {
+      id: 'l33-subjunctive',
+      order: 3,
+      title: 'الصيغة الرسمية — suggest / insist / demand',
+      estMinutes: 11,
+      objectives: [
+        'استخدام subjunctive بعد أفعال الطلب والاقتراح',
+        'استخدام it is essential/important that + base',
+        'تجنب «suggested him to»',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'فعل مجرد بلا s وبلا to',
+          body: 'بعد suggest / insist / demand / recommend / request، وبعد it is essential/important/necessary that، نستخدم الفعل المجرد مع كل الضمائر: «The doctor suggested that he rest». لا نضيف s ولا نستخدم to.',
+        },
+        {
+          type: 'table',
+          title: 'النمط الرسمي',
+          head: ['الجملة', 'المعنى'],
+          rows: [
+            ['The doctor suggested that he rest.', 'اقترح الطبيب أن يستريح'],
+            ['It is essential that she be on time.', 'من الضروري أن تكون في الموعد'],
+            ['They insisted that he tell the truth.', 'أصروا على أن يقول الحقيقة'],
+            ['The judge demanded that he not leave.', 'طالب القاضي ألا يغادر'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: suggested him to rest',
+          body: 'لا نقول «suggested him to rest» ولا «suggested that he rests». الصواب: «suggested that he rest». والنفي: «that he not rest» — not قبل الفعل المجرد.',
+        },
+      ],
+      examples: [
+        { text: 'The doctor suggested that he rest.', note: 'rest بلا s' },
+        { text: 'It is essential that she be on time.', note: 'be بلا تغيير' },
+        { text: 'They insisted that he tell the truth.', note: 'tell لا tells' },
+        { text: 'The judge demanded that he not leave the country.', note: 'النفي: not + فعل مجرد' },
+        { text: 'It is important that everyone be present.', note: 'everyone + be' },
+        { text: 'I recommend that she apply again.', note: 'apply لا applies' },
+      ],
+      practice: [
+        { id: 'l33q1', question: 'أكمل: The doctor suggested that he ___ rest.', options: ['rest', 'rests', 'to rest', 'rested'], answer: 0, explanation: 'subjunctive: الفعل المجرد rest بعد that.' },
+        { id: 'l33q2', question: 'أكمل: It is essential that she ___ on time.', options: ['be', 'is', 'was', 'to be'], answer: 0, explanation: 'بعد it is essential that: الفعل المجرد be.' },
+        { id: 'l33q3', question: 'أكمل: They insisted that he ___ the truth.', options: ['tell', 'tells', 'told', 'to tell'], answer: 0, explanation: 'insist that + فعل مجرد: tell.' },
+        { id: 'l33q4', question: 'صحح: She suggested him to rest.', options: ['She suggested that he rest.', 'She suggested him rest.', 'She suggested he rests.', 'She suggested to him resting.'], answer: 0, explanation: 'suggest لا تأخذ مفعولاً + to: suggested that he rest.' },
+        { id: 'l33q5', question: 'أكمل: It is important that everyone ___ present.', options: ['be', 'is', 'are', 'will be'], answer: 0, explanation: 'الصيغة الرسمية: that everyone be present.' },
+        { id: 'l33q6', question: 'أكمل: The judge demanded that he ___ leave the country.', options: ['not', "doesn't", "won't", 'no'], answer: 0, explanation: 'نفي subjunctive: that he not leave.' },
+      ],
+    },
+    {
+      id: 'l34-participle',
+      order: 4,
+      title: 'شبه الجمل — ing وed',
+      estMinutes: 12,
+      objectives: [
+        'اختزال الجملة بـ -ing أو -ed',
+        'التأكد من تطابق فاعل شبه الجملة مع الجملة الرئيسية',
+        'تجنب dangling modifiers',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'جملة قصيرة بدل جملة كاملة',
+          body: 'شبه الجملة يختصر جملة كاملة: «Walking home, I saw an old friend» = بينما كنت أمشي. نستخدم -ing للفعل النشط، و-ed للفعل المبني للمجهول: «Written in 1920, the novel…» = لأنها كُتبت. الفاعل يجب أن يكون نفسه في الجزأين.',
+        },
+        {
+          type: 'table',
+          title: 'صيغ شبه الجملة',
+          head: ['الصيغة', 'المثال'],
+          rows: [
+            ['-ing (نشط)', 'Walking home, I saw an old friend.'],
+            ['-ed (مجهول)', 'Written in 1920, the novel is still relevant.'],
+            ['Having + pp', 'Having finished the report, she went home.'],
+            ['اسم + -ing', 'The man standing by the door is my uncle.'],
+            ['Not + -ing', 'Not knowing the answer, I kept silent.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'الفخ: dangling modifier',
+          body: 'فاعل شبه الجملة يجب أن يكون فاعل الجملة الرئيسية. «Walking home, the rain started» خطأ لأن المطر لا يمشي. الصواب: «Walking home, I got caught in the rain».',
+        },
+      ],
+      examples: [
+        { text: 'Walking home, I saw an old friend.', note: 'أنا من يمشي ومن رأى' },
+        { text: 'Written in 1920, the novel is still relevant.', note: 'الرواية كُتبت (مجهول)' },
+        { text: 'Having finished the report, she went home.', note: 'بعد إنهاء التقرير' },
+        { text: 'The man standing by the door is my uncle.', note: 'اسم + -ing' },
+        { text: 'Surprised by the news, he said nothing.', note: '-ed للمجهول' },
+        { text: 'Not knowing the answer, I kept silent.', note: 'نفي شبه الجملة' },
+      ],
+      practice: [
+        { id: 'l34q1', question: 'أكمل: ___ from the window, the scene was magnificent.', options: ['Seen', 'Seeing', 'See', 'To see'], answer: 0, explanation: 'المشهد يُرى (مجهول) ⇒ Seen from the window.' },
+        { id: 'l34q2', question: 'أكمل: ___ home, I saw an old friend.', options: ['Walking', 'Walked', 'Walk', 'To walk'], answer: 0, explanation: 'أنا أمشي (نشط) ⇒ Walking home.' },
+        { id: 'l34q3', question: 'أكمل: ___ the report, she went home.', options: ['Having finished', 'Finish', 'Finished', 'To finish'], answer: 0, explanation: 'بعد إنهائها التقرير ⇒ Having finished.' },
+        { id: 'l34q4', question: 'صحح الجملة المعلقة: Walking home, the rain started.', options: ['Walking home, I got caught in the rain.', 'Walking home, the rain was heavy.', 'Walked home, the rain started.', 'To walk home, the rain started.'], answer: 0, explanation: 'فاعل Walking يجب أن يكون I، لا the rain.' },
+        { id: 'l34q5', question: 'أكمل: The man ___ by the door is my uncle.', options: ['standing', 'stood', 'stands', 'to stand'], answer: 0, explanation: 'اسم + -ing: the man standing.' },
+        { id: 'l34q6', question: 'أكمل: ___ by the news, he said nothing.', options: ['Surprised', 'Surprising', 'Surprise', 'To surprise'], answer: 0, explanation: 'هو فُوجئ (مجهول) ⇒ Surprised.' },
+      ],
+    },
+    {
+      id: 'l35-ellipsis-linkers',
+      order: 5,
+      title: 'الحذف والربط — أسلوب C1',
+      estMinutes: 11,
+      objectives: [
+        'استخدام so / neither / nor مع القلب',
+        'حذف الكلمات المكررة بأمان',
+        'استخدام albeit / nevertheless / whereas الرسمية',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'لا تكرر ما يُفهم',
+          body: 'so / neither / nor تختصر التكرار مع القلب: «I don\'t like coffee and neither does my brother». والحذف يحذف الفعل أو المفعول المكرر: «She can play the piano, and I can too». والروابط الرسمية: albeit = although، nevertheless = however، whereas = between contrast.',
+        },
+        {
+          type: 'table',
+          title: 'أدوات C1',
+          head: ['الأداة', 'المثال'],
+          rows: [
+            ['neither / nor', "I don't like coffee and neither does my brother."],
+            ['so', 'She can speak French, and so can I.'],
+            ['albeit', 'He passed, albeit with difficulty.'],
+            ['nevertheless', 'The plan is expensive; nevertheless, it is necessary.'],
+            ['whereas', 'Whereas the north is cold, the south is warm.'],
+          ],
+        },
+        {
+          type: 'tip',
+          title: 'بعد neither/nor قلب',
+          body: 'بعد neither/nor نستخدم ترتيب السؤال: «neither does he» لا «neither he does»، و«nor can I» لا «nor I can». وبعد albeit تأتي صفة أو عبارة غالباً: albeit slowly / albeit with difficulty.',
+        },
+      ],
+      examples: [
+        { text: "I don't like coffee and neither does my brother.", note: 'neither + does + فاعل' },
+        { text: 'She can speak French, and so can I.', note: 'so + can + I' },
+        { text: 'He passed, albeit with difficulty.', note: 'albeit = although' },
+        { text: 'The plan is expensive; nevertheless, it is necessary.', note: 'nevertheless = however' },
+        { text: 'Whereas the north is cold, the south is warm.', note: 'whereas = contrast' },
+        { text: "I wanted to help, but I didn't know how.", note: 'حذف الفعل المكرر' },
+      ],
+      practice: [
+        { id: 'l35q1', question: 'أكمل: I don\'t like coffee and ___ does my brother.', options: ['neither', 'so', 'either', 'nor not'], answer: 0, explanation: 'بعد نفي: neither + does + فاعل.' },
+        { id: 'l35q2', question: 'أكمل: She can speak French, and ___ can I.', options: ['so', 'neither', 'nor', 'too'], answer: 0, explanation: 'بعد إثبات: so + can + I.' },
+        { id: 'l35q3', question: 'أكمل: He passed, ___ with difficulty.', options: ['albeit', 'although', 'nevertheless', 'whereas'], answer: 0, explanation: 'albeit + عبارة = although it was with difficulty.' },
+        { id: 'l35q4', question: 'أكمل: The plan is expensive; ___, it is necessary.', options: ['nevertheless', 'albeit', 'whereas', 'so'], answer: 0, explanation: 'nevertheless = however، تربط تناقضاً.' },
+        { id: 'l35q5', question: 'أكمل: ___ the north is cold, the south is warm.', options: ['Whereas', 'Albeit', 'Nevertheless', 'So'], answer: 0, explanation: 'whereas تقارن بين حالتين متضادتين.' },
+        { id: 'l35q6', question: 'صحح: neither he does.', options: ['neither does he', 'neither he do', 'nor he does', 'so does he'], answer: 0, explanation: 'بعد neither: مساعد + فاعل (ترتيب السؤال).' },
+      ],
+    },
+    {
+      id: 'l36-archive-seminar',
+      order: 6,
+      title: 'حوار الندوة — «من يملك الأرشيف؟»',
+      estMinutes: 13,
+      objectives: [
+        'استخدام تراكيب C1 في نقاش أكاديمي',
+        'فهم القلب والتركيز والصيغة الرسمية والحذف',
+        'التحدث عن الأرشيف والشفافية والخصوصية',
+      ],
+      blocks: [
+        {
+          type: 'rule',
+          title: 'كيف تستخدم هذا الدرس',
+          body: 'هذه ندوة حول الأرشيف العام. ستسمع القلب (Rarely have we…)، والتركيز (What concerns me is… / It was the ministry that…)، والصيغة الرسمية (recommended that the files be…)، وشبه الجملة (Having examined…)، والربط الرسمي (nevertheless).',
+        },
+        {
+          type: 'table',
+          title: 'عبارات الندوة الجاهزة',
+          head: ['العبارة', 'المعنى'],
+          rows: [
+            ['Rarely have we seen …', 'نادراً ما رأينا…'],
+            ['What concerns me is …', 'ما يقلقني هو…'],
+            ['It was the ministry that …', 'الوزارة هي التي…'],
+            ['The committee recommended that the files be released.', 'أوصت اللجنة بالإفراج عن الملفات.'],
+          ],
+        },
+      ],
+      examples: [
+        { text: 'Mona: Rarely have we seen such public interest in the archive.', note: 'قلب بعد Rarely' },
+        { text: 'Sami: What concerns me is the missing correspondence.', note: 'wh-cleft للتركيز' },
+        { text: 'Lina: It was the ministry that restricted access last year.', note: 'it-cleft للتركيز' },
+        { text: 'Mona: The committee recommended that the files be released.', note: 'subjunctive: be released' },
+        { text: 'Sami: Having examined the documents, I can confirm the gaps.', note: 'شبه جملة: Having examined' },
+        { text: 'Lina: The public has a right to know; nevertheless, privacy matters.', note: 'ربط رسمي: nevertheless' },
+        { text: 'Mona: Not only will we publish the index, but we will also protect sensitive names.', note: 'قلب بعد Not only' },
+      ],
+      practice: [
+        { id: 'l36q1', question: 'ما الذي يقلق سامي؟', options: ['المراسلات المفقودة', 'الميزانية', 'الجمهور', 'الوزارة'], answer: 0, explanation: 'What concerns me is the missing correspondence.' },
+        { id: 'l36q2', question: 'من الذي قيّد الوصول إلى الأرشيف؟', options: ['اللجنة', 'الوزارة', 'الجامعة', 'الجمهور'], answer: 1, explanation: 'It was the ministry that restricted access last year.' },
+        { id: 'l36q3', question: 'ماذا أوصت اللجنة؟', options: ['إغلاق الأرشيف', 'الإفراج عن الملفات', 'حذف الفهرس', 'تأجيل الندوة'], answer: 1, explanation: 'The committee recommended that the files be released.' },
+        { id: 'l36q4', question: 'ماذا سينشرون؟', options: ['الفهرس', 'المراسلات الخاصة', 'أسماء المحررين', 'الميزانية'], answer: 0, explanation: 'Not only will we publish the index…' },
+        { id: 'l36q5', question: 'أي جملة تستخدم القلب (inversion)؟', options: ['Rarely have we seen such interest.', 'What concerns me is the missing correspondence.', 'It was the ministry that restricted access.', 'The public has a right to know.'], answer: 0, explanation: 'Rarely + have + we = قلب.' },
+        { id: 'l36q6', question: 'أي جملة تستخدم التركيز (cleft)؟', options: ['It was the ministry that restricted access.', 'Having examined the documents, I can confirm.', 'The files be released.', 'Rarely have we seen such interest.'], answer: 0, explanation: 'It was … that … = it-cleft.' },
+      ],
+    },
+  ],
+};
+
+export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05, UNIT_06];
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {

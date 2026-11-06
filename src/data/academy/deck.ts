@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   طَلَاقَة — رزمة بطاقات المنهاج (191 بطاقة)
-   مشتقة حرفياً من دروس المحطات الخمس: كل بطاقة مربوطة بدرسها
+   طَلَاقَة — رزمة بطاقات المنهاج (227 بطاقة)
+   مشتقة حرفياً من دروس المحطات الست: كل بطاقة مربوطة بدرسها
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
 
@@ -265,6 +265,54 @@ export const SRS_DECK: DeckCard[] = [
   { id: 'c-l30-04', lessonId: 'l30-seminar', front: '«بحلول يونيو سنكون أكملنا المرحلة الثانية»؟', back: 'By next June, we will have completed phase two.', example: 'By next June, we will have completed phase two.', note: 'مستقبل تام' },
   { id: 'c-l30-05', lessonId: 'l30-seminar', front: '«قالت الأستاذة إن النتائج ستُنشر في سبتمبر»؟', back: 'The professor said the results would be published in September.', example: 'The professor said the results would be published in September.', note: 'will ← would في الكلام غير المباشر' },
   { id: 'c-l30-06', lessonId: 'l30-seminar', front: '«النتائج، التي تبدو واعدة، ستُعرض في المؤتمر»؟', back: 'The findings, which are very promising, will be presented at the conference.', example: 'The findings, which are very promising, will be presented at the conference.', note: 'وصل غير محدد + مجهول مستقبلي' },
+
+  /* ── الدرس 31: القلب ── */
+  { id: 'c-l31-01', lessonId: 'l31-inversion', front: '«نادراً ما رأيت مثل هذا المنظر»؟', back: 'Never have I seen such a view.', example: 'Never have I seen such a view.', note: 'Never + have + I' },
+  { id: 'c-l31-02', lessonId: 'l31-inversion', front: 'أكمل: Rarely ___ complain.', back: 'does she', example: 'Rarely does she complain.', note: 'قلب: does + she' },
+  { id: 'c-l31-03', lessonId: 'l31-inversion', front: 'أكمل: Not only ___ the race…', back: 'did he win', example: 'Not only did he win, but he also broke the record.', note: 'Not only + did + he + win' },
+  { id: 'c-l31-04', lessonId: 'l31-inversion', front: 'أكمل: So loudly ___ that the police arrived.', back: 'did he shout', example: 'So loudly did he shout that the police arrived.', note: 'So + ظرف + did + فاعل' },
+  { id: 'c-l31-05', lessonId: 'l31-inversion', front: 'أكمل: Hardly ___ arrived when it started.', back: 'had I', example: 'Hardly had I arrived when it started to rain.', note: 'Hardly + had + I … when' },
+  { id: 'c-l31-06', lessonId: 'l31-inversion', front: 'صحح: Never I have seen such a view.', back: 'Never have I seen such a view.', example: 'Never have I seen such a view.', note: 'المساعد قبل الفاعل' },
+
+  /* ── الدرس 32: التركيز ── */
+  { id: 'c-l32-01', lessonId: 'l32-cleft', front: '«توم هو الذي كسر النافذة»؟', back: 'It was Tom who broke the window.', example: 'It was Tom who broke the window.', note: 'it-cleft' },
+  { id: 'c-l32-02', lessonId: 'l32-cleft', front: '«ما أحتاجه هو مزيد من الوقت»؟', back: 'What I need is more time.', example: 'What I need is more time.', note: 'wh-cleft' },
+  { id: 'c-l32-03', lessonId: 'l32-cleft', front: 'أكمل: It was in Cairo ___ we met.', back: 'that', example: 'It was in Cairo that we met.', note: 'it-cleft للمكان' },
+  { id: 'c-l32-04', lessonId: 'l32-cleft', front: '«كل ما أريده فرصة»؟', back: 'All I want is a chance.', example: 'All I want is a chance.', note: 'all-cleft' },
+  { id: 'c-l32-05', lessonId: 'l32-cleft', front: 'صحح: It was Tom which broke the window.', back: 'It was Tom who broke the window.', example: 'It was Tom who broke the window.', note: 'للأشخاص who' },
+  { id: 'c-l32-06', lessonId: 'l32-cleft', front: 'ما نوع: What she said was surprising؟', back: 'wh-cleft', example: 'What she said was surprising.', note: 'تركيز على القول' },
+
+  /* ── الدرس 33: الصيغة الرسمية ── */
+  { id: 'c-l33-01', lessonId: 'l33-subjunctive', front: '«اقترح الطبيب أن يستريح»؟', back: 'The doctor suggested that he rest.', example: 'The doctor suggested that he rest.', note: 'rest بلا s' },
+  { id: 'c-l33-02', lessonId: 'l33-subjunctive', front: 'أكمل: It is essential that she ___ on time.', back: 'be', example: 'It is essential that she be on time.', note: 'subjunctive: be' },
+  { id: 'c-l33-03', lessonId: 'l33-subjunctive', front: 'أكمل: They insisted that he ___ the truth.', back: 'tell', example: 'They insisted that he tell the truth.', note: 'tell بلا s' },
+  { id: 'c-l33-04', lessonId: 'l33-subjunctive', front: 'صحح: She suggested him to rest.', back: 'She suggested that he rest.', example: 'She suggested that he rest.', note: 'suggest لا تأخذ to' },
+  { id: 'c-l33-05', lessonId: 'l33-subjunctive', front: '«من الضروري أن يكون الجميع حاضرين»؟', back: 'It is important that everyone be present.', example: 'It is important that everyone be present.' },
+  { id: 'c-l33-06', lessonId: 'l33-subjunctive', front: 'انفِ: The judge demanded that he leave.', back: 'The judge demanded that he not leave.', example: 'The judge demanded that he not leave the country.', note: 'not + فعل مجرد' },
+
+  /* ── الدرس 34: شبه الجمل ── */
+  { id: 'c-l34-01', lessonId: 'l34-participle', front: 'أكمل: ___ from the window, the scene was magnificent.', back: 'Seen', example: 'Seen from the window, the scene was magnificent.', note: 'المشهد يُرى ⇒ -ed' },
+  { id: 'c-l34-02', lessonId: 'l34-participle', front: 'أكمل: ___ home, I saw an old friend.', back: 'Walking', example: 'Walking home, I saw an old friend.', note: 'أنا أمشي ⇒ -ing' },
+  { id: 'c-l34-03', lessonId: 'l34-participle', front: 'أكمل: ___ the report, she went home.', back: 'Having finished', example: 'Having finished the report, she went home.' },
+  { id: 'c-l34-04', lessonId: 'l34-participle', front: 'صحح: Walking home, the rain started.', back: 'Walking home, I got caught in the rain.', example: 'Walking home, I got caught in the rain.', note: 'فاعل واحد للجملتين' },
+  { id: 'c-l34-05', lessonId: 'l34-participle', front: 'أكمل: The man ___ by the door is my uncle.', back: 'standing', example: 'The man standing by the door is my uncle.', note: 'اسم + -ing' },
+  { id: 'c-l34-06', lessonId: 'l34-participle', front: 'أكمل: ___ by the news, he said nothing.', back: 'Surprised', example: 'Surprised by the news, he said nothing.', note: 'هو فُوجئ ⇒ -ed' },
+
+  /* ── الدرس 35: الحذف والربط ── */
+  { id: 'c-l35-01', lessonId: 'l35-ellipsis-linkers', front: 'أكمل: I don\'t like coffee and ___ does my brother.', back: 'neither', example: "I don't like coffee and neither does my brother.", note: 'neither + مساعد + فاعل' },
+  { id: 'c-l35-02', lessonId: 'l35-ellipsis-linkers', front: 'أكمل: She can speak French, and ___ can I.', back: 'so', example: 'She can speak French, and so can I.', note: 'so + can + I' },
+  { id: 'c-l35-03', lessonId: 'l35-ellipsis-linkers', front: '«نجح، وإن بصعوبة»؟', back: 'He passed, albeit with difficulty.', example: 'He passed, albeit with difficulty.', note: 'albeit = although' },
+  { id: 'c-l35-04', lessonId: 'l35-ellipsis-linkers', front: '«الخطة مكلفة؛ ومع ذلك فهي ضرورية»؟', back: 'The plan is expensive; nevertheless, it is necessary.', example: 'The plan is expensive; nevertheless, it is necessary.', note: 'nevertheless = however' },
+  { id: 'c-l35-05', lessonId: 'l35-ellipsis-linkers', front: 'أكمل: ___ the north is cold, the south is warm.', back: 'Whereas', example: 'Whereas the north is cold, the south is warm.', note: 'whereas للمقارنة المتضادة' },
+  { id: 'c-l35-06', lessonId: 'l35-ellipsis-linkers', front: 'صحح: neither he does.', back: 'neither does he', example: 'I was tired, and neither did he want to go.', note: 'ترتيب السؤال بعد neither' },
+
+  /* ── الدرس 36: ندوة الأرشيف ── */
+  { id: 'c-l36-01', lessonId: 'l36-archive-seminar', front: '«نادراً ما رأينا اهتماماً كهذا»؟', back: 'Rarely have we seen such interest.', example: 'Rarely have we seen such public interest in the archive.', note: 'قلب بعد Rarely' },
+  { id: 'c-l36-02', lessonId: 'l36-archive-seminar', front: '«ما يقلقني هو المراسلات المفقودة»؟', back: 'What concerns me is the missing correspondence.', example: 'What concerns me is the missing correspondence.', note: 'wh-cleft' },
+  { id: 'c-l36-03', lessonId: 'l36-archive-seminar', front: '«الوزارة هي التي قيّدت الوصول»؟', back: 'It was the ministry that restricted access.', example: 'It was the ministry that restricted access last year.', note: 'it-cleft' },
+  { id: 'c-l36-04', lessonId: 'l36-archive-seminar', front: '«أوصت اللجنة بالإفراج عن الملفات»؟', back: 'The committee recommended that the files be released.', example: 'The committee recommended that the files be released.', note: 'subjunctive: be released' },
+  { id: 'c-l36-05', lessonId: 'l36-archive-seminar', front: '«بعد فحص الوثائق، أستطيع تأكيد الفجوات»؟', back: 'Having examined the documents, I can confirm the gaps.', example: 'Having examined the documents, I can confirm the gaps.', note: 'شبه جملة: Having examined' },
+  { id: 'c-l36-06', lessonId: 'l36-archive-seminar', front: '«لن ننشر الفهرس فحسب، بل سنحمي الأسماء الحساسة أيضاً»؟', back: 'Not only will we publish the index, but we will also protect sensitive names.', example: 'Not only will we publish the index, but we will also protect sensitive names.', note: 'قلب بعد Not only' },
 ];
 
 /** بطاقات درس معين — للإشعار «وُلدت بطاقات جديدة» */
