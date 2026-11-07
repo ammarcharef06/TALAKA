@@ -5,6 +5,7 @@ import { SRS_DECK, type DeckCard } from '../data/academy/deck';
 import { CAREER_DECK } from '../data/career/scenarios';
 import { getAllSrsStates, getProgressMap, getPassedInterviewScenarios, recordReview } from '../store/db';
 import { initialSrsState, gradeCard, QUALITY_LABELS, type ReviewQuality } from '../engine/srs';
+import { SettingsEngine } from '../engine/settings';
 import { escapeHtml } from '../ui/confirm';
 import type { SrsState } from '../engine/srs';
 
@@ -28,7 +29,8 @@ const ALL_DECK: DeckCard[] = [...SRS_DECK, ...CAREER_DECK];
 function buildQueue(
   states: Record<string, SrsState>,
   progress: Record<string, { completedAt: string; bestScore: number }>,
-  passedScenarios: string[]
+  passedScenarios: string[],
+  dailyCap: number
 ): SessionCard[] {
   const now = Date.now();
   const combined = { ...progress, ...careerProgressMap(passedScenarios) };
@@ -40,7 +42,8 @@ function buildQueue(
   }).filter((c): c is SessionCard => c !== null);
   // الجديدة أولاً ثم الأقدم استحقاقاً
   born.sort((a, b) => Number(b.isNew) - Number(a.isNew) || Date.parse(a.state.due) - Date.parse(b.state.due));
-  return born.slice(0, 20);
+  // سقف يومي من مكتب شؤون الطلاب — يمنع الإرهاق ولا يحذف بطاقات
+  return born.slice(0, Math.max(1, dailyCap));
 }
 
 function renderReview(root: HTMLElement): void {
@@ -61,8 +64,9 @@ function renderReview(root: HTMLElement): void {
     go('building');
   });
 
-  void Promise.all([getAllSrsStates(), getProgressMap(), getPassedInterviewScenarios()]).then(([states, progress, passed]) => {
-    const queue = buildQueue(states, progress, passed);
+  void Promise.all([getAllSrsStates(), getProgressMap(), getPassedInterviewScenarios(), SettingsEngine.load()]).then(([states, progress, passed, settings]) => {
+    const dailyCap = settings.academic.srsDailyCap;
+    const queue = buildQueue(states, progress, passed, dailyCap);
     const mastered = Object.values(states).filter((s) => s.reps >= 3).length;
     const nextDue = Object.values(states)
       .map((s) => Date.parse(s.due))
@@ -93,7 +97,7 @@ function renderReview(root: HTMLElement): void {
       const item = queue[index];
       const { card, isNew } = item;
       wrap.innerHTML = `
-        <div class="review-progress"><span class="section-chip">${isNew ? 'بطاقة جديدة' : 'مراجعة'}</span><span class="exam-counter">البطاقة ${index + 1} من ${queue.length}</span></div>
+        <div class="review-progress"><span class="section-chip">${isNew ? 'بطاقة جديدة' : 'مراجعة'}</span><span class="exam-counter">البطاقة ${index + 1} من ${queue.length} · سقف اليوم ${dailyCap}</span></div>
         <div class="exam-bar"><div class="exam-bar-fill" style="width:${(index / queue.length) * 100}%"></div></div>
 
         <article class="srs-card" id="srsCard" aria-live="polite">

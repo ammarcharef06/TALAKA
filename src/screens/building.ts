@@ -1,8 +1,10 @@
 import { go, registerScreen } from '../router';
 import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap, getPassedInterviewScenarios } from '../store/db';
-import { sealSVG, initialsOf } from '../ui/seal';
+import { sealSVG } from '../ui/seal';
 import { showConfirm, toast } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
+import { SettingsEngine } from '../engine/settings';
+import { session } from '../state';
 import { UNITS } from '../data/academy/course';
 import { SRS_DECK, countDueCardsIn } from '../data/academy/deck';
 import { CAREER_DECK } from '../data/career/scenarios';
@@ -26,6 +28,7 @@ const HALLS: Hall[] = [
   { id: 'career', name: 'المسار المهني — Career Hub', desc: 'تدريب مكثف على مقابلات العمل بالإنجليزية حتى التوقيع', icon: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>' },
   { id: 'clinic', name: 'عيادة أخطاء العرب', desc: 'جلسات مركزة على أكثر أخطاء العرب تكراراً — نطقاً وقواعد وأسلوباً', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>' },
   { id: 'mirror', name: 'بوابة النسخ اللامركزية', desc: 'طلاقة تعيش على GitHub Pages وCloudflare Pages وIPFS — تنزيل نسخة كاملة من الأكاديمية', icon: '<circle cx="5" cy="12" r="2.4"/><circle cx="12" cy="5" r="2.4"/><circle cx="19" cy="12" r="2.4"/><circle cx="12" cy="19" r="2.4"/><path d="M7.3 10.9 9.7 7.1M14.3 7.1l2.4 3.8M16.7 13.1 14.3 16.9M9.7 16.9l-2.4-3.8"/>' },
+  { id: 'settings', name: 'مكتب شؤون الطلاب', desc: 'الوقت السائل · سقف المراجعة · الصوت واللهجة · الملف والخصوصية · الهوية العامة · الوصول وإدارة الجهاز', icon: '<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/>' },
 ];
 
 function hallIcon(paths: string): string {
@@ -39,6 +42,7 @@ function renderBuilding(root: HTMLElement): void {
     <div class="topbar-brand">${sealSVG(38, 'onDark')}<div class="topbar-titles"><b>طَلَاقَة</b><small dir="ltr">TALAQA ACADEMY</small></div></div>
     <div class="spacer"></div>
     <div id="studentChip" class="student-chip" hidden></div>
+    <button id="settingsBtn" class="icon-btn" title="مكتب شؤون الطلاب — الإعدادات" aria-label="مكتب شؤون الطلاب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></button>
     <button id="exportBtn" class="icon-btn" title="تنزيل ملف بطاقتي (سيادتك أنت)" aria-label="تنزيل ملف بطاقتي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg></button>
     <button id="switchBtn" class="icon-btn" title="طالب آخر / مسح هذا الجهاز" aria-label="طالب آخر"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 20a5.2 5.2 0 0 1 5-4"/></svg></button>
   </header>
@@ -56,26 +60,28 @@ function renderBuilding(root: HTMLElement): void {
   const grid = root.querySelector<HTMLElement>('#hallsGrid')!;
   const chip = root.querySelector<HTMLElement>('#studentChip')!;
 
-  void getCurrentStudent().then((student) => {
+  void Promise.all([getCurrentStudent(), SettingsEngine.load()]).then(([student, settings]) => {
     if (!student) {
       go('gate');
       return;
     }
+    const displayName = SettingsEngine.displayName(student.name);
     chip.hidden = false;
     chip.innerHTML = `
-      <span class="chip-avatar">${initialsOf(student.name)}</span>
-      <span class="chip-meta"><b>${escapeHtmlLocal(student.name)}</b><i dir="ltr">${escapeHtmlLocal(student.id)}</i></span>
+      <span class="chip-avatar">${escapeHtmlLocal(SettingsEngine.initials(student.name))}</span>
+      <span class="chip-meta"><b>${escapeHtmlLocal(displayName)}</b><i dir="ltr">${escapeHtmlLocal(student.id)}</i></span>
       <span class="lvl-badge" title="${student.certifiedLevel ? 'مستوى معتمد' : 'مستوى تعيين أولي'}">${escapeHtmlLocal(student.certifiedLevel ?? student.level)}${student.certifiedLevel ? ' ✓' : ''}</span>`;
 
     grid.innerHTML = HALLS.map((h) => {
       if (h.id === 'exam') return examHallCard(student);
       if (h.id === 'classroom') return classroomHallCard();
-      if (h.id === 'review') return reviewHallCard();
+      if (h.id === 'review') return reviewHallCard(settings.academic.srsDailyCap);
       if (h.id === 'cafe') return cafeHallCard();
       if (h.id === 'transcript') return transcriptHallCard();
       if (h.id === 'certificate') return certificateHallCard(student);
       if (h.id === 'library') return libraryHallCard();
       if (h.id === 'career') return careerHallCard();
+      if (h.id === 'settings') return settingsHallCard(settings.academic.defaultSessionMinutes, settings.academic.srsDailyCap);
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -96,6 +102,7 @@ function renderBuilding(root: HTMLElement): void {
     grid.querySelector<HTMLButtonElement>('#enterCertificateBtn')?.addEventListener('click', () => go('certificate'));
     grid.querySelector<HTMLButtonElement>('#enterLibraryBtn')?.addEventListener('click', () => go('library'));
     grid.querySelector<HTMLButtonElement>('#enterCareerBtn')?.addEventListener('click', () => go('career'));
+    grid.querySelector<HTMLButtonElement>('#enterSettingsBtn')?.addEventListener('click', () => go('settings'));
 
     // عدّاد إتمام الوحدة الأولى + عدد البطاقات المستحقة
     void Promise.all([getProgressMap(), getAllSrsStates(), getAllLevelExamResults(), getPassedInterviewScenarios()]).then(([map, states, examResults, passedScenarios]) => {
@@ -110,7 +117,13 @@ function renderBuilding(root: HTMLElement): void {
         const careerProgress: Record<string, true> = {};
         for (const scenarioId of passedScenarios) careerProgress[`career-${scenarioId}`] = true;
         const due = countDueCardsIn([...SRS_DECK, ...CAREER_DECK], states, { ...map, ...careerProgress });
-        reviewEl.textContent = due === 0 ? 'لا توجد بطاقات مستحقة الآن' : `${due} بطاقة تنتظرك اليوم`;
+        const cap = settings.academic.srsDailyCap;
+        reviewEl.textContent =
+          due === 0
+            ? 'لا توجد بطاقات مستحقة الآن'
+            : due > cap
+              ? `${cap} بطاقة في جلسة اليوم (من ${due} مستحقة) — سقفك من مكتب شؤون الطلاب`
+              : `${due} بطاقة تنتظرك اليوم`;
       }
       const cafeEl = grid.querySelector<HTMLElement>('#cafeDone');
       if (cafeEl) {
@@ -146,9 +159,16 @@ function renderBuilding(root: HTMLElement): void {
       if (s) exportStudentFile(s);
     });
   });
+  root.querySelector('#settingsBtn')!.addEventListener('click', () => go('settings'));
   root.querySelector('#switchBtn')!.addEventListener('click', () => {
     void showConfirm('سيتم مسح بيانات هذا الجهاز (بطاقة الطالب ومستواه). يُنصح بتنزيل ملف بطاقتك أولاً. مسح؟', 'مسح وابدأ كطالب جديد').then((ok) => {
-      if (ok) void clearAllStudents().then(() => go('gate'));
+      if (ok)
+        void clearAllStudents().then(async () => {
+          SettingsEngine.invalidate();
+          await SettingsEngine.load();
+          session.unlocked = false;
+          go('gate');
+        });
     });
   });
 }
@@ -177,7 +197,7 @@ function classroomHallCard(): string {
   </div>`;
 }
 
-function reviewHallCard(): string {
+function reviewHallCard(srsCap: number): string {
   return `
   <div class="hall hall-open" role="group" aria-label="ردهة التكرار المتباعد">
     <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'review')!.icon)}</span>
@@ -185,6 +205,7 @@ function reviewHallCard(): string {
     <span class="hall-desc">بطاقات مولّدة من دروسك — تعاد لك قبل نسيانها بدقائق، بخوارزمية SM-2 الحقيقية</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg><span id="reviewDue">جارٍ حساب استحقاقاتك…</span></span>
     <button id="enterReviewBtn" class="btn btn-gold hall-enter-btn">ادخل الردهة — ذاكرتك أولاً</button>
+    <p class="hall-mini-note">سقف جلستك: ${srsCap} بطاقة — تغيّره من مكتب شؤون الطلاب.</p>
   </div>`;
 }
 
@@ -240,6 +261,17 @@ function careerHallCard(): string {
     <span class="hall-desc">أربع مقابلات عمل حقيقية بالأسئلة الأكثر تكراراً — تقييم حتمي ونصائح، ثم صانع سيرة ذاتية بالإنجليزية جاهزة للطباعة</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>4 سيناريوهات · صانع CV · بطاقات مهنية للمراجعة</span>
     <button id="enterCareerBtn" class="btn btn-gold hall-enter-btn">ادخل المسار المهني</button>
+  </div>`;
+}
+
+function settingsHallCard(sessionMinutes: number, srsCap: number): string {
+  return `
+  <div class="hall hall-open hall-settings" role="group" aria-label="مكتب شؤون الطلاب">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'settings')!.icon)}</span>
+    <span class="hall-name">مكتب شؤون الطلاب</span>
+    <span class="hall-desc">أربعة أقسام: الوقت السائل والصوت · ملفك وقفل PIN · هويتك العامة في الشهادة · الوصول وإدارة الجهاز</span>
+    <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>جلستك الافتراضية: <b dir="ltr">${sessionMinutes}</b> دقيقة · سقف المراجعة: <b dir="ltr">${srsCap}</b> بطاقة</span>
+    <button id="enterSettingsBtn" class="btn btn-gold hall-enter-btn">افتح مكتب شؤون الطلاب</button>
   </div>`;
 }
 

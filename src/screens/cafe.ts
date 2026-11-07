@@ -7,6 +7,7 @@ import { sealSVG } from '../ui/seal';
 import { speakText, stopSpeaking, speechSupported } from '../ui/speak';
 import { showConfirm, escapeHtml, toast } from '../ui/confirm';
 import { getSpeechRecognitionCtor, matchUtterance } from '../engine/voice';
+import { SettingsEngine } from '../engine/settings';
 import { markLessonComplete, getProgressMap } from '../store/db';
 
 const SCENE_ID = 'scene-cafe-1';
@@ -402,7 +403,7 @@ function renderScene(root: HTMLElement): void {
     try {
       const Ctor = SR as unknown as { new (): RecognitionLike };
       recognition = new Ctor();
-      recognition.lang = 'en-US';
+      recognition.lang = SettingsEngine.recognitionLang();
       recognition.interimResults = false;
       recognition.maxAlternatives = 5;
       recognition.onresult = (event) => {

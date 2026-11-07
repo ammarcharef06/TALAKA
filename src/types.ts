@@ -169,3 +169,63 @@ export interface LessonProgress {
   completedAt: string;
   bestScore: number; // 0..100
 }
+
+/* ── مكتب شؤون الطلاب — الإعدادات المحلية ── */
+
+export type SessionMinutes = 10 | 20 | 60;
+export type TtsSpeed = 'slow' | 'normal' | 'fast';
+export type SpeechAccent = 'american' | 'british';
+export type ThemeMode = 'light' | 'dark' | 'system';
+export type FontScale = 'normal' | 'large' | 'xlarge';
+export type CertificateNameMode = 'full' | 'first';
+export type AvatarKind = 'initials' | 'seal';
+
+export interface PinCredential {
+  /** ملح عشوائي بصيغة hex — لا يُخزَّن الرمز نفسه أبداً */
+  salt: string;
+  /** PBKDF2-SHA-256 */
+  hash: string;
+  iterations: number;
+}
+
+export interface AcademicSettings {
+  defaultSessionMinutes: SessionMinutes;
+  srsDailyCap: number;
+  ttsSpeed: TtsSpeed;
+  accent: SpeechAccent;
+}
+
+export interface ProfileSettings {
+  /** الاسم الخاص الذي يظهر في الشريط والترحيب — لا يغيّر الشهادة */
+  displayName: string;
+  initials: string;
+  avatar: AvatarKind;
+  pin: PinCredential | null;
+  theme: ThemeMode;
+}
+
+export interface PublicIdentitySettings {
+  nameMode: CertificateNameMode;
+  showStudentId: boolean;
+  showSignature: boolean;
+  showDetailedGrades: boolean;
+}
+
+export interface AccessibilitySettings {
+  fontScale: FontScale;
+  highContrast: boolean;
+  reducedMotion: boolean;
+}
+
+export interface AppSettings {
+  version: 1;
+  academic: AcademicSettings;
+  profile: ProfileSettings;
+  publicIdentity: PublicIdentitySettings;
+  accessibility: AccessibilitySettings;
+  updatedAt: string;
+}
+
+export interface SettingsRecord extends AppSettings {
+  id: 'settings';
+}

@@ -10,6 +10,7 @@ import { sealSVG } from '../ui/seal';
 import { escapeHtml, toast } from '../ui/confirm';
 import { speakEnglish, stopSpeaking, speechSupported } from '../ui/speak';
 import { getSpeechRecognitionCtor } from '../engine/voice';
+import { SettingsEngine } from '../engine/settings';
 import { scenarioById, type InterviewScenario } from '../data/career/scenarios';
 import {
   buildInterviewResult,
@@ -172,7 +173,7 @@ function renderQuestion(root: HTMLElement, ctx: InterviewContext, index: number)
     try {
       const Ctor = SR as unknown as { new (): RecognitionLike };
       recognition = new Ctor();
-      recognition.lang = 'en-US';
+      recognition.lang = SettingsEngine.recognitionLang();
       recognition.interimResults = false;
       recognition.maxAlternatives = 3;
       recognition.onresult = (event) => {

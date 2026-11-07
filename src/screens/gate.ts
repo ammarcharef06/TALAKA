@@ -2,7 +2,10 @@ import { go, registerScreen } from '../router';
 import { getCurrentStudent, importStudentFile } from '../store/db';
 import { sealSVG } from '../ui/seal';
 import { escapeHtml, toast } from '../ui/confirm';
+import { promptPin } from '../ui/pin';
 import { LEVEL_META } from '../engine/placement';
+import { SettingsEngine } from '../engine/settings';
+import { session } from '../state';
 
 function renderGate(root: HTMLElement): void {
   root.innerHTML = `
@@ -58,22 +61,47 @@ function renderGate(root: HTMLElement): void {
   const enterBtn = root.querySelector<HTMLButtonElement>('#enterBtn')!;
   const returningPanel = root.querySelector<HTMLDivElement>('#returningPanel')!;
 
+  /** دخول المبنى: يطلب رمز PIN المحلي إن كان مفعّلاً في هذه الزيارة */
+  const openBuilding = async (): Promise<void> => {
+    const student = await getCurrentStudent();
+    if (!student) {
+      go('acceptance');
+      return;
+    }
+    await SettingsEngine.load().catch(() => undefined);
+    if (SettingsEngine.hasPin() && !session.unlocked) {
+      const pin = await promptPin('فتح الجلسة', 'هذا الجهاز محمي برمز PIN محلي. أدخل الرمز للمتابعة إلى مبنى الأكاديمية.');
+      if (!pin) return;
+      const ok = await SettingsEngine.verifyPin(pin);
+      if (!ok) {
+        toast('الرمز غير صحيح — حاول مرة أخرى');
+        return;
+      }
+      session.unlocked = true;
+    }
+    go('building');
+  };
+
   // الزائر العائد؟
-  void getCurrentStudent().then((student) => {
+  void Promise.all([getCurrentStudent(), SettingsEngine.load()]).then(([student]) => {
     if (!student) return;
     enterBtn.textContent = 'دخول مبنى الأكاديمية';
     returningPanel.hidden = false;
     const lvl = LEVEL_META[student.level];
+    const displayName = SettingsEngine.displayName(student.name);
+    const firstName = displayName.trim().split(/\s+/)[0] || displayName;
+    const locked = SettingsEngine.hasPin() && !session.unlocked;
     returningPanel.innerHTML = `
-      <div class="returning-seal">◆</div>
+      <div class="returning-seal">${locked ? '🔒' : '◆'}</div>
       <div>
-        <p class="returning-hi">أهلاً بعودتك، يا <b>${escapeHtml(student.name.trim().split(/\s+/)[0])}</b></p>
+        <p class="returning-hi">أهلاً بعودتك، يا <b>${escapeHtml(firstName)}</b></p>
         <p class="returning-meta">رقمك الطالبي: <span dir="ltr">${escapeHtml(student.id)}</span> — المستوى: <b>${escapeHtml(student.level)}</b> · ${escapeHtml(lvl.ar)}</p>
+        ${locked ? '<p class="returning-lock-note">الجلسة محمية برمز PIN — سيُطلب عند الدخول.</p>' : ''}
       </div>`;
   });
 
   enterBtn.addEventListener('click', () => {
-    void getCurrentStudent().then((student) => go(student ? 'building' : 'acceptance'));
+    void openBuilding();
   });
 
   const dialog = root.querySelector<HTMLDialogElement>('#aboutDialog')!;
@@ -91,7 +119,7 @@ function renderGate(root: HTMLElement): void {
     void importStudentFile(file)
       .then((rec) => {
         toast(`أُعيدت بطاقتك بنجاح يا ${rec.name.trim().split(/\s+/)[0]} — أهلاً بعودتك`);
-        go('building');
+        return openBuilding();
       })
       .catch((err: unknown) => {
         toast(err instanceof Error ? err.message : 'تعذر استيراد الملف — تحقق أنه ملف بطاقة طلاقة');

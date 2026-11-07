@@ -8,6 +8,7 @@ import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
 import { escapeHtml, showConfirm, toast } from '../ui/confirm';
 import { getCvProfile, saveCvProfile } from '../store/db';
+import { SettingsEngine } from '../engine/settings';
 import type { CvEducation, CvExperience, CvProfile } from '../types';
 
 type Template = 'classic' | 'modern';
@@ -57,9 +58,10 @@ function chipList(items: string[], cls: string): string {
   return items.map((t) => `<span class="${cls}" dir="ltr">${escapeHtml(t)}</span>`).join('');
 }
 
-function renderCvPreview(profile: CvProfile): string {
+function renderCvPreview(profile: CvProfile, settings = SettingsEngine.current()): string {
   const exp = profile.experiences.filter((e) => e.company || e.role);
   const edu = profile.education.filter((e) => e.school || e.degree);
+  const publicName = SettingsEngine.publicName(profile.name, settings);
   const bullets = (lines: string[]) =>
     lines.filter(Boolean).length === 0
       ? ''
@@ -86,7 +88,7 @@ function renderCvPreview(profile: CvProfile): string {
     return `
     <article class="cv-doc cv-modern" aria-label="السيرة الذاتية — معاينة">
       <aside class="cv-side">
-        <h1 class="cv-name" dir="ltr">${escapeHtml(profile.name || 'Your Name')}</h1>
+        <h1 class="cv-name" dir="ltr">${escapeHtml(publicName || 'Your Name')}</h1>
         <p class="cv-title" dir="ltr">${escapeHtml(profile.title || 'Professional Title')}</p>
         <div class="cv-side-block"><h2>Contact</h2><p class="cv-side-text" dir="ltr">${[profile.email, profile.phone, profile.city].filter(Boolean).map((s) => `<span>${escapeHtml(s)}</span>`).join('<br/>')}</p></div>
         <div class="cv-side-block"><h2>Skills</h2><div class="cv-chips cv-chips-dark">${chipList(profile.skills, 'cv-chip')}</div></div>
@@ -103,7 +105,7 @@ function renderCvPreview(profile: CvProfile): string {
   return `
   <article class="cv-doc cv-classic" aria-label="السيرة الذاتية — معاينة">
     <header class="cv-header">
-      <h1 class="cv-name" dir="ltr">${escapeHtml(profile.name || 'Your Name')}</h1>
+      <h1 class="cv-name" dir="ltr">${escapeHtml(publicName || 'Your Name')}</h1>
       <p class="cv-title" dir="ltr">${escapeHtml(profile.title || 'Professional Title')}</p>
       <p class="cv-contact">${contact}</p>
     </header>
@@ -127,7 +129,7 @@ function renderCvScreen(root: HTMLElement): void {
 
   root.innerHTML = `<div class="screen cv-screen"><main class="cv-wrap"><p class="review-empty-sub">جارٍ فتح صانع السيرة…</p></main></div>`;
 
-  void getCvProfile().then((saved) => {
+  void Promise.all([getCvProfile(), SettingsEngine.load()]).then(([saved]) => {
     if (saved) profile = { ...saved, id: 'cv', version: 1 };
     render();
   });

@@ -9,6 +9,8 @@ export const session: {
   levelExamResult: LevelExamResult | null;
   /** السيناريو المهني المختار للمقابلة */
   careerScenarioId: string | null;
+  /** هل فُتح قفل الجلسة المحلي (PIN) في هذه الزيارة؟ */
+  unlocked: boolean;
 } = {
   onboarding: null,
   result: null,
@@ -16,6 +18,7 @@ export const session: {
   pendingExamLevel: null,
   levelExamResult: null,
   careerScenarioId: null,
+  unlocked: false,
 };
 
 export function resetSession(): void {
@@ -25,4 +28,5 @@ export function resetSession(): void {
   session.pendingExamLevel = null;
   session.levelExamResult = null;
   session.careerScenarioId = null;
+  session.unlocked = false;
 }

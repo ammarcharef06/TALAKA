@@ -10,6 +10,7 @@ import { EXAM_LEVELS, passedLevels } from '../engine/levelExam';
 import { getAllLevelExamResults, getAllSrsStates, getCurrentStudent, getProgressMap } from '../store/db';
 import { UNITS, allLessonsInOrder } from '../data/academy/course';
 import { SRS_DECK, countDueCards } from '../data/academy/deck';
+import { SettingsEngine } from '../engine/settings';
 import type { LevelExamResult } from '../types';
 
 function formatDate(iso: string): string {
@@ -54,12 +55,15 @@ function unitRows(progress: Record<string, { bestScore: number }>): string {
 }
 
 function renderTranscript(root: HTMLElement): void {
-  void Promise.all([getCurrentStudent(), getProgressMap(), getAllLevelExamResults(), getAllSrsStates()]).then(
-    ([student, progress, allResults, srsStates]) => {
+  void Promise.all([getCurrentStudent(), getProgressMap(), getAllLevelExamResults(), getAllSrsStates(), SettingsEngine.load()]).then(
+    ([student, progress, allResults, srsStates, settings]) => {
       if (!student) {
         go('gate');
         return;
       }
+      const displayName = SettingsEngine.publicName(student.name, settings);
+      const showId = settings.publicIdentity.showStudentId;
+      const showGrades = settings.publicIdentity.showDetailedGrades;
       const results = allResults.filter((r) => r.studentId === student.id);
       const certified = passedLevels(results);
       const certifiedLevel = certified.length ? certified[certified.length - 1] : (student.certifiedLevel ?? null);
@@ -94,8 +98,8 @@ function renderTranscript(root: HTMLElement): void {
       </header>
 
       <div class="doc-meta">
-        <span>الطالب: <b>${escapeHtml(student.name)}</b></span>
-        <span>رقم الطالب: <b dir="ltr">${escapeHtml(student.id)}</b></span>
+        <span>الطالب: <b>${escapeHtml(displayName)}</b></span>
+        ${showId ? `<span>رقم الطالب: <b dir="ltr">${escapeHtml(student.id)}</b></span>` : ''}
         <span>الالتحاق: <b>${escapeHtml(formatDate(student.registeredAt))}</b></span>
       </div>
 
@@ -108,7 +112,9 @@ function renderTranscript(root: HTMLElement): void {
 
       ${certifiedLevel ? `<p class="transcript-cert">◆ اعتماد حالي: <b dir="ltr">${escapeHtml(certifiedLevel)}</b> — ${escapeHtml(LEVEL_META[certifiedLevel].ar)} · مسجّل محلياً في هذا السجل.</p>` : '<p class="transcript-cert transcript-cert-none">◆ لا اعتماد مستوى بعد — اجتز امتحان A1 لتظهر أول شهادة في سجلك.</p>'}
 
-      <section class="transcript-section" aria-label="محاضر الامتحانات">
+      ${
+        showGrades
+          ? `<section class="transcript-section" aria-label="محاضر الامتحانات">
         <h3>محاضر الامتحانات المعتمدة</h3>
         <table class="transcript-table">
           <thead><tr><th>المستوى</th><th>التاريخ</th><th>النتيجة</th><th>النجاح</th><th>الحالة</th></tr></thead>
@@ -122,7 +128,12 @@ function renderTranscript(root: HTMLElement): void {
           <thead><tr><th>المحطة</th><th>الدروس</th><th>متوسط أفضل الدرجات</th></tr></thead>
           <tbody>${unitRows(progress)}</tbody>
         </table>
-      </section>
+      </section>`
+          : `<section class="transcript-section" aria-label="الدرجات التفصيلية">
+        <h3>الدرجات التفصيلية</h3>
+        <p class="transcript-note">أُخفيت جداول الدرجات التفصيلية حسب إعدادات الهوية العامة في مكتب شؤون الطلاب. ملخص تقدمك أعلاه يبقى ظاهراً، ويمكنك إعادة إظهارها في أي وقت من الإعدادات.</p>
+      </section>`
+      }
 
       <section class="transcript-section" aria-label="ذاكرة المراجعة">
         <h3>ذاكرة المراجعة المتباعدة</h3>

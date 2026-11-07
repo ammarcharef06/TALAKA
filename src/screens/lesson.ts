@@ -4,8 +4,10 @@ import { findLesson, allLessonsInOrder, nextLessonAfter } from '../data/academy/
 import { cardsForLesson } from '../data/academy/deck';
 import { markLessonComplete, getProgressMap } from '../store/db';
 import { session } from '../state';
-import { escapeHtml } from '../ui/confirm';
+import { escapeHtml, toast } from '../ui/confirm';
 import { speakEnglish, stopSpeaking, speechSupported } from '../ui/speak';
+import { SettingsEngine } from '../engine/settings';
+import { buildFluidPlan, FLUID_MODES, type FluidMinutes, type FluidPlan } from '../engine/timeFluid';
 
 const LETTERS = ['أ', 'ب', 'ج', 'د'];
 
@@ -36,9 +38,67 @@ function renderLesson(root: HTMLElement): void {
       go('classroom');
     });
 
+  // مدة الجلسة الحالية — تُقرأ من مكتب شؤون الطلاب، وتُحفظ عند تغييرها داخل الدرس
+  let minutes: FluidMinutes = SettingsEngine.current().academic.defaultSessionMinutes;
+  const planFor = (): FluidPlan => buildFluidPlan(lesson, minutes);
+
+  const phaseStrip = (plan: FluidPlan): string =>
+    plan.phases
+      .map(
+        (phase) => `<span class="fluid-phase" title="${escapeHtml(phase.description)}"><b>${escapeHtml(phase.title)}</b><i>${phase.minutes} د</i></span>`
+      )
+      .join('');
+
+  const fluidPanel = (plan: FluidPlan): string => `
+    <section class="fluid-panel" aria-label="الوقت السائل — مدة الجلسة">
+      <div class="fluid-head">
+        <div class="fluid-head-copy">
+          <span class="fluid-kicker">الوقت السائل · TIME-FLUID</span>
+          <b class="fluid-title">${escapeHtml(plan.label)} — <span dir="ltr">${plan.minutes}</span> دقيقة</b>
+        </div>
+        <span class="fluid-preserved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>كل ${plan.objectives.length} أهداف محفوظة</span>
+      </div>
+
+      <div class="fluid-modes" role="group" aria-label="اختر مدة الجلسة">
+        ${FLUID_MODES.map(
+          (mode) => `
+          <button type="button" class="fluid-mode${mode.minutes === minutes ? ' is-active' : ''}" data-minutes="${mode.minutes}" aria-pressed="${mode.minutes === minutes}">
+            <b>${escapeHtml(mode.short)}</b>
+            <small>${escapeHtml(mode.label)}</small>
+          </button>`
+        ).join('')}
+      </div>
+
+      <div class="fluid-phases" aria-label="ميزانية الوقت">${phaseStrip(plan)}</div>
+      <p class="fluid-summary">${escapeHtml(plan.summary)}</p>
+      <p class="fluid-honest">${
+        plan.minutes === 10
+          ? 'ضغط ذكي: كل هدف له موضع في الشرح والأمثلة والتدريب — ما تقلّص هو التكرار لا الأهداف.'
+          : plan.minutes === 60
+            ? 'توسيع: الدرس كاملاً + ورشة إنتاج ومراجعة ذاتية — لا معلومة تُحذف، بل تُضاف طبقة تطبيق.'
+            : 'الجلسة المتوازنة: كل كتل الدرس وأمثلته وتدريبه في جلسة واحدة.'
+      }</p>
+
+      <details class="fluid-map">
+        <summary>كيف يغطي هذا الوقت كل هدف تعليمي؟</summary>
+        <ul>
+          ${plan.coverage
+            .map(
+              (row) => `
+            <li>
+              <b>${escapeHtml(row.objective)}</b>
+              <span>${escapeHtml(row.blockTitle ?? 'شرح الدرس')}${row.exampleText ? ` · <i dir="ltr" lang="en">${escapeHtml(row.exampleText)}</i>` : ''}</span>
+            </li>`
+            )
+            .join('')}
+        </ul>
+      </details>
+    </section>`;
+
   /* ───────── المرحلة 1: الدراسة ───────── */
   const renderStudy = () => {
-    const blocks = lesson.blocks
+    const plan = planFor();
+    const blocks = plan.blocks
       .map((b) => {
         if (b.type === 'rule')
           return `<section class="lesson-block block-rule"><h2 class="block-title">${escapeHtml(b.title)}</h2><p>${escapeHtml(b.body)}</p></section>`;
@@ -61,16 +121,18 @@ function renderLesson(root: HTMLElement): void {
         <h1 class="lesson-title">${escapeHtml(lesson.title)}</h1>
         <div class="lesson-objectives">
           <h2>بعد هذا الدرس ستتقن:</h2>
-          <ul>${lesson.objectives.map((o) => `<li>${escapeHtml(o)}</li>`).join('')}</ul>
+          <ul>${plan.objectives.map((o) => `<li>${escapeHtml(o)}</li>`).join('')}</ul>
         </div>
       </header>
+
+      ${fluidPanel(plan)}
 
       ${blocks}
 
       <section class="lesson-block block-examples">
         <h2 class="block-title">الأمثلة — استمع وردد بصوت عالٍ</h2>
         <ul class="examples-list">
-          ${lesson.examples
+          ${plan.examples
             .map(
               (ex) => `
             <li class="example-row">
@@ -83,12 +145,26 @@ function renderLesson(root: HTMLElement): void {
         </ul>
       </section>
 
-      <button id="startPracticeBtn" class="btn btn-primary btn-xl lesson-cta">فهمت واستمعت — ابدأ التدريب (${lesson.practice.length} أسئلة)</button>
+      <button id="startPracticeBtn" class="btn btn-primary btn-xl lesson-cta">فهمت واستمعت — ابدأ التدريب (${plan.practice.length} أسئلة)</button>
     </article>`);
 
     wireBack(root);
     root.querySelectorAll<HTMLButtonElement>('.listen-btn').forEach((btn) => {
       btn.addEventListener('click', () => speakEnglish(btn.dataset.say ?? ''));
+    });
+    root.querySelectorAll<HTMLButtonElement>('.fluid-mode').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const next = Number(btn.dataset.minutes) as FluidMinutes;
+        if (next === minutes) return;
+        minutes = next;
+        void SettingsEngine.update((draft) => {
+          draft.academic.defaultSessionMinutes = next;
+        })
+          .then(() => toast(`مدة جلستك الافتراضية الآن ${next} دقيقة`))
+          .catch(() => undefined);
+        stopSpeaking();
+        renderStudy();
+      });
     });
     root.querySelector('#startPracticeBtn')!.addEventListener('click', () => {
       stopSpeaking();
@@ -98,12 +174,14 @@ function renderLesson(root: HTMLElement): void {
 
   /* ───────── المرحلة 2: التدريب ───────── */
   const renderPractice = (index: number, correctSoFar = 0) => {
-    const item = lesson.practice[index];
-    const total = lesson.practice.length;
+    const plan = planFor();
+    const items = plan.practice;
+    const item = items[index];
+    const total = items.length;
 
     root.innerHTML = shell(`
     <div class="practice-wrap">
-      <div class="practice-meta"><span class="section-chip">التدريب التقويمي</span><span class="exam-counter">السؤال ${index + 1} من ${total}</span></div>
+      <div class="practice-meta"><span class="section-chip">التدريب التقويمي</span><span class="exam-counter">السؤال ${index + 1} من ${total} · ${plan.minutes} دقيقة</span></div>
       <div class="exam-bar"><div class="exam-bar-fill" style="width:${(index / total) * 100}%"></div></div>
       <div class="question-card">
         <h2 class="question-text" dir="auto">${escapeHtml(item.question)}</h2>
@@ -170,6 +248,7 @@ function renderLesson(root: HTMLElement): void {
     void getProgressMap().then((map) => {
       const best = map[lesson.id]?.bestScore ?? score;
       const nextLesson = nextLessonAfter(lesson.id)?.lesson ?? null;
+      const plan = planFor();
 
       root.innerHTML = shell(`
       <div class="done-wrap">
@@ -181,6 +260,12 @@ function renderLesson(root: HTMLElement): void {
           <p class="done-best">أدق محاولة هذه: ${score}% · أفضل درجة لك على الإطلاق: <b>${best}%</b></p>
           <p class="done-note">رفدت ردهة التكرار المتباعد بـ <b>${cardsForLesson(lesson.id).length} بطاقة</b> من هذا الدرس — ستطفو عليك قبل نسيانها بقليل.</p>
           <p class="done-note">ختم مكتب الفصل يُثبت إتمامك. سجلك الأكاديمي يزداد سطرًا، وهمتك تشتد — هذه طريقتك أنت للتخرج.</p>
+          <p class="done-fluid">وضع الوقت السائل: <b>${escapeHtml(plan.label)} — ${plan.minutes} دقيقة</b> · كل ${plan.objectives.length} أهداف بقيت معك.</p>
+          ${
+            plan.deepTasks.length
+              ? `<section class="done-deep"><h2>ورشة الإنتاج — أكمِلها الآن</h2><ul>${plan.deepTasks.map((task) => `<li>${escapeHtml(task)}</li>`).join('')}</ul></section>`
+              : ''
+          }
           <div class="done-actions">
             ${nextLesson ? `<button id="nextLessonBtn" class="btn btn-primary btn-xl">الدرس التالي: ${escapeHtml(nextLesson.title.slice(0, 46))}${nextLesson.title.length > 46 ? '…' : ''}</button>` : '<p class="done-unit-complete">ختمت خط الرحلة كاملاً — مبروك يا طالب طَلَاقَة.</p>'}
             <button id="backToClassroomBtn2" class="btn btn-ghost">العودة إلى خط الرحلة</button>
@@ -200,7 +285,14 @@ function renderLesson(root: HTMLElement): void {
     });
   };
 
-  renderStudy();
+  // نضمن تحميل الإعدادات قبل أول رسم: مدة الجلسة الافتراضية من مكتب شؤون الطلاب
+  root.innerHTML = shell('<p class="review-empty-sub">جارٍ تجهيز جلستك حسب وقتك…</p>');
+  void SettingsEngine.load()
+    .then((settings) => {
+      minutes = settings.academic.defaultSessionMinutes;
+      renderStudy();
+    })
+    .catch(() => renderStudy());
 }
 
 registerScreen('lesson', renderLesson);

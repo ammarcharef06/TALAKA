@@ -1,11 +1,11 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
-import type { Cefr, CvProfile, LevelExamResult, StudentRecord } from '../types';
+import type { AppSettings, Cefr, CvProfile, LevelExamResult, SettingsRecord, StudentRecord } from '../types';
 import type { SignedCertificate } from '../engine/certificate';
 import type { InterviewResult } from '../engine/interview';
 import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 7;
+const DB_VERSION = 8;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
@@ -16,6 +16,30 @@ const STORE_CERTS = 'certificates';
 const STORE_LIBRARY = 'library';
 const STORE_CAREER = 'career';
 const STORE_CV = 'cv-profile';
+const STORE_SETTINGS = 'settings';
+
+const EXPORT_STORES = [
+  STORE_STUDENTS,
+  STORE_META,
+  STORE_PROGRESS,
+  STORE_SRS,
+  STORE_EXAMS,
+  STORE_CERTS,
+  STORE_LIBRARY,
+  STORE_CAREER,
+  STORE_CV,
+  STORE_SETTINGS,
+] as const;
+
+export interface TalaqaBackup {
+  format: 'talaqa-backup';
+  version: 1;
+  exportedBy: 'talaqa';
+  exportedAt: string;
+  dbVersion: number;
+  /** لا يشمل مفتاح التوقيع الخاص — المفتاح غير قابل للتصدير ويبقى على الجهاز */
+  stores: Record<string, unknown[]>;
+}
 
 export interface CertificateSigningKeyRecord {
   id: 'cert-signing';
@@ -40,6 +64,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_LIBRARY)) db.createObjectStore(STORE_LIBRARY, { keyPath: 'readerId' });
       if (!db.objectStoreNames.contains(STORE_CAREER)) db.createObjectStore(STORE_CAREER, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_CV)) db.createObjectStore(STORE_CV, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'id' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -390,6 +415,138 @@ export async function saveCvProfile(profile: CvProfile): Promise<void> {
   }
 }
 
+/* ── إعدادات مكتب شؤون الطلاب ── */
+
+export async function getSettingsRecord(): Promise<SettingsRecord | null> {
+  const db = await openDb();
+  try {
+    const row = await tx<SettingsRecord | undefined>(db, STORE_SETTINGS, 'readonly', (s) => s.get('settings'));
+    return row ?? null;
+  } finally {
+    db.close();
+  }
+}
+
+export async function saveSettingsRecord(settings: AppSettings): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_SETTINGS, 'readwrite', (s) => s.put({ id: 'settings', ...settings }));
+  } finally {
+    db.close();
+  }
+}
+
+/* ── النسخ الاحتياطي الشامل: كل بيانات الطالب، بلا مفتاح التوقيع الخاص ── */
+
+async function readStore(db: IDBDatabase, storeName: string): Promise<unknown[]> {
+  return await new Promise((resolve, reject) => {
+    const t = db.transaction(storeName, 'readonly');
+    const req = t.objectStore(storeName).getAll();
+    req.onsuccess = () => resolve(req.result as unknown[]);
+    req.onerror = () => reject(req.error ?? new Error(`تعذر قراءة مخزن ${storeName}`));
+  });
+}
+
+export async function exportAllData(): Promise<TalaqaBackup> {
+  const db = await openDb();
+  try {
+    const stores: Record<string, unknown[]> = {};
+    for (const name of EXPORT_STORES) stores[name] = await readStore(db, name);
+    return {
+      format: 'talaqa-backup',
+      version: 1,
+      exportedBy: 'talaqa',
+      exportedAt: new Date().toISOString(),
+      dbVersion: DB_VERSION,
+      stores,
+    };
+  } finally {
+    db.close();
+  }
+}
+
+export async function exportAllDataFile(): Promise<void> {
+  const backup = await exportAllData();
+  const body = JSON.stringify(backup, null, 2);
+  const blob = new Blob([body], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `talaqa-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/** استيراد نسخة كاملة: يستبدل مخازن بيانات الطالب، ويترك مفتاح التوقيع المحلي في مكانه */
+export async function importAllData(file: File): Promise<{ students: number; hasSettings: boolean }> {
+  const text = await file.text();
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error('الملف ليس JSON صالحاً');
+  }
+  const backup = parsed as Partial<TalaqaBackup>;
+  if (!backup || backup.format !== 'talaqa-backup' || backup.version !== 1 || !backup.stores || typeof backup.stores !== 'object') {
+    throw new Error('الملف ليس نسخة احتياطية صالحة من طَلَاقة');
+  }
+  const stores = backup.stores;
+  const allowed = new Set<string>(EXPORT_STORES);
+  for (const [name, rows] of Object.entries(stores)) {
+    if (!allowed.has(name)) throw new Error(`مخزن غير معروف في النسخة: ${name}`);
+    if (!Array.isArray(rows)) throw new Error(`بيانات المخزن ${name} غير صالحة`);
+  }
+
+  const db = await openDb();
+  try {
+    await new Promise<void>((resolve, reject) => {
+      const t = db.transaction([...EXPORT_STORES], 'readwrite');
+      for (const name of EXPORT_STORES) t.objectStore(name).clear();
+      for (const [name, rows] of Object.entries(stores)) {
+        const store = t.objectStore(name);
+        for (const row of rows) {
+          if (!row || typeof row !== 'object') continue;
+          store.put(row as object);
+        }
+      }
+      t.oncomplete = () => resolve();
+      t.onerror = () => reject(t.error ?? new Error('تعذر استيراد النسخة'));
+      t.onabort = () => reject(t.error ?? new Error('أُلغيت عملية الاستيراد'));
+    });
+    const studentRows = stores[STORE_STUDENTS];
+    const settingsRows = stores[STORE_SETTINGS];
+    return {
+      students: Array.isArray(studentRows) ? studentRows.length : 0,
+      hasSettings: Array.isArray(settingsRows) && settingsRows.length > 0,
+    };
+  } finally {
+    db.close();
+  }
+}
+
+export interface StorageEstimate {
+  usage: number;
+  quota: number;
+}
+
+export async function getStorageEstimate(): Promise<StorageEstimate | null> {
+  if (typeof navigator === 'undefined' || !navigator.storage?.estimate) return null;
+  try {
+    const estimate = await navigator.storage.estimate();
+    return { usage: estimate.usage ?? 0, quota: estimate.quota ?? 0 };
+  } catch {
+    return null;
+  }
+}
+
+/** الحجم التقريبي لبيانات طَلَاقة وحدها (JSON بلا مفتاح التوقيع) */
+export async function getDataFootprint(): Promise<number> {
+  const backup = await exportAllData();
+  return new TextEncoder().encode(JSON.stringify(backup)).length;
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -410,6 +567,7 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_LIBRARY);
     await done(STORE_CAREER);
     await done(STORE_CV);
+    await done(STORE_SETTINGS);
   } finally {
     db.close();
   }

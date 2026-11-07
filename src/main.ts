@@ -23,8 +23,13 @@ import './screens/library.ts';
 import './screens/career.ts';
 import './screens/interview.ts';
 import './screens/cv.ts';
+import './screens/settings.ts';
 
 import { go } from './router';
+import { SettingsEngine } from './engine/settings';
+
+// الإعدادات تُحمَّل قبل أول شاشة: المظهر وحجم الخط والتباين والحركة تُطبَّق فوراً
+void SettingsEngine.load().catch(() => undefined);
 
 // العمل بلا إنترنت: Service Worker يعمل في الإنتاج فقط حتى لا يتداخل مع التطوير
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

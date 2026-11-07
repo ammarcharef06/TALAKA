@@ -26,6 +26,8 @@ import {
   saveSigningKey,
 } from '../store/db';
 import { UNITS, allLessonsInOrder } from '../data/academy/course';
+import { SettingsEngine } from '../engine/settings';
+import type { AppSettings } from '../types';
 import type { SignedCertificate } from '../engine/certificate';
 
 function formatDate(iso: string): string {
@@ -60,10 +62,14 @@ function renderEmpty(root: HTMLElement): void {
   root.querySelector('#toExamHallBtn')!.addEventListener('click', () => go('examHall'));
 }
 
-function renderCertificate(root: HTMLElement, cert: SignedCertificate): void {
+function renderCertificate(root: HTMLElement, cert: SignedCertificate, settings: AppSettings): void {
   const p = cert.payload;
   const meta = LEVEL_META[p.level];
   const full = p.scope === 'full-path';
+  const displayName = SettingsEngine.publicName(p.studentName, settings);
+  const showId = settings.publicIdentity.showStudentId;
+  const showSignature = settings.publicIdentity.showSignature;
+  const showGrades = settings.publicIdentity.showDetailedGrades;
   const examsRows = p.exams
     .map(
       (e) => `
@@ -101,8 +107,8 @@ function renderCertificate(root: HTMLElement, cert: SignedCertificate): void {
       </header>
 
       <div class="doc-meta">
-        <span>الطالب: <b>${escapeHtml(p.studentName)}</b></span>
-        <span>رقم الطالب: <b dir="ltr">${escapeHtml(p.studentId)}</b></span>
+        <span>الطالب: <b>${escapeHtml(displayName)}</b></span>
+        ${showId ? `<span>رقم الطالب: <b dir="ltr">${escapeHtml(p.studentId)}</b></span>` : ''}
         <span>تاريخ الإصدار: <b>${escapeHtml(formatDate(p.issuedAt))}</b></span>
       </div>
 
@@ -110,33 +116,41 @@ function renderCertificate(root: HTMLElement, cert: SignedCertificate): void {
         <span class="unit-kicker">${full ? 'من الصفر إلى C2' : 'اعتماد مستوى معتمد'}</span>
         <h1 class="cert-title">${full ? 'شهادة إتمام المسار' : 'شهادة اعتماد مستوى'}</h1>
         <p class="cert-pre">تشهد أكاديمية طَلَاقَة بأن</p>
-        <h2 class="cert-name">${escapeHtml(p.studentName)}</h2>
+        <h2 class="cert-name">${escapeHtml(displayName)}</h2>
         <p class="cert-statement">${escapeHtml(p.statementAr)}</p>
         <p class="cert-statement-en" dir="ltr">${escapeHtml(p.statementEn)}</p>
         <div class="cert-level"><b dir="ltr">${escapeHtml(p.level)}</b><span>${escapeHtml(meta.ar)} · ${escapeHtml(meta.en)}</span></div>
       </section>
 
-      <section class="transcript-section" aria-label="الامتحانات المعتمدة">
+      ${
+        showGrades
+          ? `<section class="transcript-section" aria-label="الامتحانات المعتمدة">
         <h3>الامتحانات المعتمدة المدرجة في الشهادة</h3>
         <table class="transcript-table">
           <thead><tr><th>المستوى</th><th>الدرجة</th><th>حد النجاح</th><th>التاريخ</th></tr></thead>
           <tbody>${examsRows}</tbody>
         </table>
-      </section>
+      </section>`
+          : '<p class="cert-grades-hidden">الدرجات التفصيلية مخفية في هذا العرض حسب إعدادات الهوية العامة — الملف الموقّع نفسه يحتفظ بها كاملة.</p>'
+      }
 
       <section class="cert-verification" aria-label="بيانات التحقق">
         <div>
           <span class="cert-verify-label">رقم الشهادة</span>
           <b class="cert-verify-id" dir="ltr">${escapeHtml(p.id)}</b>
         </div>
-        <div>
+        ${
+          showSignature
+            ? `<div>
           <span class="cert-verify-label">بصمة المفتاح العام (SHA-256)</span>
           <b class="cert-verify-fingerprint" dir="ltr" title="${escapeHtml(cert.fingerprint)}">${escapeHtml(shortFingerprint(cert.fingerprint))}</b>
         </div>
         <div>
           <span class="cert-verify-label">خوارزمية التوقيع</span>
           <b dir="ltr">${escapeHtml(cert.algorithm)}</b>
-        </div>
+        </div>`
+            : ''
+        }
         <div>
           <span class="cert-verify-label">الدروس المكتملة</span>
           <b dir="ltr">${p.lessonsCompleted}/${p.lessonsTotal}</b>
@@ -202,8 +216,8 @@ function renderCertificateError(root: HTMLElement, message: string): void {
 function renderCertificateScreen(root: HTMLElement): void {
   root.innerHTML = `<div class="screen certificate-screen"><main class="result-wrap"><p class="review-empty-sub">جارٍ تجهيز شهادتك الموقعة…</p></main></div>`;
 
-  void Promise.all([getCurrentStudent(), getProgressMap(), getAllLevelExamResults()])
-    .then(async ([student, progress, allResults]) => {
+  void Promise.all([getCurrentStudent(), getProgressMap(), getAllLevelExamResults(), SettingsEngine.load()])
+    .then(async ([student, progress, allResults, settings]) => {
       if (!student) {
         go('gate');
         return;
@@ -239,7 +253,7 @@ function renderCertificateScreen(root: HTMLElement): void {
         cert = await signCertificate(payload, key.privateKey, key.publicKeyJwk);
         await saveCertificate(cert);
       }
-      renderCertificate(root, cert);
+      renderCertificate(root, cert, settings);
     })
     .catch((err: unknown) => {
       renderCertificateError(root, err instanceof Error ? err.message : 'تعذر الوصول إلى Web Crypto أو بيانات الاعتماد.');
