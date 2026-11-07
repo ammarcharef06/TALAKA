@@ -2,7 +2,8 @@ import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
 import { speakEnglish, stopSpeaking, speechSupported } from '../ui/speak';
 import { SRS_DECK, type DeckCard } from '../data/academy/deck';
-import { getAllSrsStates, getProgressMap, recordReview } from '../store/db';
+import { CAREER_DECK } from '../data/career/scenarios';
+import { getAllSrsStates, getProgressMap, getPassedInterviewScenarios, recordReview } from '../store/db';
 import { initialSrsState, gradeCard, QUALITY_LABELS, type ReviewQuality } from '../engine/srs';
 import { escapeHtml } from '../ui/confirm';
 import type { SrsState } from '../engine/srs';
@@ -13,21 +14,33 @@ interface SessionCard {
   isNew: boolean;
 }
 
-function buildQueue(states: Record<string, SrsState>, progress: Record<string, { completedAt: string; bestScore: number }>): SessionCard[] {
-  const now = Date.now();
-  const born = SRS_DECK.filter((c) => progress[c.lessonId]); // البطاقة تولد باكتمال درسها
-  const due: SessionCard[] = [];
-  for (const card of born) {
-    const state = states[card.id];
-    if (!state) {
-      due.push({ card, state: initialSrsState(), isNew: true });
-    } else if (Date.parse(state.due) <= now) {
-      due.push({ card, state, isNew: false });
-    }
+// البطاقة تولد باكتمال درسها، وبطاقات المسار المهني بأول اجتياز لمقابلتها
+function careerProgressMap(passed: string[]): Record<string, { completedAt: string; bestScore: number }> {
+  const map: Record<string, { completedAt: string; bestScore: number }> = {};
+  for (const scenarioId of passed) {
+    map[`career-${scenarioId}`] = { completedAt: new Date().toISOString(), bestScore: 60 };
   }
+  return map;
+}
+
+const ALL_DECK: DeckCard[] = [...SRS_DECK, ...CAREER_DECK];
+
+function buildQueue(
+  states: Record<string, SrsState>,
+  progress: Record<string, { completedAt: string; bestScore: number }>,
+  passedScenarios: string[]
+): SessionCard[] {
+  const now = Date.now();
+  const combined = { ...progress, ...careerProgressMap(passedScenarios) };
+  const born: SessionCard[] = ALL_DECK.filter((c) => combined[c.lessonId]).map((card) => {
+    const state = states[card.id];
+    if (!state) return { card, state: initialSrsState(), isNew: true };
+    if (Date.parse(state.due) <= now) return { card, state, isNew: false };
+    return null;
+  }).filter((c): c is SessionCard => c !== null);
   // الجديدة أولاً ثم الأقدم استحقاقاً
-  due.sort((a, b) => Number(b.isNew) - Number(a.isNew) || Date.parse(a.state.due) - Date.parse(b.state.due));
-  return due.slice(0, 20);
+  born.sort((a, b) => Number(b.isNew) - Number(a.isNew) || Date.parse(a.state.due) - Date.parse(b.state.due));
+  return born.slice(0, 20);
 }
 
 function renderReview(root: HTMLElement): void {
@@ -48,8 +61,8 @@ function renderReview(root: HTMLElement): void {
     go('building');
   });
 
-  void Promise.all([getAllSrsStates(), getProgressMap()]).then(([states, progress]) => {
-    const queue = buildQueue(states, progress);
+  void Promise.all([getAllSrsStates(), getProgressMap(), getPassedInterviewScenarios()]).then(([states, progress, passed]) => {
+    const queue = buildQueue(states, progress, passed);
     const mastered = Object.values(states).filter((s) => s.reps >= 3).length;
     const nextDue = Object.values(states)
       .map((s) => Date.parse(s.due))
@@ -57,13 +70,13 @@ function renderReview(root: HTMLElement): void {
       .sort((a, b) => a - b)[0];
 
     if (queue.length === 0) {
-      const born = SRS_DECK.filter((c) => progress[c.lessonId]).length;
+      const born = ALL_DECK.filter((c) => ({ ...progress, ...careerProgressMap(passed) })[c.lessonId]).length;
       const nextDate = nextDue ? new Intl.DateTimeFormat('ar', { day: 'numeric', month: 'long' }).format(new Date(nextDue)) : null;
       wrap.innerHTML = `
         <div class="review-empty">
           ${sealSVG(84, 'onPaper')}
           <h1>كل بطاقاتك راجعة</h1>
-          <p class="review-empty-sub">لا توجد بطاقة مستحقة الآن — وقد «أتممت» ${born} بطاقة مولودة من دروسك، و${mastered} منها وصلت حد الإتقان (3+ مراجعة).</p>
+          <p class="review-empty-sub">لا توجد بطاقة مستحقة الآن — وقد «أتممت» ${born} بطاقة مولودة من دروسك ومقابلاتك، و${mastered} منها وصلت حد الإتقان (3+ مراجعة).</p>
           <p class="review-empty-note">${nextDate ? `القادمة تطفو على السطح في <b>${escapeHtml(nextDate)}</b> — دماغك يعمل في الخلفية حتى وأنت نائم.` : 'أتمم دروساً جديدة لتوليد بطاقاتك — كل درس يُسقط بذوره في الردهة.'}</p>
           <button id="backToClassroomBtn" class="btn btn-primary">إلى فصولي — لأولَّد بطاقات جديدة</button>
           <button id="backToBuilding2Btn" class="btn btn-ghost">العودة إلى المبنى</button>

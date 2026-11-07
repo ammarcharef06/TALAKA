@@ -30,10 +30,10 @@ npm run preview     # معاينة نسخة الإنتاج
 
 | المسار | ما بداخله |
 |---|---|
-| `src/screens/` | شاشة لكل جناح (`gate`, `acceptance`, `exam`, `building`, `lesson`, `review`, `cafe`, `examHall`, `transcript`, `certificate`, `verify`, `library`…) |
-| `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) |
-| `src/data/` | `items/` (بنك المعايرة 108 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) |
-| `src/store/db.ts` | IndexedDB — الإصدار 6 (`students, meta, progress, srs-cards, exams, keys, certificates, library`) |
+| `src/screens/` | شاشة لكل جناح (`gate`, `acceptance`, `exam`, `building`, `lesson`, `review`, `cafe`, `examHall`, `transcript`, `certificate`, `verify`, `library`, `career`, `interview`, `cv`…) |
+| `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) · `interview.ts` (تقييم مقابلة حتمي) |
+| `src/data/` | `items/` (بنك المعايرة 108 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) |
+| `src/store/db.ts` | IndexedDB — الإصدار 7 (`students, meta, progress, srs-cards, exams, keys, certificates, library, career, cv-profile`) |
 | `src/ui/` | الختم (`seal.ts`) · `speak.ts` · `confirm.ts` (`escapeHtml`, `toast`) |
 | `tests/` | مستوى لكل مجال — سلامة المحتوى تُختبر آلياً (word bands، خيارات/إجابات، فريدة المعرفات) |
 | `tools/` | `validate-items.mjs` · `download-fonts.ps1` |
@@ -73,8 +73,8 @@ npm run preview     # معاينة نسخة الإنتاج
 ```js
 // من browser evaluate — بذر طالب كامل (نفس النمط في كل E2E)
 const db = await new Promise((res, rej) => {
-  const req = indexedDB.open('talaqa', 6);
-  req.onupgradeneeded = () => { /* 8 stores */ };
+  const req = indexedDB.open('talaqa', 7);
+  req.onupgradeneeded = () => { /* 10 stores */ };
   req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error);
 });
 // ... إدراج student + meta(currentStudentId) + progress + exams ...
@@ -92,7 +92,7 @@ const db = await new Promise((res, rej) => {
 
 ## 8. الخريطة المعلنة للقادم (من `docs/PLAN.md`)
 
-Career Hub → طبقات وكلاء LLM محلية (0 حتمي ← 1 WebLLM اختياري ← 2 Ollama ← 3 مفتاح المستخدم) → الوقت السائل (Time-Fluid) → إذاعة محلية بلا بيانات اجتماعية → قرار DID/بلوكتشين مستقل → نشر حي على GitHub Pages/Cloudflare/IPFS.
+Career Hub (منفّذ في 0.14.0 — محتواه آلي الكتابة وينتظر المراجعة البشرية) → طبقات وكلاء LLM محلية (0 حتمي ← 1 WebLLM اختياري ← 2 Ollama ← 3 مفتاح المستخدم) → الوقت السائل (Time-Fluid) → إذاعة محلية بلا بيانات اجتماعية → قرار DID/بلوكتشين مستقل → نشر حي على GitHub Pages/Cloudflare/IPFS.
 
 ## 9. رموز الجودة (Code Review)
 

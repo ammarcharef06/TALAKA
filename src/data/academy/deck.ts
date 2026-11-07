@@ -383,16 +383,26 @@ export function deckIntegrityCheck(units: Unit[]): { ok: boolean; problems: stri
 }
 
 /** البطاقات «المولودة» باكتمال درسها ولها الآن حاجة للمراجعة */
-export function countDueCards(
+export function countDueCardsIn(
+  deck: DeckCard[],
   states: Record<string, { due: string; reps: number }>,
   progress: Record<string, unknown>,
   now: number = Date.now()
 ): number {
   let n = 0;
-  for (const card of SRS_DECK) {
+  for (const card of deck) {
     if (!progress[card.lessonId]) continue; // لا تولد إلا باكتمال درسها
     const s = states[card.id];
     if (!s || Date.parse(s.due) <= now) n += 1;
   }
   return n;
+}
+
+/** عدّاد بطاقات المنهاج وحدها (للتوافق مع الواجهات القديمة) */
+export function countDueCards(
+  states: Record<string, { due: string; reps: number }>,
+  progress: Record<string, unknown>,
+  now: number = Date.now()
+): number {
+  return countDueCardsIn(SRS_DECK, states, progress, now);
 }

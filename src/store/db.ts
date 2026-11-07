@@ -1,10 +1,11 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
-import type { Cefr, LevelExamResult, StudentRecord } from '../types';
+import type { Cefr, CvProfile, LevelExamResult, StudentRecord } from '../types';
 import type { SignedCertificate } from '../engine/certificate';
+import type { InterviewResult } from '../engine/interview';
 import type { SrsState } from '../engine/srs';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
@@ -13,6 +14,8 @@ const STORE_EXAMS = 'exams';
 const STORE_KEYS = 'keys';
 const STORE_CERTS = 'certificates';
 const STORE_LIBRARY = 'library';
+const STORE_CAREER = 'career';
+const STORE_CV = 'cv-profile';
 
 export interface CertificateSigningKeyRecord {
   id: 'cert-signing';
@@ -35,6 +38,8 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_KEYS)) db.createObjectStore(STORE_KEYS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_CERTS)) db.createObjectStore(STORE_CERTS, { keyPath: 'payload.id' });
       if (!db.objectStoreNames.contains(STORE_LIBRARY)) db.createObjectStore(STORE_LIBRARY, { keyPath: 'readerId' });
+      if (!db.objectStoreNames.contains(STORE_CAREER)) db.createObjectStore(STORE_CAREER, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_CV)) db.createObjectStore(STORE_CV, { keyPath: 'id' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -312,6 +317,79 @@ export async function markReaderComplete(readerId: string, score: number): Promi
   }
 }
 
+/* ── المسار المهني (Career Hub) ── */
+
+export async function saveInterviewResult(rec: InterviewResult): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_CAREER, 'readwrite', (s) => s.put(rec));
+  } finally {
+    db.close();
+  }
+}
+
+/** كل محاولات المقابلات — مرتبة من الأقدم إلى الأحدث */
+export async function getInterviewResults(): Promise<InterviewResult[]> {
+  const db = await openDb();
+  try {
+    return await new Promise((resolve, reject) => {
+      const t = db.transaction(STORE_CAREER, 'readonly');
+      const req = t.objectStore(STORE_CAREER).getAll();
+      req.onsuccess = () => {
+        const rows = (req.result as InterviewResult[]).sort((a, b) => Date.parse(a.takenAt) - Date.parse(b.takenAt));
+        resolve(rows);
+      };
+      req.onerror = () => reject(req.error ?? new Error('تعذر قراءة نتائج المقابلات'));
+    });
+  } finally {
+    db.close();
+  }
+}
+
+/** أفضل نتيجة وعدد المحاولات وحالة الاجتياز لكل سيناريو */
+export async function getInterviewBestMap(): Promise<Record<string, { bestScore: number; attempts: number; passed: boolean }>> {
+  const results = await getInterviewResults();
+  const map: Record<string, { bestScore: number; attempts: number; passed: boolean }> = {};
+  for (const r of results) {
+    const prev = map[r.scenarioId];
+    map[r.scenarioId] = {
+      bestScore: Math.max(prev?.bestScore ?? 0, r.score),
+      attempts: (prev?.attempts ?? 0) + 1,
+      passed: (prev?.passed ?? false) || r.passed,
+    };
+  }
+  return map;
+}
+
+/** السيناريوهات المجتازة — لاختبار ميلاد بطاقات SRS المهنية */
+export async function getPassedInterviewScenarios(): Promise<string[]> {
+  const results = await getInterviewResults();
+  const passed = new Set<string>();
+  for (const r of results) if (r.passed) passed.add(r.scenarioId);
+  return [...passed];
+}
+
+/* ── السيرة الذاتية (CV Builder) ── */
+
+export async function getCvProfile(): Promise<CvProfile | null> {
+  const db = await openDb();
+  try {
+    const row = await tx<CvProfile | undefined>(db, STORE_CV, 'readonly', (s) => s.get('cv'));
+    return row ?? null;
+  } finally {
+    db.close();
+  }
+}
+
+export async function saveCvProfile(profile: CvProfile): Promise<void> {
+  const db = await openDb();
+  try {
+    await tx(db, STORE_CV, 'readwrite', (s) => s.put(profile));
+  } finally {
+    db.close();
+  }
+}
+
 export async function clearAllStudents(): Promise<void> {
   const db = await openDb();
   try {
@@ -330,6 +408,8 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_KEYS);
     await done(STORE_CERTS);
     await done(STORE_LIBRARY);
+    await done(STORE_CAREER);
+    await done(STORE_CV);
   } finally {
     db.close();
   }

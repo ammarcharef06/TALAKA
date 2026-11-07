@@ -1,10 +1,11 @@
 import { go, registerScreen } from '../router';
-import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap } from '../store/db';
+import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap, getPassedInterviewScenarios } from '../store/db';
 import { sealSVG, initialsOf } from '../ui/seal';
 import { showConfirm, toast } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
 import { UNITS } from '../data/academy/course';
-import { countDueCards } from '../data/academy/deck';
+import { SRS_DECK, countDueCardsIn } from '../data/academy/deck';
+import { CAREER_DECK } from '../data/career/scenarios';
 import type { StudentRecord } from '../types';
 
 interface Hall {
@@ -15,7 +16,7 @@ interface Hall {
 }
 
 const HALLS: Hall[] = [
-  { id: 'classroom', name: 'الفصل الافتراضي', desc: 'ثلاث محطات — ثمانية عشر درساً من الحروف حتى الحكي عن الماضي ورسم المستقبل', icon: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.5v4.8c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7v-4.8"/><path d="M21.5 9.5V15"/>' },
+  { id: 'classroom', name: 'الفصل الافتراضي', desc: 'سبع محطات — 42 درساً من الحروف حتى الحكي عن الماضي ورسم المستقبل', icon: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.5v4.8c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7v-4.8"/><path d="M21.5 9.5V15"/>' },
   { id: 'review', name: 'ردهة التكرار المتباعد', desc: 'بطاقات تُعيد لك معرفتك قبل نسيانها — بلا ضغط ولا نقاط، فقط تذكير في موعده', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>' },
   { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'أول حوار صوتي حقيقي مع «بسام» — تحدث بميكروفونك أو اكتب، واختم الصورة في سجلك', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
@@ -44,7 +45,7 @@ function renderBuilding(root: HTMLElement): void {
 
   <section class="building-hero">
     <h1 class="building-title">مبنى الأكاديمية</h1>
-    <p class="building-sub">اختر جناحاً. الأجنحة تُفتتح حين يكتمل بناؤها —<br/>الفصل، المراجعة، المقهى، الامتحانات، السجل، الشهادة والمكتبة <b>مفتوحة لك اليوم</b>.</p>
+    <p class="building-sub">اختر جناحاً. الأجنحة تُفتتح حين يكتمل بناؤها —<br/>الفصل، المراجعة، المقهى، الامتحانات، السجل، الشهادة والمكتبة <b>مفتوحة لك اليوم</b>، والمسار المهني كذلك.</p>
   </section>
 
   <section class="halls-grid" id="hallsGrid" aria-label="أجنحة الأكاديمية"></section>
@@ -74,6 +75,7 @@ function renderBuilding(root: HTMLElement): void {
       if (h.id === 'transcript') return transcriptHallCard();
       if (h.id === 'certificate') return certificateHallCard(student);
       if (h.id === 'library') return libraryHallCard();
+      if (h.id === 'career') return careerHallCard();
       return `
       <button class="hall hall-locked" data-hall="${h.id}" aria-disabled="true">
         <span class="hall-icon">${hallIcon(h.icon)}</span>
@@ -93,9 +95,10 @@ function renderBuilding(root: HTMLElement): void {
     grid.querySelector<HTMLButtonElement>('#enterTranscriptBtn')?.addEventListener('click', () => go('transcript'));
     grid.querySelector<HTMLButtonElement>('#enterCertificateBtn')?.addEventListener('click', () => go('certificate'));
     grid.querySelector<HTMLButtonElement>('#enterLibraryBtn')?.addEventListener('click', () => go('library'));
+    grid.querySelector<HTMLButtonElement>('#enterCareerBtn')?.addEventListener('click', () => go('career'));
 
     // عدّاد إتمام الوحدة الأولى + عدد البطاقات المستحقة
-    void Promise.all([getProgressMap(), getAllSrsStates(), getAllLevelExamResults()]).then(([map, states, examResults]) => {
+    void Promise.all([getProgressMap(), getAllSrsStates(), getAllLevelExamResults(), getPassedInterviewScenarios()]).then(([map, states, examResults, passedScenarios]) => {
       const done = UNITS.flatMap((u) => u.lessons).filter((l) => map[l.id]).length;
       const total = UNITS.flatMap((u) => u.lessons).length;
       const el = grid.querySelector<HTMLElement>('#classroomProgress');
@@ -104,7 +107,9 @@ function renderBuilding(root: HTMLElement): void {
       }
       const reviewEl = grid.querySelector<HTMLElement>('#reviewDue');
       if (reviewEl) {
-        const due = countDueCards(states, map);
+        const careerProgress: Record<string, true> = {};
+        for (const scenarioId of passedScenarios) careerProgress[`career-${scenarioId}`] = true;
+        const due = countDueCardsIn([...SRS_DECK, ...CAREER_DECK], states, { ...map, ...careerProgress });
         reviewEl.textContent = due === 0 ? 'لا توجد بطاقات مستحقة الآن' : `${due} بطاقة تنتظرك اليوم`;
       }
       const cafeEl = grid.querySelector<HTMLElement>('#cafeDone');
@@ -166,7 +171,7 @@ function classroomHallCard(): string {
   <div class="hall hall-open" role="group" aria-label="الفصل الافتراضي">
     <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'classroom')!.icon)}</span>
     <span class="hall-name">الفصل الافتراضي</span>
-    <span class="hall-desc">ثلاث محطات — ثمانية عشر درساً: من «انطق أولاً» حتى الماضي والمستقبل والمقارنة وحوار الرحلة</span>
+    <span class="hall-desc">سبع محطات — 42 درساً: من «انطق أولاً» حتى الماضي والمستقبل والمقارنة وحوار الرحلة</span>
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="classroomProgress">جارٍ حساب التقدم…</span></span>
     <button id="enterClassroomBtn" class="btn btn-gold hall-enter-btn">دخول الفصل — ابدأ التعلم</button>
   </div>`;
@@ -224,6 +229,17 @@ function libraryHallCard(): string {
     <span class="hall-desc">نصوص إنجليزية حقيقية من S0 إلى C2 — مسرد عربي وأسئلة فهم بملاحظات عربية — تُحفظ قراءاتك في سجلك</span>
     <span class="hall-complete" id="libraryStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>14 نصاً — اثنان لكل مستوى، وأبوابك مفتوحة</span>
     <button id="enterLibraryBtn" class="btn btn-gold hall-enter-btn">افتح المكتبة</button>
+  </div>`;
+}
+
+function careerHallCard(): string {
+  return `
+  <div class="hall hall-open" role="group" aria-label="المسار المهني">
+    <span class="hall-icon hall-icon-open">${hallIcon(HALLS.find((h) => h.id === 'career')!.icon)}</span>
+    <span class="hall-name">المسار المهني — Career Hub</span>
+    <span class="hall-desc">أربع مقابلات عمل حقيقية بالأسئلة الأكثر تكراراً — تقييم حتمي ونصائح، ثم صانع سيرة ذاتية بالإنجليزية جاهزة للطباعة</span>
+    <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>4 سيناريوهات · صانع CV · بطاقات مهنية للمراجعة</span>
+    <button id="enterCareerBtn" class="btn btn-gold hall-enter-btn">ادخل المسار المهني</button>
   </div>`;
 }
 

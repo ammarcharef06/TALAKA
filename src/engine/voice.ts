@@ -10,7 +10,7 @@ export type VoiceMatch = 'strong' | 'weak' | 'miss';
 export function normalizeUtterance(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[\u060C\u061B\u061F,;:!?.()\[\]{}«»"'’‘–—_]/g, ' ')
+    .replace(/[\u060C\u061B\u061F,;:!?.()\[\]{}«»"'’‘–—_\-]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }

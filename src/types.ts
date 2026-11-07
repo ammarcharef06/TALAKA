@@ -34,6 +34,39 @@ export interface OnboardingAnswers {
   dailyMinutes: number;
 }
 
+/* ── السيرة الذاتية (CV Builder) ── */
+
+export interface CvExperience {
+  id: string;
+  company: string;
+  role: string;
+  period: string;
+  achievements: string[];
+}
+
+export interface CvEducation {
+  id: string;
+  school: string;
+  degree: string;
+  year: string;
+}
+
+export interface CvProfile {
+  version: 1;
+  id: 'cv';
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  city: string;
+  summary: string;
+  languages: string[];
+  experiences: CvExperience[];
+  education: CvEducation[];
+  skills: string[];
+  updatedAt: string;
+}
+
 export interface StudentRecord {
   version: 1;
   id: string; // TALAQA-2026-XXXX-x

@@ -7,12 +7,15 @@ export const session: {
   currentLessonId: string | null;
   pendingExamLevel: ExamLevel | null;
   levelExamResult: LevelExamResult | null;
+  /** السيناريو المهني المختار للمقابلة */
+  careerScenarioId: string | null;
 } = {
   onboarding: null,
   result: null,
   currentLessonId: null,
   pendingExamLevel: null,
   levelExamResult: null,
+  careerScenarioId: null,
 };
 
 export function resetSession(): void {
@@ -21,4 +24,5 @@ export function resetSession(): void {
   session.currentLessonId = null;
   session.pendingExamLevel = null;
   session.levelExamResult = null;
+  session.careerScenarioId = null;
 }

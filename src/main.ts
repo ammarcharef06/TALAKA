@@ -20,6 +20,9 @@ import './screens/transcript.ts';
 import './screens/certificate.ts';
 import './screens/verify.ts';
 import './screens/library.ts';
+import './screens/career.ts';
+import './screens/interview.ts';
+import './screens/cv.ts';
 
 import { go } from './router';
 
