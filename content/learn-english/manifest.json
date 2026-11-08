@@ -1,0 +1,737 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "tools/import/learn-english.mjs",
+  "generatedAt": "2026-11-08T21:18:17.006Z",
+  "source": {
+    "name": "Learn-English",
+    "repository": "https://github.com/ammarcharef06/Learn-English",
+    "commit": "57b91e73cd679fc3b639f198fb4887f49ac942d0",
+    "commitDate": "2026-10-29T22:59:02+01:00",
+    "dirty": false,
+    "fingerprint": "ba1fb4702bb8bce9ceefabf540f1ff727c9407dc15b5c6a8dfb0ea3c7ec1fdef",
+    "files": [
+      {
+        "path": "assets/js/data/curriculum-a1.js",
+        "sha256": "f3a7d6ce8f7e8b2a61b12f1f1982d23ec3be72634904507bca4445557bf45f88",
+        "bytes": 79685
+      },
+      {
+        "path": "assets/js/data/curriculum-a2.js",
+        "sha256": "dad32069c6211e5b2b4ecb6037d6fa858cbe0fd3f665ef7efe046f67ed44c26a",
+        "bytes": 79919
+      },
+      {
+        "path": "assets/js/data/curriculum-b1.js",
+        "sha256": "eca3ec7ace954107e0372f41c49e1da280e6b76d68b29fa767c909853e323f22",
+        "bytes": 87214
+      },
+      {
+        "path": "assets/js/data/curriculum-advanced.js",
+        "sha256": "dd380ad23b034fef67860f49c1b562e812f14675af82106e5a40aefcd2b38f6a",
+        "bytes": 138769
+      },
+      {
+        "path": "assets/js/data/readings.js",
+        "sha256": "c3dba69d8e0dede26933846f82eaeb790d1f566c648ee1dc8aedd907ed3c4e35",
+        "bytes": 48929
+      },
+      {
+        "path": "assets/js/data/zero-words.js",
+        "sha256": "543539bca3e549a4fb0ae9b08112966b99bb923d97e8c9a2ecbc5e12ea5d3156",
+        "bytes": 22580
+      }
+    ]
+  },
+  "outputs": [
+    {
+      "path": "content/learn-english/curriculum.json",
+      "sha256": "33ab939a68b71c4ddba8dc2dd65e81659edf48b778e10645787f713d4d7fc18e",
+      "bytes": 718852
+    },
+    {
+      "path": "content/learn-english/readings.json",
+      "sha256": "e0cab2599ea9700002c0e2e84deea564fa084f792d2c1fba9ee0557fd278d148",
+      "bytes": 80428
+    }
+  ],
+  "scope": {
+    "extractedStages": [
+      "S0",
+      "A1",
+      "A2",
+      "B1",
+      "B2",
+      "C1",
+      "C2"
+    ],
+    "integrationStages": [
+      "S0",
+      "A1",
+      "A2",
+      "B1"
+    ],
+    "deferredStages": [
+      "B2",
+      "C1",
+      "C2"
+    ],
+    "note": "B2–C2 مستخرجة للتوثيق فقط؛ التزاماً بقرار المالك تبقى TALAQA الحالية هي المرجع في B2–C2."
+  },
+  "counts": {
+    "byStage": {
+      "S0": {
+        "units": 5,
+        "grammar": 5,
+        "vocabulary": 72,
+        "uniqueVocabulary": 72,
+        "sentences": 30,
+        "uniqueSentences": 30,
+        "dialogue": 0,
+        "uniqueDialogue": 0,
+        "phonetics": 5,
+        "l1Transfers": 10,
+        "academicTerms": 10
+      },
+      "A1": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 98,
+        "uniqueVocabulary": 98,
+        "sentences": 72,
+        "uniqueSentences": 71,
+        "dialogue": 36,
+        "uniqueDialogue": 36,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      },
+      "A2": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 106,
+        "uniqueVocabulary": 106,
+        "sentences": 72,
+        "uniqueSentences": 72,
+        "dialogue": 36,
+        "uniqueDialogue": 36,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      },
+      "B1": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 90,
+        "uniqueVocabulary": 90,
+        "sentences": 72,
+        "uniqueSentences": 72,
+        "dialogue": 36,
+        "uniqueDialogue": 36,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      },
+      "B2": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 48,
+        "uniqueVocabulary": 48,
+        "sentences": 6,
+        "uniqueSentences": 6,
+        "dialogue": 12,
+        "uniqueDialogue": 12,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      },
+      "C1": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 48,
+        "uniqueVocabulary": 48,
+        "sentences": 6,
+        "uniqueSentences": 6,
+        "dialogue": 12,
+        "uniqueDialogue": 12,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      },
+      "C2": {
+        "units": 6,
+        "grammar": 12,
+        "vocabulary": 48,
+        "uniqueVocabulary": 47,
+        "sentences": 6,
+        "uniqueSentences": 6,
+        "dialogue": 12,
+        "uniqueDialogue": 12,
+        "phonetics": 12,
+        "l1Transfers": 12,
+        "academicTerms": 12
+      }
+    },
+    "totals": {
+      "units": 41,
+      "grammar": 77,
+      "vocabulary": 510,
+      "uniqueVocabulary": 491,
+      "sentences": 264,
+      "uniqueSentences": 263,
+      "dialogue": 144,
+      "uniqueDialogue": 144,
+      "phonetics": 77,
+      "l1Transfers": 82,
+      "academicTerms": 82
+    },
+    "core": {
+      "units": 18,
+      "grammar": 36,
+      "vocabulary": 294,
+      "uniqueVocabulary": 283,
+      "sentences": 216,
+      "uniqueSentences": 215,
+      "dialogue": 108,
+      "uniqueDialogue": 108,
+      "phonetics": 36,
+      "l1Transfers": 36,
+      "academicTerms": 36
+    },
+    "foundation": {
+      "units": 5,
+      "grammar": 5,
+      "vocabulary": 72,
+      "uniqueVocabulary": 72,
+      "sentences": 30,
+      "uniqueSentences": 30,
+      "dialogue": 0,
+      "uniqueDialogue": 0,
+      "phonetics": 5,
+      "l1Transfers": 10,
+      "academicTerms": 10
+    },
+    "deferred": {
+      "units": 18,
+      "grammar": 36,
+      "vocabulary": 144,
+      "uniqueVocabulary": 139,
+      "sentences": 18,
+      "uniqueSentences": 18,
+      "dialogue": 36,
+      "uniqueDialogue": 36,
+      "phonetics": 36,
+      "l1Transfers": 36,
+      "academicTerms": 36
+    },
+    "readings": {
+      "total": 16,
+      "questions": 75,
+      "words": 1679,
+      "byStage": {
+        "S0": {
+          "readings": 4,
+          "questions": 15,
+          "words": 115
+        },
+        "A1": {
+          "readings": 4,
+          "questions": 20,
+          "words": 304
+        },
+        "A2": {
+          "readings": 4,
+          "questions": 20,
+          "words": 502
+        },
+        "B1": {
+          "readings": 4,
+          "questions": 20,
+          "words": 758
+        },
+        "B2": {
+          "readings": 0,
+          "questions": 0,
+          "words": 0
+        },
+        "C1": {
+          "readings": 0,
+          "questions": 0,
+          "words": 0
+        },
+        "C2": {
+          "readings": 0,
+          "questions": 0,
+          "words": 0
+        }
+      }
+    },
+    "audio": {
+      "totalFiles": 1110,
+      "totalBytes": 14676912,
+      "byDirectory": {
+        "curriculum": {
+          "files": 754,
+          "bytes": 10393344
+        },
+        "zero/d": {
+          "files": 12,
+          "bytes": 135216
+        },
+        "zero/n": {
+          "files": 64,
+          "bytes": 721728
+        },
+        "zero/w": {
+          "files": 280,
+          "bytes": 3426624
+        }
+      },
+      "imported": false,
+      "note": "الصوت لم يُنسخ إلى TALAQA بعد؛ خطة S0 تبدأ بـ Web Speech ثم 100–150 مقطعاً اختيارياً."
+    }
+  },
+  "uniqueness": {
+    "vocabulary": {
+      "raw": 510,
+      "unique": 491,
+      "duplicates": 19,
+      "duplicateTerms": 17
+    },
+    "coreVocabulary": {
+      "raw": 294,
+      "unique": 283,
+      "duplicates": 11,
+      "duplicateTerms": 11,
+      "claimed": 288,
+      "claimedDeltaFromUnique": 5,
+      "claimedDeltaFromRaw": -6
+    },
+    "foundationVocabulary": {
+      "raw": 72,
+      "unique": 72
+    },
+    "sentences": {
+      "raw": 264,
+      "unique": 263,
+      "duplicates": 1
+    },
+    "dialogue": {
+      "raw": 144,
+      "unique": 144,
+      "duplicates": 0
+    }
+  },
+  "duplicates": {
+    "vocabulary": [
+      {
+        "key": "compromise",
+        "count": 3,
+        "units": [
+          "b1u6",
+          "b2u1",
+          "c2u5"
+        ],
+        "stages": [
+          "B1",
+          "B2",
+          "C2"
+        ],
+        "ar": "تسوية"
+      },
+      {
+        "key": "deadline",
+        "count": 3,
+        "units": [
+          "a2u1",
+          "b1u1",
+          "b2u1"
+        ],
+        "stages": [
+          "A2",
+          "B1",
+          "B2"
+        ],
+        "ar": "موعد نهائي"
+      },
+      {
+        "key": "abroad",
+        "count": 2,
+        "units": [
+          "a2u3",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "في الخارج"
+      },
+      {
+        "key": "account for",
+        "count": 2,
+        "units": [
+          "c1u1",
+          "c2u1"
+        ],
+        "stages": [
+          "C1",
+          "C2"
+        ],
+        "ar": "يفسر أو يشكل نسبة من"
+      },
+      {
+        "key": "afford",
+        "count": 2,
+        "units": [
+          "a2u2",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يستطيع تحمّل التكلفة"
+      },
+      {
+        "key": "attend",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يحضر"
+      },
+      {
+        "key": "colleague",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "زميل عمل"
+      },
+      {
+        "key": "concentrate",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يركّز"
+      },
+      {
+        "key": "confident",
+        "count": 2,
+        "units": [
+          "a2u4",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "واثق"
+      },
+      {
+        "key": "improve",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يحسّن"
+      },
+      {
+        "key": "intransigent",
+        "count": 2,
+        "units": [
+          "c2u3",
+          "c2u5"
+        ],
+        "stages": [
+          "C2"
+        ],
+        "ar": "متعنت لا يلين"
+      },
+      {
+        "key": "perspective",
+        "count": 2,
+        "units": [
+          "b2u4",
+          "c1u6"
+        ],
+        "stages": [
+          "B2",
+          "C1"
+        ],
+        "ar": "وجهة نظر"
+      },
+      {
+        "key": "prepare",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يُعِدّ"
+      },
+      {
+        "key": "reliable",
+        "count": 2,
+        "units": [
+          "b1u4",
+          "b2u2"
+        ],
+        "stages": [
+          "B1",
+          "B2"
+        ],
+        "ar": "موثوق"
+      },
+      {
+        "key": "routine",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "روتين"
+      },
+      {
+        "key": "salient",
+        "count": 2,
+        "units": [
+          "c1u5",
+          "c2u3"
+        ],
+        "stages": [
+          "C1",
+          "C2"
+        ],
+        "ar": "بارز أو ذو صلة"
+      },
+      {
+        "key": "schedule",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "جدول مواعيد"
+      }
+    ],
+    "coreVocabulary": [
+      {
+        "key": "abroad",
+        "count": 2,
+        "units": [
+          "a2u3",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "في الخارج"
+      },
+      {
+        "key": "afford",
+        "count": 2,
+        "units": [
+          "a2u2",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يستطيع تحمّل التكلفة"
+      },
+      {
+        "key": "attend",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يحضر"
+      },
+      {
+        "key": "colleague",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "زميل عمل"
+      },
+      {
+        "key": "concentrate",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يركّز"
+      },
+      {
+        "key": "confident",
+        "count": 2,
+        "units": [
+          "a2u4",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "واثق"
+      },
+      {
+        "key": "deadline",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "موعد نهائي"
+      },
+      {
+        "key": "improve",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يحسّن"
+      },
+      {
+        "key": "prepare",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u5"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "يُعِدّ"
+      },
+      {
+        "key": "routine",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u2"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "روتين"
+      },
+      {
+        "key": "schedule",
+        "count": 2,
+        "units": [
+          "a2u1",
+          "b1u1"
+        ],
+        "stages": [
+          "A2",
+          "B1"
+        ],
+        "ar": "جدول مواعيد"
+      }
+    ],
+    "sentences": [
+      {
+        "key": "i sleep eight hours every night.",
+        "count": 2,
+        "units": [
+          "a1u3",
+          "a1u5"
+        ],
+        "stages": [
+          "A1"
+        ],
+        "ar": "أنام ثماني ساعات كل ليلة."
+      }
+    ],
+    "dialogue": [],
+    "readingQuestions": [
+      {
+        "key": "what is the father's job?",
+        "count": 2,
+        "units": [
+          "le-r-a1-foundation-zr1",
+          "le-r-a1-2"
+        ],
+        "stages": [
+          "S0",
+          "A1"
+        ],
+        "ar": "ما عمل الأب؟"
+      }
+    ]
+  },
+  "warnings": [
+    "لا يوجد ملف LICENSE في مصدر Learn-English؛ الاعتماد على إقرار المالك المكتوب في NOTICE وdocs/CONTENT-SOURCES.md.",
+    "الوحدات التأسيسية الخمس (S0) لا تحتوي حواراً في المصدر؛ ستُبنى حوارات S0 داخل TALAQA عند الدمج.",
+    "وحدات B2–C2 في المصدر «staged» وغير مكتملة الكثافة (48 مفردة و6 جمل لكل مستوى)؛ مستخرجة للتوثيق وغير مدمجة الآن.",
+    "توجد 17 مفردة مكررة (19 تكراراً زائداً)؛ يُحتفظ بالأولى ويُدمج السياق عند الدمج.",
+    "توجد جملة واحدة مكررة حرفياً في المصدر: «i sleep eight hours every night.».",
+    "يوجد سؤال قراءة واحد مكرر حرفياً بين نصين: «what is the father's job?».",
+    "الرقم المعلن 288 لا يطابق العدّ: raw 294، unique 283 (فرق +5 عن الفريد).",
+    "كل محتوى Learn-English المستورد ينتظر مراجعة المالك: 100% من القواعد والقراءات و20% من المفردات قبل أي دمج في src/data/academy."
+  ]
+}

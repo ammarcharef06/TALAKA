@@ -10,7 +10,7 @@
 
 - **طَلَاقَة (TALAQA — AREN)**: أكاديمية العرب السيادية للغة الإنجليزية — توأم رقمي لمؤسسة تعليمية عريقة، End-to-End من **S0 إلى C2**.
 - تطبيق ويب **static / offline-first (PWA)** — بلا خادم، بلا حساب، بلا تكلفة، بلا تتبع، بلا مفتاح API.
-- المحتوى أصلي ومكتوب خصيصاً لعلاج أخطاء العرب — **مراجَع بشرياً بالكامل منذ 2026-11-06**.
+- المحتوى أصلي ومكتوب خصيصاً لعلاج أخطاء العرب — **مراجَع بشرياً بالكامل منذ 2026-11-06** (المحتوى الأساسي السابق). أي محتوى جديد بعد هذا التاريخ يُوسم بأنه ينتظر المراجعة البشرية حتى تُتم فعلاً.
 - المستودع المرجعي هو `docs/PLAN.md` (الخطة الرسمية + جدول المراحل M1..) — اقرأه قبل أي تغيير جوهري.
 - **المرجع الأعلى للرؤية هو `docs/VISION.md`** — النص الأصلي لصاحب المشروع، محفوظ حرفياً. أي قرار يجب أن يخدم نقطة من نقاطه.
 
@@ -33,7 +33,7 @@ npm run preview     # معاينة نسخة الإنتاج
 |---|---|
 | `src/screens/` | شاشة لكل جناح (`gate`, `acceptance`, `exam`, `building`, `lesson`, `review`, `cafe`, `examHall`, `transcript`, `certificate`, `verify`, `library`, `career`, `interview`, `cv`, `settings`…) |
 | `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) · `interview.ts` (تقييم مقابلة حتمي) · `settings.ts` (إعدادات + PIN) · `timeFluid.ts` (وقت سائل 10/20/60) |
-| `src/data/` | `items/` (بنك المعايرة 108 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) |
+| `src/data/` | `items/` (بنك المعايرة 145 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) |
 | `src/store/db.ts` | IndexedDB — الإصدار 8 (`students, meta, progress, srs-cards, exams, keys, certificates, library, career, cv-profile, settings`) |
 | `src/ui/` | الختم (`seal.ts`) · `speak.ts` · `confirm.ts` (`escapeHtml`, `toast`) · `pin.ts` (نافذة PIN) |
 | `tests/` | مستوى لكل مجال — سلامة المحتوى تُختبر آلياً (word bands، خيارات/إجابات، فريدة المعرفات) |

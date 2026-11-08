@@ -99,6 +99,49 @@ describe('بناء ورقة الامتحان', () => {
   });
 });
 
+describe('اتساع بنوك المستويات ومواءمتها', () => {
+  const pool = (level: ExamLevel, section: 'rules' | 'vocab' | 'reading') =>
+    ITEM_BANK.filter((i) => i.cefr === level && i.section === section);
+
+  it('C1 وC2: كل قسم أكبر من عدد أسئلة الامتحان — لا تتكرر الورقة نفسها', () => {
+    for (const level of ['C1', 'C2'] as ExamLevel[]) {
+      for (const section of ['rules', 'vocab', 'reading'] as const) {
+        expect(pool(level, section).length, `${level}/${section}`).toBeGreaterThan(
+          LEVEL_EXAM_CONFIG[level].blueprint[section]
+        );
+      }
+    }
+  });
+
+  it('C1 وC2: محاولتان بعشوائية مختلفة لا تسحبان المجموعة نفسها', () => {
+    for (const level of ['C1', 'C2'] as ExamLevel[]) {
+      const first = createLevelExam(level, () => 0.1).map((q) => q.itemId).sort();
+      const second = createLevelExam(level, () => 0.9).map((q) => q.itemId).sort();
+      expect(first, level).not.toEqual(second);
+    }
+  });
+
+  it('A1: بنك القواعد من المحطتين الأولى والثانية فقط، وأكبر من حاجة الامتحان', () => {
+    const rules = pool('A1', 'rules');
+    expect(rules.length).toBeGreaterThan(LEVEL_EXAM_CONFIG.A1.blueprint.rules);
+    for (const item of rules) {
+      expect(item.tags, item.id).not.toContain('past-simple');
+      expect(item.tags, item.id).not.toContain('modals');
+      expect(item.tags, item.id).not.toContain('present-perfect');
+      expect(item.tags, item.id).not.toContain('used-to');
+    }
+  });
+
+  it('A2: بنك القواعد من المحطة الثالثة فقط — لا مضارع تام ولا used to من B1', () => {
+    const rules = pool('A2', 'rules');
+    expect(rules.length).toBeGreaterThan(LEVEL_EXAM_CONFIG.A2.blueprint.rules);
+    for (const item of rules) {
+      expect(item.tags, item.id).not.toContain('present-perfect');
+      expect(item.tags, item.id).not.toContain('used-to');
+    }
+  });
+});
+
 describe('تصحيح الامتحان', () => {
   it('كل الإجابات صحيحة ← 100% ونجاح', () => {
     const qs = createLevelExam('A1', () => 0.5);

@@ -85,7 +85,8 @@ export function defaultSettings(): AppSettings {
       initials: '',
       avatar: 'initials',
       pin: null,
-      theme: 'system',
+      // الطالب الجديد يبدأ بالمظهر الفاتح؛ من اختار مظهراً سابقاً يُحفظ اختياره ولا يُمسّ.
+      theme: 'light',
     },
     publicIdentity: {
       nameMode: 'full',

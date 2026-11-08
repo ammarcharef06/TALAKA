@@ -12,13 +12,13 @@ import {
 } from '../src/engine/settings';
 
 describe('الإعدادات الافتراضية والتطبيع', () => {
-  it('الافتراضي: جلسة 20 دقيقة، سقف 20 بطاقة، صوت عادي، لهجة أمريكية، مظهر النظام', () => {
+  it('الافتراضي: جلسة 20 دقيقة، سقف 20 بطاقة، صوت عادي، لهجة أمريكية، مظهر فاتح', () => {
     const s = defaultSettings();
     expect(s.academic.defaultSessionMinutes).toBe(20);
     expect(s.academic.srsDailyCap).toBe(20);
     expect(s.academic.ttsSpeed).toBe('normal');
     expect(s.academic.accent).toBe('american');
-    expect(s.profile.theme).toBe('system');
+    expect(s.profile.theme).toBe('light');
     expect(s.publicIdentity.nameMode).toBe('full');
     expect(s.accessibility.fontScale).toBe('normal');
   });
@@ -36,7 +36,7 @@ describe('الإعدادات الافتراضية والتطبيع', () => {
     expect(s.academic.accent).toBe('american');
     expect(s.profile.displayName).toBe('أحمد');
     expect(s.profile.initials).toBe('AB');
-    expect(s.profile.theme).toBe('system');
+    expect(s.profile.theme).toBe('light');
     expect(s.profile.avatar).toBe('initials');
     expect(s.publicIdentity.nameMode).toBe('full');
     expect(s.publicIdentity.showStudentId).toBe(true);
