@@ -31,8 +31,10 @@
 - **الالتزام**: `57b91e73cd679fc3b639f198fb4887f49ac942d0`
 - **تاريخ الاستخراج**: 2026-11-08
 - **بصمة الملفات المصدرية**: `ba1fb4702bb8bce9ceefabf540f1ff727c9407dc15b5c6a8dfb0ea3c7ec1fdef`
-- **الأداة**: `tools/import/learn-english.mjs`
-- **المخرجات**: `content/learn-english/{curriculum.json,readings.json,manifest.json,EXTRACTION_REPORT.md}`
+- **الأداة**: `tools/import/learn-english.mjs` (استخراج) + `tools/import/build-learn-english.mjs` (توليد TypeScript والأوراق)
+- **المخرجات الخام**: `content/learn-english/{curriculum.json,readings.json,manifest.json,EXTRACTION_REPORT.md}`
+- **المخرجات المولّدة**: `src/data/learnEnglish/{types.ts,index.ts,curriculum.generated.ts,readings.generated.ts}`
+- **أوراق المراجعة**: `content/learn-english/review/`
 
 ### الأعداد المستخرجة
 
@@ -55,12 +57,20 @@
 
 ### ما لم يُدمج بعد
 
-- كل محتوى Learn-English في `content/learn-english/` هو **مادة خام مطبّعة**،
-  وليس جزءاً من `src/data/academy/course.ts`.
-- لا يُدمج أي منه في الدروس قبل:
-  1. موافقة المالك على تقرير الاستخراج.
-  2. المراجعة البشرية: 100% من القواعد والقراءات، و20% من المفردات.
-  3. توليد TypeScript من JSON المطبّع ومراجعته.
+- كل محتوى Learn-English في `content/learn-english/` و`src/data/learnEnglish/` هو
+  **مادة مطبّعة/مولّدة**، وليس جزءاً من `src/data/academy/course.ts`.
+- **تم اعتماد الأرقام الرسمية** من المالك في 2026-11-08: 283 فريدة للنواة A1–B1،
+  355 لـS0–B1، 491 لكل المصدر.
+- **تم توليد TypeScript** في `src/data/learnEnglish/` (23 وحدة، 41 قاعدة،
+  366 مفردة خام/355 فريدة، 246 جملة، 108 حوار، 16 قراءة/75 سؤالاً).
+- **أوراق المراجعة جاهزة** في `content/learn-english/review/`:
+  `01-grammar-review.md` (41/41)، `02-readings-review.md` (16 نصاً/75 سؤالاً)،
+  `03-vocabulary-sample.md` (71 من 355 = 20%)، مع `README.md` و`manifest.json`.
+- **الدمج محجوب** حتى:
+  1. توقيع المالك على أوراق المراجعة الثلاث.
+  2. تغيير `LEARN_ENGLISH_MERGE_ALLOWED` إلى `true` في `src/data/learnEnglish/index.ts`.
+  3. مراجعة التغيير في `course.ts` واختباراته.
+- `tests/learnEnglish.test.ts` يتحقق آلياً من أن `course.ts` لا يستورد المحتوى المولّد.
 
 ## 4. english-school
 
@@ -79,7 +89,7 @@
 | 14 نصاً في `src/data/library/readers.ts` | ذكاء اصطناعي بمراجعة بشرية | **مراجَع بشرياً** حتى 2026-11-06 |
 | 37 سؤالاً جديداً في 0.16.0 | ذكاء اصطناعي | **ينتظر المراجعة البشرية** |
 | 32 سؤالاً في المسار المهني + نماذجها | ذكاء اصطناعي | **ينتظر المراجعة البشرية** |
-| محتوى Learn-English (S0–B1) | صاحب المشروع | **ينتظر مراجعة المالك + الموافقة** |
+| محتوى Learn-English (S0–B1) | صاحب المشروع | **مولّد في TypeScript — ينتظر توقيع المالك على أوراق المراجعة** |
 
 ### الأسئلة الجديدة في 0.16.0
 
@@ -91,21 +101,25 @@
 هذه الأسئلة صيغت لتوسيع مجموعات C1/C2 وضبط مواءمة A1/A2، **ولم تُراجَع بشرياً بعد**.
 لا يجوز وصف بنك الأسئلة كله بأنه «مراجَع بشرياً» حتى تُتم مراجعتها.
 
-## 6. إعادة توليد الاستخراج
+## 6. إعادة التوليد
 
 ```bash
 node tools/import/learn-english.mjs --source "C:\path\to\Learn-English"
+node tools/import/build-learn-english.mjs
 ```
 
-الأداة تقرأ ملفات المصدر مباشرة، وتُنتج JSON مطبّعاً + `manifest.json` +
-`EXTRACTION_REPORT.md`. لا تكتب في `src/` إطلاقاً.
+الأول يقرأ ملفات المصدر مباشرة ويُنتج JSON مطبّعاً + `manifest.json` +
+`EXTRACTION_REPORT.md`، ولا يكتب في `src/` إطلاقاً. الثاني يقرأ JSON المطبّع
+ويولّد TypeScript وأوراق المراجعة، ولا يكتب في `src/data/academy`.
 
 ## 7. التحقق من البصمات
 
 - `manifest.json` يحمل `sha256` لكل ملف مصدر، وبصمة مجمّعة للمصدر.
-- `EXTRACTION_REPORT.md` يحمل بصمة المصدر نفسها.
-- عند تحديث المصدر، تتغير البصمة؛ يجب إعادة الاستخراج وتحديث هذا الملف
-  و`NOTICE` معاً.
+- `EXTRACTION_REPORT.md` ورأس كل ملف `.generated.ts` يحملان بصمة المصدر نفسها.
+- `content/learn-english/review/manifest.json` يحمل بصمة المصدر وقائمة معرّفات
+  عيّنة المفردات الـ71.
+- عند تحديث المصدر، تتغير البصمة؛ يجب إعادة الاستخراج والتوليد وإعادة المراجعة،
+  وتحديث هذا الملف و`NOTICE` معاً.
 
 ## 8. ما يجب فعله عند إضافة مصدر جديد
 

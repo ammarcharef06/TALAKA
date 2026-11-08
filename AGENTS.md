@@ -33,11 +33,12 @@ npm run preview     # معاينة نسخة الإنتاج
 |---|---|
 | `src/screens/` | شاشة لكل جناح (`gate`, `acceptance`, `exam`, `building`, `lesson`, `review`, `cafe`, `examHall`, `transcript`, `certificate`, `verify`, `library`, `career`, `interview`, `cv`, `settings`…) |
 | `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) · `interview.ts` (تقييم مقابلة حتمي) · `settings.ts` (إعدادات + PIN) · `timeFluid.ts` (وقت سائل 10/20/60) |
-| `src/data/` | `items/` (بنك المعايرة 145 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) |
+| `src/data/` | `items/` (بنك المعايرة 145 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) · `learnEnglish/` (محتوى S0–B1 مولّد — **غير مدمج في الدروس**) |
 | `src/store/db.ts` | IndexedDB — الإصدار 8 (`students, meta, progress, srs-cards, exams, keys, certificates, library, career, cv-profile, settings`) |
 | `src/ui/` | الختم (`seal.ts`) · `speak.ts` · `confirm.ts` (`escapeHtml`, `toast`) · `pin.ts` (نافذة PIN) |
 | `tests/` | مستوى لكل مجال — سلامة المحتوى تُختبر آلياً (word bands، خيارات/إجابات، فريدة المعرفات) |
-| `tools/` | `validate-items.mjs` · `download-fonts.ps1` |
+| `tools/` | `validate-items.mjs` · `download-fonts.ps1` · `import/learn-english.mjs` (استخراج) · `import/build-learn-english.mjs` (توليد TypeScript والأوراق) |
+| `content/learn-english/` | JSON مطبّع + `EXTRACTION_REPORT.md` + `review/` (أوراق المراجعة البشرية) — **لا دمج قبل توقيع المالك** |
 
 ## 3. قواعد غير قابلة للتفاوض
 
@@ -46,6 +47,7 @@ npm run preview     # معاينة نسخة الإنتاج
 - **لا تصف محركاً حتمياً بأنه «وكيل ذكي»**؛ «الوكيل/المعلم الافتراضي» يوصَف بهما فقط ما يعمل LLM فعلاً (طبقات 1–3).
 - **لا واجهات تعلّم وهمية**: الجناح إما مبني ويفتح، أو مسموح اسمه بحالة «يُفتتح قريباً» صادقة، أو يُشطب.
 - **لا تعدّل `src/data/items/*.json` دون `npm run validate`**؛ أي محتوى جديد يمر عبر اختبارات `tests/`.
+- **بوابة Learn-English**: لا يُدمج المحتوى المولّد في `course.ts` قبل توقيع المالك على أوراق المراجعة الثلاث (`content/learn-english/review/`) وتغيير `LEARN_ENGLISH_MERGE_ALLOWED` إلى `true`؛ الملفات `*.generated.ts` لا تُعدّل يدوياً بل تُعاد من JSON.
 - **العربية أولاً في الواجهة** (RTL، فصحى بلا لهجات) — المحتوى التعليمي إنجليزي مع شرح عربي.
 - **مصدر الحقيقة الوحيد بيانات الطالب = IndexedDB** — لا تخزّن بيانات أساسية في localStorage.
 - **حق التصدير دائماً**: زر «تنزيل بطاقتي (JSON)» لا يُكسر ولا يُزاح في أي إصدار — سيادة الطالب خط أحمر.
