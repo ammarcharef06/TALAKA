@@ -1,11 +1,20 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
-import type { AppSettings, Cefr, CvProfile, LevelExamResult, SettingsRecord, StudentRecord } from '../types';
+import type { AppSettings, Cefr, CvProfile, GamificationRecord, LevelExamResult, SettingsRecord, StudentRecord } from '../types';
 import type { SignedCertificate } from '../engine/certificate';
 import type { InterviewResult } from '../engine/interview';
 import type { SrsState } from '../engine/srs';
+import {
+  GAMIFICATION_ID,
+  applyMistakeAward,
+  createGamificationRecord,
+  normalizeDaily,
+  refreshBadges,
+  sanitizeGamification,
+  type GamificationSignals,
+} from '../engine/gamification';
 
 const DB_NAME = 'talaqa';
-const DB_VERSION = 8;
+export const DB_VERSION = 9;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
@@ -17,8 +26,10 @@ const STORE_LIBRARY = 'library';
 const STORE_CAREER = 'career';
 const STORE_CV = 'cv-profile';
 const STORE_SETTINGS = 'settings';
+const STORE_GAMIFICATION = 'gamification';
 
-const EXPORT_STORES = [
+/** المخازن التي تدخل النسخة الاحتياطية — مفتاح التوقيع الخاص يبقى على الجهاز وحده. */
+export const EXPORT_STORES = [
   STORE_STUDENTS,
   STORE_META,
   STORE_PROGRESS,
@@ -29,6 +40,7 @@ const EXPORT_STORES = [
   STORE_CAREER,
   STORE_CV,
   STORE_SETTINGS,
+  STORE_GAMIFICATION,
 ] as const;
 
 export interface TalaqaBackup {
@@ -65,6 +77,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_CAREER)) db.createObjectStore(STORE_CAREER, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_CV)) db.createObjectStore(STORE_CV, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_GAMIFICATION)) db.createObjectStore(STORE_GAMIFICATION, { keyPath: 'id' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -436,6 +449,105 @@ export async function saveSettingsRecord(settings: AppSettings): Promise<void> {
   }
 }
 
+/* ── التحفيز (Gamification): نقاط محلية وأوسمة مشتقة من إنجازات حقيقية ── */
+
+const FOUNDATION_LESSON_IDS = ['l1-sounds', 'l2-im', 'l3-numbers', 'l4-greetings', 'l5-job', 'l6-dialogue'];
+
+/** طابور واحد يمنع تسابق نقرتين على السجل نفسه (مثل خطأين متتاليين). */
+let gamificationQueue: Promise<unknown> = Promise.resolve();
+
+function enqueueGamification<T>(task: () => Promise<T>): Promise<T> {
+  const run = gamificationQueue.then(task, task);
+  gamificationQueue = run.then(
+    () => undefined,
+    () => undefined
+  );
+  return run;
+}
+
+async function readGamificationSignals(db: IDBDatabase): Promise<GamificationSignals> {
+  const [progressRows, srsRows, examRows, libraryRows, careerRows, cvRows] = await Promise.all([
+    readStore(db, STORE_PROGRESS),
+    readStore(db, STORE_SRS),
+    readStore(db, STORE_EXAMS),
+    readStore(db, STORE_LIBRARY),
+    readStore(db, STORE_CAREER),
+    readStore(db, STORE_CV),
+  ]);
+
+  const progress = progressRows as { lessonId: string; bestScore: number }[];
+  const completed = new Set(progress.map((row) => row.lessonId));
+  const passedScenarios = new Set(
+    (careerRows as { scenarioId: string; passed: boolean }[])
+      .filter((row) => row.passed)
+      .map((row) => row.scenarioId)
+  );
+
+  return {
+    lessonsCompleted: completed.size,
+    perfectLessons: progress.filter((row) => row.bestScore >= 100).length,
+    foundationComplete: FOUNDATION_LESSON_IDS.every((id) => completed.has(id)),
+    examsPassed: (examRows as { passed: boolean }[]).filter((row) => row.passed).length,
+    libraryReadings: libraryRows.length,
+    interviewsPassed: passedScenarios.size,
+    hasCv: cvRows.length > 0,
+    masteredCards: (srsRows as { reps: number }[]).filter((row) => row.reps >= 3).length,
+  };
+}
+
+async function loadOrCreateGamification(): Promise<GamificationRecord> {
+  const db = await openDb();
+  try {
+    const now = new Date();
+    const raw = await tx<unknown>(db, STORE_GAMIFICATION, 'readonly', (s) => s.get(GAMIFICATION_ID));
+    const signals = await readGamificationSignals(db);
+    const base = sanitizeGamification(raw, now) ?? createGamificationRecord(now);
+    const normalized = normalizeDaily(base, now);
+    // legacy=true فقط عند أول تهيئة: الأوسمة المستحقة من تاريخ الطالب تُمنح بصمت.
+    const { record, added } = refreshBadges(normalized, signals, now, raw === undefined);
+    if (raw === undefined || normalized !== base || added.length > 0) {
+      await tx(db, STORE_GAMIFICATION, 'readwrite', (s) => s.put(record));
+    }
+    return record;
+  } finally {
+    db.close();
+  }
+}
+
+/** يضمن وجود سجل التحفيز، ويصفّر رصيد اليوم عند تغيّر التاريخ، ويضيف الأوسمة المستحقة. */
+export function ensureGamification(): Promise<GamificationRecord> {
+  return enqueueGamification(loadOrCreateGamification);
+}
+
+export interface MistakeAwardOutcome {
+  record: GamificationRecord;
+  awarded: number;
+  capped: boolean;
+  dailyPoints: number;
+  dailyCap: number;
+}
+
+/** نقطتان لكل إجابة خاطئة — بحد 20 نقطة في اليوم المحلي. */
+export function awardMistakePoints(): Promise<MistakeAwardOutcome> {
+  return enqueueGamification(async () => {
+    const current = await loadOrCreateGamification();
+    const result = applyMistakeAward(current);
+    const db = await openDb();
+    try {
+      await tx(db, STORE_GAMIFICATION, 'readwrite', (s) => s.put(result.record));
+    } finally {
+      db.close();
+    }
+    return {
+      record: result.record,
+      awarded: result.awarded,
+      capped: result.capped,
+      dailyPoints: result.dailyPoints,
+      dailyCap: result.dailyCap,
+    };
+  });
+}
+
 /* ── النسخ الاحتياطي الشامل: كل بيانات الطالب، بلا مفتاح التوقيع الخاص ── */
 
 async function readStore(db: IDBDatabase, storeName: string): Promise<unknown[]> {
@@ -568,6 +680,7 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_CAREER);
     await done(STORE_CV);
     await done(STORE_SETTINGS);
+    await done(STORE_GAMIFICATION);
   } finally {
     db.close();
   }

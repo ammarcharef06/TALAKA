@@ -10,6 +10,12 @@ import {
   LEARN_ENGLISH_UNITS,
   learnEnglishUnitsForStage,
 } from '../src/data/learnEnglish';
+import {
+  LEARN_ENGLISH_LESSON_MAP,
+  allMergedLearnEnglishUnitIds,
+  learnEnglishUnitsForLesson,
+} from '../src/data/academy/learnEnglishMerge';
+import { UNITS, allLessonsInOrder } from '../src/data/academy/course';
 
 const reviewDir = join(process.cwd(), 'content', 'learn-english', 'review');
 
@@ -147,17 +153,81 @@ describe('أوراق المراجعة البشرية', () => {
     for (const id of sampleIds) expect(allVocabularyIds.has(id), id).toBe(true);
   });
 
-  it('README يوثق جدول التوقيع وقاعدة عدم الدمج', () => {
+  it('README يوثق جدول التوقيع واعتماد المالك الكتابي', () => {
     expect(readme).toContain('جدول التوقيع');
-    expect(readme).toContain('لا دمج في الدروس');
+    expect(readme).toContain('اعتماد كتابي');
+    expect(readme).toContain('☑ معتمد');
+    expect(readme).not.toContain('بانتظار مراجعة المالك');
   });
 });
 
 describe('بوابة الدمج', () => {
-  it('الدمج محجوب حتى توقيع المالك — والدروس الـ42 لا تستورد المحتوى المولّد', () => {
-    expect(LEARN_ENGLISH_MERGE_ALLOWED).toBe(false);
-    expect(LEARN_ENGLISH_REVIEW_STATUS).toBe('pending-owner-review');
-    const course = readFileSync(join(process.cwd(), 'src', 'data', 'academy', 'course.ts'), 'utf8');
-    expect(course).not.toContain('learnEnglish');
+  it('الدمج مفتوح بعد اعتماد المالك الكتابي في 2026-11-08', () => {
+    expect(LEARN_ENGLISH_MERGE_ALLOWED).toBe(true);
+    expect(LEARN_ENGLISH_REVIEW_STATUS).toBe('owner-approved-2026-11-08');
+  });
+
+  it('كل الدروس المستهدفة (m0–m3) تحمل مرجع إثراء، والدروس الـ42 كلها باقية', () => {
+    const all = allLessonsInOrder();
+    expect(all).toHaveLength(42);
+    const merged = all.filter(({ lesson }) => lesson.learnEnglish);
+    expect(merged).toHaveLength(24);
+    expect(merged.map(({ lesson }) => lesson.id).sort()).toEqual(
+      Object.keys(LEARN_ENGLISH_LESSON_MAP).sort()
+    );
+    for (const { unit } of all) {
+      expect(UNITS).toContain(unit);
+    }
+  });
+
+  it('المحطات 5–7 (B2–C2) لم تُمسّ: 18 درساً بلا إثراء Learn-English', () => {
+    const untouched = allLessonsInOrder().filter(({ unit }) => unit.order >= 5);
+    expect(untouched).toHaveLength(18);
+    expect(untouched.every(({ lesson }) => !lesson.learnEnglish)).toBe(true);
+  });
+
+  it('كل وحدات S0–B1 الـ23 مدمجة مرة على الأقل، ولا معرّف مفقود', () => {
+    const mapped = allMergedLearnEnglishUnitIds();
+    expect(mapped).toHaveLength(LEARN_ENGLISH_COUNTS.units);
+    expect(new Set(mapped).size).toBe(LEARN_ENGLISH_COUNTS.units);
+    const existing = new Set(LEARN_ENGLISH_UNITS.map((unit) => unit.id));
+    for (const id of mapped) expect(existing.has(id), id).toBe(true);
+  });
+
+  it('وسم التأسيسي S0 يظهر في كل درس يحمل وحدة S0', () => {
+    for (const { lesson } of allLessonsInOrder()) {
+      if (!lesson.learnEnglish) continue;
+      const units = learnEnglishUnitsForLesson(lesson.id);
+      const hasS0 = units.some((unit) => unit.stage === 'S0');
+      expect(lesson.learnEnglish.foundation, lesson.id).toBe(hasS0);
+      expect(lesson.learnEnglish.unitIds.length, lesson.id).toBeGreaterThan(0);
+    }
+  });
+
+  it('الإثراء تكثيف لا إلغاء: الكتل والأمثلة والتدريب الأصلية باقية ومزيد عليها', () => {
+    for (const { lesson } of allLessonsInOrder()) {
+      expect(lesson.blocks.length, lesson.id).toBeGreaterThanOrEqual(1);
+      expect(lesson.examples.length, lesson.id).toBeGreaterThanOrEqual(3);
+      expect(lesson.practice.length, lesson.id).toBeGreaterThanOrEqual(5);
+    }
+    const enriched = allLessonsInOrder().filter(({ lesson }) => lesson.learnEnglish);
+    for (const { lesson } of enriched) {
+      expect(lesson.blocks.length, lesson.id).toBeGreaterThan(1);
+      expect(lesson.examples.length, lesson.id).toBeGreaterThan(3);
+    }
+  });
+
+  it('معرّفات تدريب المفردات المدمج فريدة وخياراتها سليمة', () => {
+    const ids = new Set<string>();
+    for (const { lesson } of allLessonsInOrder()) {
+      for (const item of lesson.practice) {
+        expect(ids.has(item.id), `معرّف تدريب مكرر: ${item.id}`).toBe(false);
+        ids.add(item.id);
+        expect(new Set(item.options).size, `${lesson.id}/${item.id}`).toBe(4);
+        expect(item.answer, item.id).toBeGreaterThanOrEqual(0);
+        expect(item.answer, item.id).toBeLessThan(4);
+        expect(item.explanation.trim().length, item.id).toBeGreaterThan(10);
+      }
+    }
   });
 });

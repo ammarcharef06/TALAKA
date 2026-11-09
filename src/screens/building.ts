@@ -1,5 +1,6 @@
 import { go, registerScreen } from '../router';
-import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap, getPassedInterviewScenarios } from '../store/db';
+import { getCurrentStudent, clearAllStudents, exportStudentFile, getProgressMap, getAllSrsStates, getAllLevelExamResults, getLibraryProgressMap, getPassedInterviewScenarios, ensureGamification } from '../store/db';
+import { BADGE_DEFINITIONS, DAILY_POINT_CAP } from '../engine/gamification';
 import { sealSVG } from '../ui/seal';
 import { showConfirm, toast } from '../ui/confirm';
 import { LEVEL_META } from '../engine/placement';
@@ -8,7 +9,7 @@ import { session } from '../state';
 import { UNITS } from '../data/academy/course';
 import { SRS_DECK, countDueCardsIn } from '../data/academy/deck';
 import { CAREER_DECK } from '../data/career/scenarios';
-import type { StudentRecord } from '../types';
+import type { GamificationRecord, StudentRecord } from '../types';
 
 interface Hall {
   id: string;
@@ -19,7 +20,7 @@ interface Hall {
 
 const HALLS: Hall[] = [
   { id: 'classroom', name: 'الفصل الافتراضي', desc: 'سبع محطات — 42 درساً من الحروف حتى الحكي عن الماضي ورسم المستقبل', icon: '<path d="M2.5 9.5 12 5l9.5 4.5L12 14Z"/><path d="M6.5 11.5v4.8c0 1.4 2.5 2.7 5.5 2.7s5.5-1.3 5.5-2.7v-4.8"/><path d="M21.5 9.5V15"/>' },
-  { id: 'review', name: 'ردهة التكرار المتباعد', desc: 'بطاقات تُعيد لك معرفتك قبل نسيانها — بلا ضغط ولا نقاط، فقط تذكير في موعده', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>' },
+  { id: 'review', name: 'ردهة التكرار المتباعد', desc: 'بطاقات تُعيد لك معرفتك قبل نسيانها — بلا ضغط، ونقطتا محاولة عند «نسيت» ضمن سقف اليوم', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>' },
   { id: 'cafe', name: 'مقهى طَلَاقَة', desc: 'أول حوار صوتي حقيقي مع «بسام» — تحدث بميكروفونك أو اكتب، واختم الصورة في سجلك', icon: '<path d="M4 10h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z"/><path d="M17 11h2.2a2.3 2.3 0 0 1 0 4.6H17"/><path d="M7.5 6.5c1-1 1-2 0-3M11.5 6.5c1-1 1-2 0-3"/>' },
   { id: 'exam', name: 'قاعة الاختبارات', desc: 'امتحانات مشددة للانتقال بين المستويات — من A1 حتى C2', icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 12l2 2 4-4"/>' },
   { id: 'transcript', name: 'السجل الأكاديمي', desc: 'Transcript حيّ: درجاتك واعتماداتك ومحاضر امتحاناتك — وثيقتك الرسمية للجامعة والمهنة', icon: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M9.5 8h5M9.5 12h5"/>' },
@@ -52,6 +53,8 @@ function renderBuilding(root: HTMLElement): void {
     <p class="building-sub">اختر جناحاً. الأجنحة تُفتتح حين يكتمل بناؤها —<br/>الفصل، المراجعة، المقهى، الامتحانات، السجل، الشهادة والمكتبة <b>مفتوحة لك اليوم</b>، والمسار المهني كذلك.</p>
   </section>
 
+  <section class="gamification-strip" id="gamificationStrip" aria-label="نقاطك وأوسمتك" hidden></section>
+
   <section class="halls-grid" id="hallsGrid" aria-label="أجنحة الأكاديمية"></section>
 
   <footer class="building-foot">طَلَاقَة ملك لمن يملك نسخة منها ◆ لا يُغلق بابها أبداً ◆ لا تحتاج إذناً للعلم</footer>
@@ -60,10 +63,15 @@ function renderBuilding(root: HTMLElement): void {
   const grid = root.querySelector<HTMLElement>('#hallsGrid')!;
   const chip = root.querySelector<HTMLElement>('#studentChip')!;
 
-  void Promise.all([getCurrentStudent(), SettingsEngine.load()]).then(([student, settings]) => {
+  void Promise.all([getCurrentStudent(), SettingsEngine.load(), ensureGamification()]).then(([student, settings, gamification]) => {
     if (!student) {
       go('gate');
       return;
+    }
+    const strip = root.querySelector<HTMLElement>('#gamificationStrip');
+    if (strip) {
+      strip.hidden = false;
+      strip.innerHTML = gamificationStripHtml(gamification);
     }
     const displayName = SettingsEngine.displayName(student.name);
     chip.hidden = false;
@@ -273,6 +281,29 @@ function settingsHallCard(sessionMinutes: number, srsCap: number): string {
     <span class="hall-complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg>جلستك الافتراضية: <b dir="ltr">${sessionMinutes}</b> دقيقة · سقف المراجعة: <b dir="ltr">${srsCap}</b> بطاقة</span>
     <button id="enterSettingsBtn" class="btn btn-gold hall-enter-btn">افتح مكتب شؤون الطلاب</button>
   </div>`;
+}
+
+function gamificationStripHtml(record: GamificationRecord): string {
+  const badgeHtml = record.badges.length
+    ? record.badges
+        .map(
+          (badge) =>
+            `<span class="gp-badge${badge.legacy ? ' gp-badge-legacy' : ''}" title="${escapeHtmlLocal(badge.description)}">✦ ${escapeHtmlLocal(badge.title)}</span>`
+        )
+        .join('')
+    : '<span class="gp-empty">لا وسام بعد — أول درس تُتمّه يفتح أول ختم.</span>';
+
+  return `
+    <div class="gp-points">
+      <span class="gp-kicker">نقاط المحاولة</span>
+      <span class="gp-total"><b dir="ltr">${record.points}</b><small>نقطة</small></span>
+      <span class="gp-daily">اليوم: <b dir="ltr">${record.dailyPoints}</b> / ${DAILY_POINT_CAP}</span>
+    </div>
+    <div class="gp-badges">
+      <span class="gp-kicker">أوسمتك <small>${record.badges.length} / ${BADGE_DEFINITIONS.length}</small></span>
+      <div class="gp-badge-row">${badgeHtml}</div>
+    </div>
+    <p class="gp-note">نقطتان لكل إجابة خاطئة في التدريب أو مراجعة «نسيت»، بحد ${DAILY_POINT_CAP} نقطة يومياً. الأوسمة من إنجازاتك الحقيقية، ومن أتمّ شيئاً قبل هذا الإصدار نال وسامه بصمت.</p>`;
 }
 
 function formatDate(iso: string): string {

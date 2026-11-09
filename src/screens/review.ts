@@ -3,10 +3,10 @@ import { sealSVG } from '../ui/seal';
 import { speakEnglish, stopSpeaking, speechSupported } from '../ui/speak';
 import { SRS_DECK, type DeckCard } from '../data/academy/deck';
 import { CAREER_DECK } from '../data/career/scenarios';
-import { getAllSrsStates, getProgressMap, getPassedInterviewScenarios, recordReview } from '../store/db';
+import { getAllSrsStates, getProgressMap, getPassedInterviewScenarios, recordReview, awardMistakePoints } from '../store/db';
 import { initialSrsState, gradeCard, QUALITY_LABELS, type ReviewQuality } from '../engine/srs';
 import { SettingsEngine } from '../engine/settings';
-import { escapeHtml } from '../ui/confirm';
+import { escapeHtml, toast } from '../ui/confirm';
 import type { SrsState } from '../engine/srs';
 
 interface SessionCard {
@@ -132,6 +132,17 @@ function renderReview(root: HTMLElement): void {
           const quality = Number(btn.dataset.q) as ReviewQuality;
           const { state, retained } = gradeCard(item.state, quality);
           if (retained) goodCount += 1;
+          if (quality === 1) {
+            void awardMistakePoints()
+              .then((result) => {
+                toast(
+                  result.awarded > 0
+                    ? `+${result.awarded} نقطة على المحاولة — رصيد اليوم ${result.dailyPoints} من ${result.dailyCap}`
+                    : `سقف نقاط اليوم بلغ ${result.dailyCap} — غداً رصيد جديد`
+                );
+              })
+              .catch(() => {});
+          }
           void recordReview(card.id, state).then(() => {
             index += 1;
             if (index < queue.length) {

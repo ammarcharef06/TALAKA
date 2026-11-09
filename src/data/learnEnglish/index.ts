@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
    طَلَاقَة — واجهة بيانات Learn-English المولّدة
    المحتوى هنا مولّد آلياً من content/learn-english/*.json.
-   ⚠️ لا يُدمج في الدروس الـ42 قبل توقيع أوراق المراجعة الثلاث
-   (content/learn-english/review/) وموافقة المالك الصريحة.
+   ✅ اعتمد المالك أوراق المراجعة الثلاث كتابياً في 2026-11-08،
+   وبدأ دمج S0–B1 في الدروس الـ42 القائمة (تكثيف لا إلغاء).
    ═══════════════════════════════════════════════════════════════ */
 
 import { LEARN_ENGLISH_UNITS } from './curriculum.generated';
@@ -17,11 +17,11 @@ export { LEARN_ENGLISH_READINGS } from './readings.generated';
 export const LEARN_ENGLISH_STAGES = ['S0', 'A1', 'A2', 'B1'] as const;
 export type LearnEnglishScopeStage = (typeof LEARN_ENGLISH_STAGES)[number];
 
-/** حالة المراجعة: لا تُغيّر إلا بعد توقيع المالك على الأوراق الثلاث. */
-export const LEARN_ENGLISH_REVIEW_STATUS = 'pending-owner-review' as const;
+/** حالة المراجعة: اعتماد المالك الكتابي في 2026-11-08 بعد مراجعة الأوراق الثلاث. */
+export const LEARN_ENGLISH_REVIEW_STATUS = 'owner-approved-2026-11-08' as const;
 
-/** بوابة الدمج: تبقى false حتى الموافقة الصريحة بعد المراجعة البشرية. */
-export const LEARN_ENGLISH_MERGE_ALLOWED = false;
+/** بوابة الدمج: فُتحت بعد الاعتماد الكتابي للمالك — والدمج تكثيف لا إلغاء. */
+export const LEARN_ENGLISH_MERGE_ALLOWED = true;
 
 function normalizeVocabulary(value: string): string {
   return value.trim().toLowerCase().replace(/\s+/g, ' ');

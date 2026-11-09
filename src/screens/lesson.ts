@@ -2,14 +2,210 @@ import { go, registerScreen } from '../router';
 import { sealSVG } from '../ui/seal';
 import { findLesson, allLessonsInOrder, nextLessonAfter } from '../data/academy/course';
 import { cardsForLesson } from '../data/academy/deck';
-import { markLessonComplete, getProgressMap } from '../store/db';
+import { markLessonComplete, getProgressMap, awardMistakePoints } from '../store/db';
 import { session } from '../state';
 import { escapeHtml, toast } from '../ui/confirm';
 import { speakEnglish, stopSpeaking, speechSupported } from '../ui/speak';
 import { SettingsEngine } from '../engine/settings';
 import { buildFluidPlan, FLUID_MODES, type FluidMinutes, type FluidPlan } from '../engine/timeFluid';
+import { learnEnglishUnitsForLesson } from '../data/academy/learnEnglishMerge';
+import type { LearnEnglishUnit } from '../data/learnEnglish/types';
 
 const LETTERS = ['أ', 'ب', 'ج', 'د'];
+
+function stageBadge(stage: string): string {
+  const label = stage === 'S0' ? 'تأسيسي S0' : stage;
+  return `<span class="le-stage le-stage-${stage.toLowerCase()}">${label}</span>`;
+}
+
+function vocabularyHtml(unit: LearnEnglishUnit, listen: (text: string) => string): string {
+  if (unit.vocabulary.length === 0) return '';
+  return `
+    <div class="le-sub">
+      <h3>المفردات <span class="le-count">${unit.vocabulary.length}</span></h3>
+      <div class="le-vocab-grid">
+        ${unit.vocabulary
+          .map(
+            (vocabulary) => `
+          <article class="le-vocab">
+            <div class="le-vocab-head"><b dir="ltr" lang="en">${escapeHtml(vocabulary.en)}</b><span>${escapeHtml(vocabulary.ar)}</span></div>
+            ${vocabulary.pos ? `<small class="le-pos">${escapeHtml(vocabulary.pos)}</small>` : ''}
+            <p class="le-ex-en" dir="ltr" lang="en">${escapeHtml(vocabulary.example.en)}</p>
+            <p class="le-ex-ar">${escapeHtml(vocabulary.example.ar)}</p>
+            ${
+              vocabulary.collocations.length
+                ? `<p class="le-colloc">${vocabulary.collocations
+                    .map((collocation) => `${escapeHtml(collocation.en)} = ${escapeHtml(collocation.ar)}`)
+                    .join(' · ')}</p>`
+                : ''
+            }
+            ${listen(vocabulary.example.en)}
+          </article>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+}
+
+function sentencesHtml(unit: LearnEnglishUnit, listen: (text: string) => string): string {
+  if (unit.sentences.length === 0) return '';
+  return `
+    <div class="le-sub">
+      <h3>جمل الوحدة <span class="le-count">${unit.sentences.length}</span></h3>
+      <ul class="le-sentences">
+        ${unit.sentences
+          .map(
+            (sentence) => `
+          <li>
+            <p dir="ltr" lang="en">${escapeHtml(sentence.en)}</p>
+            <p>${escapeHtml(sentence.ar)}</p>
+            ${listen(sentence.en)}
+          </li>`
+          )
+          .join('')}
+      </ul>
+    </div>`;
+}
+
+function dialogueHtml(unit: LearnEnglishUnit, listen: (text: string) => string): string {
+  if (unit.dialogue.length === 0) {
+    return unit.foundation
+      ? `<div class="le-sub"><h3>الحوار</h3><p class="le-empty">لا يوجد حوار في مصدر S0 التأسيسي — يُبنى داخل طَلَاقة عند الحاجة، ولا ننسب للمصدر ما ليس فيه.</p></div>`
+      : '';
+  }
+  return `
+    <div class="le-sub">
+      <h3>الحوار <span class="le-count">${unit.dialogue.length}</span></h3>
+      <div class="le-dialogue">
+        ${unit.dialogue
+          .map(
+            (line) => `
+          <div class="le-line">
+            <span class="le-who">${escapeHtml(line.who)}</span>
+            <div>
+              <p dir="ltr" lang="en">${escapeHtml(line.en)}</p>
+              <p>${escapeHtml(line.ar)}</p>
+              ${listen(line.en)}
+            </div>
+          </div>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+}
+
+function phoneticsHtml(unit: LearnEnglishUnit, listen: (text: string) => string): string {
+  if (unit.phonetics.length === 0) return '';
+  return `
+    <div class="le-sub">
+      <h3>الصوتيات <span class="le-count">${unit.phonetics.length}</span></h3>
+      <div class="le-phonetics">
+        ${unit.phonetics
+          .map(
+            (phonetic) => `
+          <article class="le-phonetic">
+            <div class="le-phonetic-head"><b dir="ltr" lang="en">${escapeHtml(phonetic.en)}</b><span dir="ltr">${escapeHtml(phonetic.ipa)}</span><span>${escapeHtml(phonetic.ar)}</span></div>
+            ${listen(phonetic.en)}
+            ${phonetic.contrastPairs
+              .map((pair) => `<p class="le-pair"><b>تمييز:</b> <span dir="ltr" lang="en">${escapeHtml(pair.en)}</span> — ${escapeHtml(pair.ar)}</p>`)
+              .join('')}
+            ${phonetic.connectedSpeech
+              .map((pair) => `<p class="le-pair"><b>وصل:</b> <span dir="ltr" lang="en">${escapeHtml(pair.en)}</span> — ${escapeHtml(pair.ar)}</p>`)
+              .join('')}
+            ${phonetic.intonation
+              .map((pair) => `<p class="le-pair"><b>تنغيم:</b> <span dir="ltr" lang="en">${escapeHtml(pair.en)}</span> — ${escapeHtml(pair.ar)}</p>`)
+              .join('')}
+          </article>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+}
+
+function transfersHtml(unit: LearnEnglishUnit): string {
+  if (unit.l1Transfers.length === 0) return '';
+  return `
+    <div class="le-sub">
+      <h3>أخطاء العرب المستهدفة <span class="le-count">${unit.l1Transfers.length}</span></h3>
+      <div class="le-transfers">
+        ${unit.l1Transfers
+          .map(
+            (transfer) => `
+          <article class="le-transfer">
+            <p class="le-wrong" dir="ltr" lang="en">✗ ${escapeHtml(transfer.incorrect)}</p>
+            <p class="le-right" dir="ltr" lang="en">✓ ${escapeHtml(transfer.corrected)}</p>
+            <p>${escapeHtml(transfer.explanationAr)}</p>
+          </article>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+}
+
+function academicHtml(unit: LearnEnglishUnit): string {
+  if (unit.academicFocus.length === 0) return '';
+  return `
+    <div class="le-sub">
+      <h3>المهارات الأكاديمية <span class="le-count">${unit.academicFocus.length}</span></h3>
+      <div class="le-academic">
+        ${unit.academicFocus
+          .map(
+            (term) => `
+          <article class="le-term">
+            <div class="le-term-head"><b dir="ltr" lang="en">${escapeHtml(term.term)}</b><span>${escapeHtml(term.meaningAr)}</span></div>
+            <p dir="ltr" lang="en">${escapeHtml(term.example.en)}</p>
+            <p>${escapeHtml(term.example.ar)}</p>
+            ${term.paraphrasing
+              .map((pair) => `<p class="le-pair"><b>إعادة صياغة:</b> <span dir="ltr" lang="en">${escapeHtml(pair.original)} → ${escapeHtml(pair.paraphrase)}</span></p>`)
+              .join('')}
+            ${term.idioms.map((idiom) => `<p class="le-pair"><b>تعبير:</b> <span dir="ltr" lang="en">${escapeHtml(idiom.phrase)}</span> — ${escapeHtml(idiom.meaningAr)}</p>`).join('')}
+            ${term.readingAnalysis.map((row) => `<p class="le-pair"><b>تحليل:</b> <span dir="ltr" lang="en">${escapeHtml(row.term)}</span> — ${escapeHtml(row.meaningAr)}</p>`).join('')}
+          </article>`
+          )
+          .join('')}
+      </div>
+    </div>`;
+}
+
+function enrichmentHtml(lessonId: string, listen: (text: string) => string): string {
+  const units = learnEnglishUnitsForLesson(lessonId);
+  if (units.length === 0) return '';
+  return `
+    <section class="lesson-enrichment" aria-label="إثراء Learn-English المدمج">
+      <header class="le-head">
+        <span class="le-kicker">إثراء مدمج · LEARN-ENGLISH</span>
+        <h2>محتوى S0–B1 المدمج</h2>
+        <p>اعتمد المالك أوراق المراجعة في 2026-11-08. هذا الإثراء يُكثّف الدرس ولا يلغي شيئاً منه، ولا يدخل في ميزانية الوقت السريع — افتح ما تشاء منه.</p>
+      </header>
+      ${units
+        .map(
+          (unit, index) => `
+        <details class="le-unit" ${index === 0 ? 'open' : ''}>
+          <summary>
+            <span class="le-summary-title">${stageBadge(unit.stage)} ${escapeHtml(unit.titleAr)}</span>
+            <small dir="ltr" lang="en">${escapeHtml(unit.titleEn)}</small>
+          </summary>
+          <div class="le-body">
+            <p class="le-goal">${escapeHtml(unit.goalAr)}</p>
+            ${
+              unit.grammar.length
+                ? `<div class="le-sub"><h3>قواعد الوحدة</h3><ul class="le-grammar-list">${unit.grammar
+                    .map((grammar) => `<li><b>${escapeHtml(grammar.titleAr)}</b></li>`)
+                    .join('')}</ul><p class="le-note">الشرح الكامل والجداول مدمجة أعلاه في كتل الدرس.</p></div>`
+                : ''
+            }
+            ${vocabularyHtml(unit, listen)}
+            ${sentencesHtml(unit, listen)}
+            ${dialogueHtml(unit, listen)}
+            ${phoneticsHtml(unit, listen)}
+            ${transfersHtml(unit)}
+            ${academicHtml(unit)}
+          </div>
+        </details>`
+        )
+        .join('')}
+    </section>`;
+}
 
 function renderLesson(root: HTMLElement): void {
   const found = session.currentLessonId ? findLesson(session.currentLessonId) : null;
@@ -114,10 +310,13 @@ function renderLesson(root: HTMLElement): void {
       ? (text: string) => `<button class="listen-btn" data-say="${escapeHtml(text)}" aria-label="استمع إلى الجملة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6.5 9H3v6h3.5L11 19Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.2 6a9 9 0 0 1 0 12"/></svg><span>استمع</span></button>`
       : () => '';
 
+    const enrichment = enrichmentHtml(lesson.id, listenButton);
+
     root.innerHTML = shell(`
     <article class="lesson-document">
       <header class="lesson-head">
         <span class="lesson-kicker">الدرس ${globalIndex}</span>
+        ${lesson.learnEnglish ? `<span class="le-lesson-badge">${lesson.learnEnglish.foundation ? 'تأسيسي S0' : lesson.learnEnglish.stages.join(' · ')} · إثراء Learn-English</span>` : ''}
         <h1 class="lesson-title">${escapeHtml(lesson.title)}</h1>
         <div class="lesson-objectives">
           <h2>بعد هذا الدرس ستتقن:</h2>
@@ -144,6 +343,8 @@ function renderLesson(root: HTMLElement): void {
             .join('')}
         </ul>
       </section>
+
+      ${enrichment}
 
       <button id="startPracticeBtn" class="btn btn-primary btn-xl lesson-cta">فهمت واستمعت — ابدأ التدريب (${plan.practice.length} أسئلة)</button>
     </article>`);
@@ -226,7 +427,23 @@ function renderLesson(root: HTMLElement): void {
         explanationBox.hidden = false;
         explanationBox.innerHTML = `
           <div class="explanation-head ${correct ? 'is-correct' : 'is-wrong'}">${correct ? 'أحسنت' : 'خطأ شائع — راجع وأكمل'}</div>
-          <p class="explanation-text">${escapeHtml(item.explanation)}</p>`;
+          <p class="explanation-text">${escapeHtml(item.explanation)}</p>
+          ${correct ? '' : '<p class="points-award" id="practicePoints" aria-live="polite">جارٍ حساب نقاط المحاولة…</p>'}`;
+        if (!correct) {
+          const pointsLine = explanationBox.querySelector<HTMLElement>('#practicePoints');
+          void awardMistakePoints()
+            .then((result) => {
+              if (!pointsLine) return;
+              pointsLine.textContent =
+                result.awarded > 0
+                  ? `+${result.awarded} نقطة على المحاولة — رصيد اليوم ${result.dailyPoints} من ${result.dailyCap}`
+                  : `بلغت سقف نقاط اليوم (${result.dailyCap}) — غداً رصيد جديد. المهم أنك حاولت.`;
+              pointsLine.classList.toggle('points-capped', result.capped && result.awarded === 0);
+            })
+            .catch(() => {
+              pointsLine?.remove();
+            });
+        }
         root.querySelector<HTMLElement>('.exam-bar-fill')!.style.width = `${((index + 1) / total) * 100}%`;
         nextBtn.hidden = false;
         nextBtn.focus();

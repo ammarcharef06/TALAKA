@@ -3,6 +3,12 @@
    محتوى مكتوب ومعاير يدوياً: الفصحى العربية للشرح، إنجليزية حقيقية للتطبيق
    ═══════════════════════════════════════════════════════════════ */
 import type { Unit } from '../../types';
+import {
+  learnEnglishForLesson,
+  learnEnglishBlocksForLesson,
+  learnEnglishExamplesForLesson,
+  learnEnglishPracticeForLesson,
+} from './learnEnglishMerge';
 
 export const UNIT_01: Unit = {
   id: 'm0-first-steps',
@@ -2218,7 +2224,27 @@ export const UNIT_07: Unit = {
   ],
 };
 
-export const UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05, UNIT_06, UNIT_07];
+/**
+ * المنهج الكامل: 42 درساً في 7 محطات.
+ * دروس المحطات 1–4 (m0–m3) تحمل إثراء Learn-English (S0–B1) — تكثيف لا إلغاء.
+ * المحطات 5–7 (B2–C2) تبقى على محتوى TALAQA الأصلي.
+ */
+const RAW_UNITS: Unit[] = [UNIT_01, UNIT_02, UNIT_03, UNIT_04, UNIT_05, UNIT_06, UNIT_07];
+
+export const UNITS: Unit[] = RAW_UNITS.map((unit) => ({
+  ...unit,
+  lessons: unit.lessons.map((lesson) => {
+    const learnEnglish = learnEnglishForLesson(lesson.id);
+    if (!learnEnglish) return lesson;
+    return {
+      ...lesson,
+      blocks: [...lesson.blocks, ...learnEnglishBlocksForLesson(lesson.id)],
+      examples: [...lesson.examples, ...learnEnglishExamplesForLesson(lesson.id)],
+      practice: [...lesson.practice, ...learnEnglishPracticeForLesson(lesson.id)],
+      learnEnglish,
+    };
+  }),
+}));
 
 /** مرجعية سريعة: البحث عن درس بمعرفه */
 export function findLesson(id: string): { unit: Unit; lesson: Unit['lessons'][number] } | null {

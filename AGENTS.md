@@ -10,7 +10,7 @@
 
 - **طَلَاقَة (TALAQA — AREN)**: أكاديمية العرب السيادية للغة الإنجليزية — توأم رقمي لمؤسسة تعليمية عريقة، End-to-End من **S0 إلى C2**.
 - تطبيق ويب **static / offline-first (PWA)** — بلا خادم، بلا حساب، بلا تكلفة، بلا تتبع، بلا مفتاح API.
-- المحتوى أصلي ومكتوب خصيصاً لعلاج أخطاء العرب — **مراجَع بشرياً بالكامل منذ 2026-11-06** (المحتوى الأساسي السابق). أي محتوى جديد بعد هذا التاريخ يُوسم بأنه ينتظر المراجعة البشرية حتى تُتم فعلاً.
+- المحتوى أصلي ومكتوب خصيصاً لعلاج أخطاء العرب — **مراجَع بشرياً بالكامل منذ 2026-11-06** (المحتوى الأساسي السابق). أي محتوى جديد بعد هذا التاريخ يُوسم بأنه ينتظر المراجعة البشرية حتى تُتم فعلاً — باستثناء محتوى Learn-English (S0–B1) الذي **اعتمده المالك كتابياً في 2026-11-08** ودُمج تكثيفاً في الدروس الـ42 القائمة.
 - المستودع المرجعي هو `docs/PLAN.md` (الخطة الرسمية + جدول المراحل M1..) — اقرأه قبل أي تغيير جوهري.
 - **المرجع الأعلى للرؤية هو `docs/VISION.md`** — النص الأصلي لصاحب المشروع، محفوظ حرفياً. أي قرار يجب أن يخدم نقطة من نقاطه.
 
@@ -32,13 +32,13 @@ npm run preview     # معاينة نسخة الإنتاج
 | المسار | ما بداخله |
 |---|---|
 | `src/screens/` | شاشة لكل جناح (`gate`, `acceptance`, `exam`, `building`, `lesson`, `review`, `cafe`, `examHall`, `transcript`, `certificate`, `verify`, `library`, `career`, `interview`, `cv`, `settings`…) |
-| `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) · `interview.ts` (تقييم مقابلة حتمي) · `settings.ts` (إعدادات + PIN) · `timeFluid.ts` (وقت سائل 10/20/60) |
-| `src/data/` | `items/` (بنك المعايرة 145 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) · `learnEnglish/` (محتوى S0–B1 مولّد — **غير مدمج في الدروس**) |
-| `src/store/db.ts` | IndexedDB — الإصدار 8 (`students, meta, progress, srs-cards, exams, keys, certificates, library, career, cv-profile, settings`) |
+| `src/engine/` | `placement.ts` (لوجستي/Elo) · `levelExam.ts` (6 امتحانات معتمدة) · `srs.ts` (SM-2) · `certificate.ts` (ECDSA P-256) · `voice.ts` (Web Speech) · `interview.ts` (تقييم مقابلة حتمي) · `settings.ts` (إعدادات + PIN) · `timeFluid.ts` (وقت سائل 10/20/60) · `gamification.ts` (نقاط وأوسمة محلية) |
+| `src/data/` | `items/` (بنك المعايرة 145 س) · `academy/course.ts` (7 محطات / 42 درساً) · `academy/learnEnglishMerge.ts` (خريطة دمج S0–B1) · `academy/deck.ts` (263 بطاقة) · `library/readers.ts` (14 نصاً بمستويات CEFR) · `career/scenarios.ts` (4 مقابلات / 32 سؤالاً) · `learnEnglish/` (محتوى S0–B1 مولّد — **مدمج في m0–m3**) |
+| `src/store/db.ts` | IndexedDB — الإصدار 9 (`students, meta, progress, srs-cards, exams, keys, certificates, library, career, cv-profile, settings, gamification`) |
 | `src/ui/` | الختم (`seal.ts`) · `speak.ts` · `confirm.ts` (`escapeHtml`, `toast`) · `pin.ts` (نافذة PIN) |
 | `tests/` | مستوى لكل مجال — سلامة المحتوى تُختبر آلياً (word bands، خيارات/إجابات، فريدة المعرفات) |
 | `tools/` | `validate-items.mjs` · `download-fonts.ps1` · `import/learn-english.mjs` (استخراج) · `import/build-learn-english.mjs` (توليد TypeScript والأوراق) |
-| `content/learn-english/` | JSON مطبّع + `EXTRACTION_REPORT.md` + `review/` (أوراق المراجعة البشرية) — **لا دمج قبل توقيع المالك** |
+| `content/learn-english/` | JSON مطبّع + `EXTRACTION_REPORT.md` + `review/` (أوراق المراجعة البشرية) — **اعتمدها المالك كتابياً 2026-11-08 ودُمجت S0–B1** |
 
 ## 3. قواعد غير قابلة للتفاوض
 
@@ -47,7 +47,7 @@ npm run preview     # معاينة نسخة الإنتاج
 - **لا تصف محركاً حتمياً بأنه «وكيل ذكي»**؛ «الوكيل/المعلم الافتراضي» يوصَف بهما فقط ما يعمل LLM فعلاً (طبقات 1–3).
 - **لا واجهات تعلّم وهمية**: الجناح إما مبني ويفتح، أو مسموح اسمه بحالة «يُفتتح قريباً» صادقة، أو يُشطب.
 - **لا تعدّل `src/data/items/*.json` دون `npm run validate`**؛ أي محتوى جديد يمر عبر اختبارات `tests/`.
-- **بوابة Learn-English**: لا يُدمج المحتوى المولّد في `course.ts` قبل توقيع المالك على أوراق المراجعة الثلاث (`content/learn-english/review/`) وتغيير `LEARN_ENGLISH_MERGE_ALLOWED` إلى `true`؛ الملفات `*.generated.ts` لا تُعدّل يدوياً بل تُعاد من JSON.
+- **Learn-English المدمج**: المحتوى المولّد مدمج في دروس `m0–m3` فقط (تكثيف لا إلغاء) بعد الاعتماد الكتابي للمالك في 2026-11-08 (`LEARN_ENGLISH_MERGE_ALLOWED = true`)؛ لا تُلغِ درساً ولا تستبدل المحطات 5–7 (B2–C2)؛ الملفات `*.generated.ts` لا تُعدّل يدوياً بل تُعاد من JSON عبر `tools/import/build-learn-english.mjs`.
 - **العربية أولاً في الواجهة** (RTL، فصحى بلا لهجات) — المحتوى التعليمي إنجليزي مع شرح عربي.
 - **مصدر الحقيقة الوحيد بيانات الطالب = IndexedDB** — لا تخزّن بيانات أساسية في localStorage.
 - **حق التصدير دائماً**: زر «تنزيل بطاقتي (JSON)» لا يُكسر ولا يُزاح في أي إصدار — سيادة الطالب خط أحمر.
@@ -76,8 +76,8 @@ npm run preview     # معاينة نسخة الإنتاج
 ```js
 // من browser evaluate — بذر طالب كامل (نفس النمط في كل E2E)
 const db = await new Promise((res, rej) => {
-  const req = indexedDB.open('talaqa', 8);
-  req.onupgradeneeded = () => { /* 11 stores */ };
+  const req = indexedDB.open('talaqa', 9);
+  req.onupgradeneeded = () => { /* 12 stores */ };
   req.onsuccess = () => res(req.result); req.onerror = () => rej(req.error);
 });
 // ... إدراج student + meta(currentStudentId) + progress + exams ...
@@ -95,11 +95,12 @@ const db = await new Promise((res, rej) => {
 - **الإعدادات**: مصدرها الوحيد مخزن `settings` في IndexedDB؛ `SettingsEngine` يملك التطبيع والحفظ والتطبيق، وطابور كتابة واحد يمنع تسابق النقرات. لا localStorage لبيانات الطالب.
 - **PIN**: PBKDF2-SHA-256 بملح عشوائي — قفل شاشة محلي، **ليس تشفيراً لقاعدة البيانات**؛ لا يُوصف بأمان مطلق.
 - **الوقت السائل**: حتمي ومبني على بيانات الدرس؛ 10 يضغط و60 يوسّع، وكل هدف تعليمي محفوظ في الأوضاع الثلاثة (اختبار آلي على كل الدروس).
-- **النسخة الاحتياطية الكاملة**: تشمل بيانات الطالب والإعدادات، **ولا تشمل مفتاح التوقيع الخاص**؛ الهوية العامة إخفاء عرض فقط وملف الشهادة الموقّع يبقى كاملاً.
+- **التحفيز**: حتمي ومحلي بالكامل في `gamification.ts` + مخزن `gamification` (IndexedDB v9)؛ نقطتان لكل إجابة خاطئة بسقف 20 نقطة في اليوم المحلي، والأوسمة مشتقة من إنجازات حقيقية لا من نقرات. النقاط ليست تقييماً أكاديمياً ولا تُرسل لأي خادم. الطلاب القدامى ينالون أوسمة تاريخهم بصمت والنقاط تبدأ من صفر.
+- **النسخة الاحتياطية الكاملة**: تشمل بيانات الطالب والإعدادات **والتحفيز**، **ولا تشمل مفتاح التوقيع الخاص**؛ الهوية العامة إخفاء عرض فقط وملف الشهادة الموقّع يبقى كاملاً.
 
 ## 8. الخريطة المعلنة للقادم (من `docs/PLAN.md`)
 
-Career Hub (منفّذ في 0.14.0 — محتواه آلي الكتابة وينتظر المراجعة البشرية) → **مكتب شؤون الطلاب + الوقت السائل (منفّذ في 0.15.0)** → طبقات وكلاء LLM محلية (0 حتمي ← 1 WebLLM اختياري ← 2 Ollama ← 3 مفتاح المستخدم) → إذاعة محلية بلا بيانات اجتماعية → قرار DID/بلوكتشين مستقل → نشر حي على GitHub Pages/Cloudflare/IPFS.
+Career Hub (منفّذ في 0.14.0 — محتواه آلي الكتابة وينتظر المراجعة البشرية) → **مكتب شؤون الطلاب + الوقت السائل (0.15.0)** → **دمج Learn-English S0–B1 تكثيفاً (0.17.0)** → **التحفيز المحلي: نقاط وأوسمة (0.17.0)** → مراجعة الأسئلة السبعة والثلاثين ومحتوى المسار المهني بشرياً → توسيع تحديد المستوى إلى 24 سؤالاً + قسم استماع → طبقات وكلاء LLM محلية (0 حتمي ← 1 WebLLM اختياري ← 2 Ollama ← 3 مفتاح المستخدم) → إذاعة محلية بلا بيانات اجتماعية → قرار DID/بلوكتشين مستقل → نشر حي على GitHub Pages/Cloudflare/IPFS.
 
 ## 9. رموز الجودة (Code Review)
 

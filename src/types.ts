@@ -153,6 +153,15 @@ export interface Lesson {
   blocks: LessonBlock[];
   examples: LessonExample[];
   practice: PracticeItem[];
+  /** إثراء Learn-English المدمج — مرجع لوحدات S0–B1 المعتمدة (تكثيف لا إلغاء). */
+  learnEnglish?: LessonLearnEnglish;
+}
+
+/** مرجع الإثراء المدمج في الدرس — البيانات نفسها في src/data/learnEnglish. */
+export interface LessonLearnEnglish {
+  unitIds: string[];
+  stages: ('S0' | 'A1' | 'A2' | 'B1')[];
+  foundation: boolean;
 }
 
 export interface Unit {
@@ -228,4 +237,28 @@ export interface AppSettings {
 
 export interface SettingsRecord extends AppSettings {
   id: 'settings';
+}
+
+/* ── التحفيز (Gamification) — محلي بالكامل ── */
+
+export interface GamificationBadge {
+  id: string;
+  title: string;
+  description: string;
+  earnedAt: string;
+  /** وسام مُنح بصمت من إنجازات سابقة قبل تفعيل نظام التحفيز */
+  legacy: boolean;
+}
+
+export interface GamificationRecord {
+  version: 1;
+  id: 'gamification';
+  /** مجموع نقاط المحاولة مدى الحياة — يبدأ من صفر عند تفعيل النظام */
+  points: number;
+  /** نقاط اليوم الحالي — تُصفَّر تلقائياً عند تغيّر التاريخ المحلي */
+  dailyPoints: number;
+  /** التاريخ المحلي بصيغة YYYY-MM-DD */
+  dailyDate: string;
+  badges: GamificationBadge[];
+  updatedAt: string;
 }
