@@ -121,3 +121,11 @@
 
 ---
 *هذه الوثيقة هي مرجع المشروع. أي تغيير جوهري يُناقش مع صاحب المشروع ويُحدَّث هنا أولاً.*
+
+
+## التحقق المحلي وإبلاغ GitHub
+
+- أضيف الأمر `npm run ci:local` لتشغيل `npm run validate` ثم `npm run build` ثم `npm test` على جهاز المطوّر.
+- بعد التشغيل، يرسل GitHub CLI حالة commit بالسياق `local/validate-build-test`. يتطلب ذلك تثبيت `gh` وتسجيل الدخول بصلاحية إنشاء commit statuses.
+- أزيل `.github/workflows/validate.yml` لمنع تشغيل مجموعة الفحوصات على runner سحابي.
+- **قيد قائم:** `.github/workflows/pages.yml` ما زال يبني نسخة GitHub Pages على GitHub. لذلك لم يكتمل بعد شرط تنفيذ كل عمليات البناء محلياً؛ يلزم نقل بناء/نشر Pages إلى مسار محلي منفصل بعد التحقق من إعدادات Pages.
