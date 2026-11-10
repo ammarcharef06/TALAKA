@@ -26,7 +26,14 @@ const ACADEMIC_FIXTURES: Record<string, unknown[]> = {
   'learning-plans': [{ id: 'plan1' }],
 };
 
-function backup(dbVersion: number, academic = false): {\n  format: string;\n  version: number;\n  exportedBy: string;\n  exportedAt: string;\n  dbVersion: number;\n  stores: Record<string, unknown[]>;\n} {
+function backup(dbVersion: number, academic = false): {
+  format: string;
+  version: number;
+  exportedBy: string;
+  exportedAt: string;
+  dbVersion: number;
+  stores: Record<string, unknown[]>;
+} {
   return {
     format: 'talaqa-backup',
     version: 1,
