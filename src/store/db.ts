@@ -722,6 +722,9 @@ export function validateBackupPayload(value: unknown): TalaqaBackup {
   if (value.dbVersion > DB_VERSION) {
     throw new Error('هذه النسخة الاحتياطية أحدث من إصدار طَلَاقة الحالي');
   }
+  if (value.dbVersion < 9) {
+    throw new Error('لا يمكن استيراد هذا الإصدار القديم بأمان قبل التحقق من مخططه التاريخي');
+  }
   if (!isRecord(value.stores)) throw new Error('مخازن النسخة الاحتياطية غير صالحة');
 
   const sourceStores = value.stores;
@@ -730,10 +733,7 @@ export function validateBackupPayload(value: unknown): TalaqaBackup {
     if (!allowed.has(name)) throw new Error(`مخزن غير معروف في النسخة: ${name}`);
     if (!Array.isArray(sourceStores[name])) throw new Error(`بيانات المخزن ${name} غير صالحة`);
   }
-  const requiredLegacyStores = value.dbVersion >= 9
-    ? LEGACY_EXPORT_STORES
-    : LEGACY_EXPORT_STORES.filter((name) => name !== STORE_GAMIFICATION);
-  for (const name of requiredLegacyStores) {
+  for (const name of LEGACY_EXPORT_STORES) {
     if (!Array.isArray(sourceStores[name])) throw new Error(`النسخة ناقصة: مخزن ${name} مطلوب`);
   }
   if (value.dbVersion >= 10) {
@@ -759,7 +759,7 @@ export function validateBackupPayload(value: unknown): TalaqaBackup {
     normalizedStores[name] = rows;
   }
 
-  // نسخ v8/v9 لا تحتوي ملف الطالب الأكاديمي؛ يُعاد بناؤه من الحقول القديمة المعروفة فقط.
+  // نسخة v9 لا تحتوي ملف الطالب الأكاديمي؛ يُعاد بناؤه من الحقول القديمة المعروفة فقط.
   if (value.dbVersion < 10) {
     normalizedStores[STORE_STUDENT_PROFILES] = normalizedStores[STORE_STUDENTS]
       .map(createLegacyStudentProfile)
