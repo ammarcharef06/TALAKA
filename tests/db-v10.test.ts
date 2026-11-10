@@ -62,6 +62,14 @@ describe('التحقق من النسخ الاحتياطية قبل الاستي�
     expect(valid.stores.students).toHaveLength(1);
   });
 
+  it('يقبل نسخة v8 التي سبقت إضافة مخزن التحفيز', () => {
+    const legacyV8 = backup(8);
+    delete legacyV8.stores.gamification;
+    const valid = validateBackupPayload(legacyV8);
+    expect(valid.stores.gamification).toEqual([]);
+    expect(valid.stores.students).toHaveLength(1);
+  });
+
   it('يقبل نسخة v10 فقط عند وجود المخازن السبعة كلها', () => {
     expect(() => validateBackupPayload(backup(10))).toThrow(/ناقص/);
     const valid = validateBackupPayload(backup(10, true));
