@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "validate": "node tools/validate-items.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "ci:local": "node tools/local-ci.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.0",
