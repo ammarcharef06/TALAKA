@@ -48,7 +48,7 @@ npm run dev        # http://localhost:5173
 npm run validate   # متحقق بنك الأسئلة (بنية، تكرار، تطابق الإجابات)
 npm run build      # فحص الأنواع + بناء حزمة static في dist/
 npm test           # 124 اختباراً آلياً (تحديد المستوى، SRS، المنهج، النطق، الامتحانات المعتمدة، الشهادة الموقعة، المكتبة، المسار المهني، الإعدادات، الوقت السائل، بيانات Learn-English ودمجها، التحفيز)
-npm run preview    # معاينة نسخة الإنتاج
+npm run preview    # معاينة نسخة الإنتاج\nnpm run ci:local    # validate + build + test محلياً ثم نشر النتيجة إلى GitHub (يتطلب GitHub CLI مسجلاً)
 ```
 
 ## البنية
