@@ -58,7 +58,7 @@ describe('IndexedDB v10 schema', () => {
 describe('التحقق من النسخ الاحتياطية قبل الاستيراد', () => {
   it('يقبل نسخة v9 القديمة ويهيئ المخازن الأكاديمية الجديدة كمصفوفات فارغة', () => {
     const valid = validateBackupPayload(backup(9));
-    for (const store of ACADEMIC_STORES) expect(valid.stores[store]).toEqual([]);
+    for (const store of ACADEMIC_STORES.filter((name) => name !== 'student-profiles')) expect(valid.stores[store]).toEqual([]);
     expect(valid.stores.students).toHaveLength(1);
     expect(valid.stores['student-profiles']).toHaveLength(1);
   });
