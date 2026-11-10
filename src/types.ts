@@ -262,3 +262,137 @@ export interface GamificationRecord {
   badges: GamificationBadge[];
   updatedAt: string;
 }
+
+
+/* ── القبول والتشخيص والخطة الأكاديمية — مخطط IndexedDB v10 ── */
+
+export type AdmissionSessionStatus = 'in-progress' | 'completed' | 'abandoned';
+export type AdmissionResponseMode = 'choice' | 'text' | 'system';
+export type AssessmentKind = 'literacy-screen' | 'audio-first-diagnostic' | 'academic-placement';
+export type AssessmentSessionStatus = 'in-progress' | 'completed' | 'abandoned';
+export type SkillMasteryStatus = 'not-assessed' | 'introduced' | 'developing' | 'mastered' | 'review-due';
+export type LearningPlanStatus = 'active' | 'paused' | 'archived';
+
+export interface StudentProfile {
+  version: 1;
+  studentId: string;
+  ageBand: string | null;
+  goals: {
+    primary: string | null;
+    secondary: string[];
+    source: 'legacy-single-goal' | 'admission';
+  };
+  availability: {
+    dailyMinutes: number | null;
+    source: 'legacy-student-record' | 'admission';
+  };
+  preferences: {
+    instructionLanguage: 'ar';
+    targetAccent: 'en-US';
+    s0AudioFirst: true;
+    progressiveReveal: true;
+    voiceRecording: false;
+    voiceAssessment: false;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdmissionSessionRecord {
+  version: 1;
+  id: string;
+  studentId: string | null;
+  flowVersion: string;
+  status: AdmissionSessionStatus;
+  currentNodeId: string;
+  selectedPath: string | null;
+  startedAt: string;
+  updatedAt: string;
+  completedAt?: string;
+}
+
+export interface AdmissionResponseRecord {
+  version: 1;
+  id: string;
+  sessionId: string;
+  studentId: string | null;
+  sequence: number;
+  nodeId: string;
+  questionId: string;
+  responseMode: AdmissionResponseMode;
+  selectedChoiceId: string | null;
+  responseText?: string;
+  evidence?: string;
+  answeredAt: string;
+}
+
+export interface AssessmentSessionRecord {
+  version: 1;
+  id: string;
+  studentId: string | null;
+  admissionSessionId: string | null;
+  kind: AssessmentKind;
+  status: AssessmentSessionStatus;
+  route: string;
+  currentSectionId: string | null;
+  startedAt: string;
+  updatedAt: string;
+  completedAt?: string;
+}
+
+export interface AssessmentDomainResult {
+  domainId: string;
+  status: 'not-assessed' | 'developing' | 'functional' | 'mastered';
+  estimate: number | null;
+  evidenceCount: number;
+}
+
+export interface AssessmentResultRecord {
+  version: 1;
+  id: string;
+  sessionId: string;
+  studentId: string | null;
+  kind: AssessmentKind;
+  recommendedEntryLevel: Cefr;
+  confidence: Confidence;
+  provisional: true;
+  domains: AssessmentDomainResult[];
+  methodologyVersion: string;
+  createdAt: string;
+}
+
+export interface SkillMasteryRecord {
+  version: 1;
+  id: string;
+  studentId: string;
+  skillId: string;
+  status: SkillMasteryStatus;
+  evidenceCount: number;
+  lastEvidenceAt: string | null;
+  nextReviewAt: string | null;
+  updatedAt: string;
+}
+
+export interface LearningPlanBlock {
+  id: string;
+  activityType: 'learn' | 'practice' | 'review' | 'assessment' | 'break';
+  durationMinutes: number;
+  skillIds: string[];
+  contentIds: string[];
+}
+
+export interface LearningPlanRecord {
+  version: 1;
+  id: string;
+  studentId: string;
+  sourceAssessmentResultId: string;
+  status: LearningPlanStatus;
+  dailyAvailableMinutes: number;
+  scheduleMode: 'fixed' | 'flexible';
+  dailyBlocks: LearningPlanBlock[];
+  prioritySkillIds: string[];
+  reviewSchedule: { skillId: string; dueAt: string }[];
+  rulesetVersion: string;
+  createdAt: string;
+  supersedesPlanId: string | null;
+}
