@@ -1,5 +1,5 @@
 /* طَلَاقَة — التخزين المحلي: IndexedDB على جهازك وحدك. لا خادم، لا حساب، لا تتبع. */
-import type { AppSettings, Cefr, CvProfile, GamificationRecord, LevelExamResult, SettingsRecord, StudentRecord } from '../types';
+import type { AppSettings, Cefr, CvProfile, GamificationRecord, LevelExamResult, SettingsRecord, StudentProfile, StudentRecord } from '../types';
 import type { SignedCertificate } from '../engine/certificate';
 import type { InterviewResult } from '../engine/interview';
 import type { SrsState } from '../engine/srs';
@@ -14,7 +14,7 @@ import {
 } from '../engine/gamification';
 
 const DB_NAME = 'talaqa';
-export const DB_VERSION = 9;
+export const DB_VERSION = 10;
 const STORE_STUDENTS = 'students';
 const STORE_META = 'meta';
 const STORE_PROGRESS = 'progress';
@@ -27,9 +27,27 @@ const STORE_CAREER = 'career';
 const STORE_CV = 'cv-profile';
 const STORE_SETTINGS = 'settings';
 const STORE_GAMIFICATION = 'gamification';
+const STORE_STUDENT_PROFILES = 'student-profiles';
+const STORE_ADMISSION_SESSIONS = 'admission-sessions';
+const STORE_ADMISSION_RESPONSES = 'admission-responses';
+const STORE_ASSESSMENT_SESSIONS = 'assessment-sessions';
+const STORE_ASSESSMENT_RESULTS = 'assessment-results';
+const STORE_SKILL_MASTERY = 'skill-mastery';
+const STORE_LEARNING_PLANS = 'learning-plans';
 
-/** المخازن التي تدخل النسخة الاحتياطية — مفتاح التوقيع الخاص يبقى على الجهاز وحده. */
-export const EXPORT_STORES = [
+/** المخازن الأكاديمية السبعة المضافة في v10. */
+export const ACADEMIC_STORES = [
+  STORE_STUDENT_PROFILES,
+  STORE_ADMISSION_SESSIONS,
+  STORE_ADMISSION_RESPONSES,
+  STORE_ASSESSMENT_SESSIONS,
+  STORE_ASSESSMENT_RESULTS,
+  STORE_SKILL_MASTERY,
+  STORE_LEARNING_PLANS,
+] as const;
+
+/** مخازن النسخ القديمة v9 وما قبلها — مطلوبة عند استيراد نسخ v1 القديمة. */
+const LEGACY_EXPORT_STORES = [
   STORE_STUDENTS,
   STORE_META,
   STORE_PROGRESS,
@@ -42,6 +60,30 @@ export const EXPORT_STORES = [
   STORE_SETTINGS,
   STORE_GAMIFICATION,
 ] as const;
+
+/** المخازن التي تدخل النسخة الاحتياطية — مفتاح التوقيع الخاص يبقى على الجهاز وحده. */
+export const EXPORT_STORES = [...LEGACY_EXPORT_STORES, ...ACADEMIC_STORES] as const;
+
+const BACKUP_KEY_PATHS: Record<string, string> = {
+  [STORE_STUDENTS]: 'id',
+  [STORE_META]: 'key',
+  [STORE_PROGRESS]: 'lessonId',
+  [STORE_SRS]: 'cardId',
+  [STORE_EXAMS]: 'id',
+  [STORE_CERTS]: 'payload.id',
+  [STORE_LIBRARY]: 'readerId',
+  [STORE_CAREER]: 'id',
+  [STORE_CV]: 'id',
+  [STORE_SETTINGS]: 'id',
+  [STORE_GAMIFICATION]: 'id',
+  [STORE_STUDENT_PROFILES]: 'studentId',
+  [STORE_ADMISSION_SESSIONS]: 'id',
+  [STORE_ADMISSION_RESPONSES]: 'id',
+  [STORE_ASSESSMENT_SESSIONS]: 'id',
+  [STORE_ASSESSMENT_RESULTS]: 'id',
+  [STORE_SKILL_MASTERY]: 'id',
+  [STORE_LEARNING_PLANS]: 'id',
+};
 
 export interface TalaqaBackup {
   format: 'talaqa-backup';
@@ -78,6 +120,59 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_CV)) db.createObjectStore(STORE_CV, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_SETTINGS)) db.createObjectStore(STORE_SETTINGS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_GAMIFICATION)) db.createObjectStore(STORE_GAMIFICATION, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_STUDENT_PROFILES)) db.createObjectStore(STORE_STUDENT_PROFILES, { keyPath: 'studentId' });
+      if (!db.objectStoreNames.contains(STORE_ADMISSION_SESSIONS)) db.createObjectStore(STORE_ADMISSION_SESSIONS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_ADMISSION_RESPONSES)) db.createObjectStore(STORE_ADMISSION_RESPONSES, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_ASSESSMENT_SESSIONS)) db.createObjectStore(STORE_ASSESSMENT_SESSIONS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_ASSESSMENT_RESULTS)) db.createObjectStore(STORE_ASSESSMENT_RESULTS, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_SKILL_MASTERY)) db.createObjectStore(STORE_SKILL_MASTERY, { keyPath: 'id' });
+      if (!db.objectStoreNames.contains(STORE_LEARNING_PLANS)) db.createObjectStore(STORE_LEARNING_PLANS, { keyPath: 'id' });
+
+      // ترحيل وصفي لا يمس سجل الطالب: ينشئ ملفاً أكاديمياً أولياً من الحقول القديمة المتاحة فقط.
+      const oldVersion = (event as IDBVersionChangeEvent).oldVersion;
+      if (oldVersion < 10 && req.transaction && db.objectStoreNames.contains(STORE_STUDENTS)) {
+        const students = req.transaction.objectStore(STORE_STUDENTS);
+        const profiles = req.transaction.objectStore(STORE_STUDENT_PROFILES);
+        const cursorRequest = students.openCursor();
+        cursorRequest.onsuccess = () => {
+          const cursor = cursorRequest.result;
+          if (!cursor) return;
+          const student = cursor.value as Partial<StudentRecord>;
+          if (typeof student.id === 'string' && student.id.trim()) {
+            const legacyGoal = typeof student.goal === 'string' && student.goal.trim() && student.goal.trim() !== '—'
+              ? student.goal.trim()
+              : null;
+            const ageBand = typeof student.ageBand === 'string' && student.ageBand.trim() && student.ageBand.trim() !== '—'
+              ? student.ageBand.trim()
+              : null;
+            const dailyMinutes = typeof student.dailyMinutes === 'number' && Number.isFinite(student.dailyMinutes) && student.dailyMinutes > 0
+              ? student.dailyMinutes
+              : null;
+            const migratedAt = typeof student.registeredAt === 'string' && student.registeredAt
+              ? student.registeredAt
+              : new Date().toISOString();
+            const profile: StudentProfile = {
+              version: 1,
+              studentId: student.id,
+              ageBand,
+              goals: { primary: legacyGoal, secondary: [], source: 'legacy-single-goal' },
+              availability: { dailyMinutes, source: 'legacy-student-record' },
+              preferences: {
+                instructionLanguage: 'ar',
+                targetAccent: 'en-US',
+                s0AudioFirst: true,
+                progressiveReveal: true,
+                voiceRecording: false,
+                voiceAssessment: false,
+              },
+              createdAt: migratedAt,
+              updatedAt: migratedAt,
+            };
+            profiles.put(profile);
+          }
+          cursor.continue();
+        };
+      }
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error ?? new Error('تعذر فتح قاعدة البيانات المحلية'));
@@ -591,7 +686,83 @@ export async function exportAllDataFile(): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
-/** استيراد نسخة كاملة: يستبدل مخازن بيانات الطالب، ويترك مفتاح التوقيع المحلي في مكانه */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function readBackupKey(value: Record<string, unknown>, keyPath: string): unknown {
+  let current: unknown = value;
+  for (const part of keyPath.split('.')) {
+    if (!isRecord(current)) return undefined;
+    current = current[part];
+  }
+  return current;
+}
+
+/**
+ * يتحقق من النسخة كاملة قبل فتح معاملة الكتابة:
+ * - النسخ القديمة v1/v9 مقبولة مع المخازن القديمة الإلزامية.
+ * - النسخ v10 تتطلب المخازن الأكاديمية السبعة كلها.
+ * - لا تُقبل سجلات مجهولة أو مفاتيح مفقودة/مكررة.
+ */
+export function validateBackupPayload(value: unknown): TalaqaBackup {
+  if (!isRecord(value) || value.format !== 'talaqa-backup' || value.version !== 1) {
+    throw new Error('الملف ليس نسخة احتياطية صالحة من طَلَاقة');
+  }
+  if (value.exportedBy !== 'talaqa' || typeof value.exportedAt !== 'string' || !value.exportedAt.trim()) {
+    throw new Error('بيانات مصدر النسخة الاحتياطية غير صالحة');
+  }
+  if (typeof value.dbVersion !== 'number' || !Number.isInteger(value.dbVersion) || value.dbVersion < 1) {
+    throw new Error('إصدار قاعدة البيانات في النسخة غير صالح');
+  }
+  if (value.dbVersion > DB_VERSION) {
+    throw new Error('هذه النسخة الاحتياطية أحدث من إصدار طَلَاقة الحالي');
+  }
+  if (!isRecord(value.stores)) throw new Error('مخازن النسخة الاحتياطية غير صالحة');
+
+  const sourceStores = value.stores;
+  const allowed = new Set<string>(EXPORT_STORES);
+  for (const name of Object.keys(sourceStores)) {
+    if (!allowed.has(name)) throw new Error(`مخزن غير معروف في النسخة: ${name}`);
+    if (!Array.isArray(sourceStores[name])) throw new Error(`بيانات المخزن ${name} غير صالحة`);
+  }
+  for (const name of LEGACY_EXPORT_STORES) {
+    if (!Array.isArray(sourceStores[name])) throw new Error(`النسخة ناقصة: مخزن ${name} مطلوب`);
+  }
+  if (value.dbVersion >= 10) {
+    for (const name of ACADEMIC_STORES) {
+      if (!Array.isArray(sourceStores[name])) throw new Error(`النسخة v10 ناقصة: مخزن ${name} مطلوب`);
+    }
+  }
+
+  const normalizedStores: Record<string, unknown[]> = {};
+  for (const name of EXPORT_STORES) {
+    const rows = Array.isArray(sourceStores[name]) ? sourceStores[name] as unknown[] : [];
+    const keyPath = BACKUP_KEY_PATHS[name];
+    const seen = new Set<string>();
+    for (const row of rows) {
+      if (!isRecord(row)) throw new Error(`سجل غير صالح في المخزن ${name}`);
+      const key = readBackupKey(row, keyPath);
+      if (typeof key !== 'string' || !key.trim()) {
+        throw new Error(`مفتاح مفقود أو غير صالح في المخزن ${name} (${keyPath})`);
+      }
+      if (seen.has(key)) throw new Error(`مفتاح مكرر في المخزن ${name}: ${key}`);
+      seen.add(key);
+    }
+    normalizedStores[name] = rows;
+  }
+
+  return {
+    format: 'talaqa-backup',
+    version: 1,
+    exportedBy: 'talaqa',
+    exportedAt: value.exportedAt,
+    dbVersion: value.dbVersion,
+    stores: normalizedStores,
+  };
+}
+
+/** استيراد ذري: لا تُمسح أي بيانات قبل اكتمال التحقق البنيوي من النسخة كلها. */
 export async function importAllData(file: File): Promise<{ students: number; hasSettings: boolean }> {
   const text = await file.text();
   let parsed: unknown;
@@ -600,38 +771,25 @@ export async function importAllData(file: File): Promise<{ students: number; has
   } catch {
     throw new Error('الملف ليس JSON صالحاً');
   }
-  const backup = parsed as Partial<TalaqaBackup>;
-  if (!backup || backup.format !== 'talaqa-backup' || backup.version !== 1 || !backup.stores || typeof backup.stores !== 'object') {
-    throw new Error('الملف ليس نسخة احتياطية صالحة من طَلَاقة');
-  }
+  const backup = validateBackupPayload(parsed);
   const stores = backup.stores;
-  const allowed = new Set<string>(EXPORT_STORES);
-  for (const [name, rows] of Object.entries(stores)) {
-    if (!allowed.has(name)) throw new Error(`مخزن غير معروف في النسخة: ${name}`);
-    if (!Array.isArray(rows)) throw new Error(`بيانات المخزن ${name} غير صالحة`);
-  }
 
   const db = await openDb();
   try {
     await new Promise<void>((resolve, reject) => {
       const t = db.transaction([...EXPORT_STORES], 'readwrite');
-      for (const name of EXPORT_STORES) t.objectStore(name).clear();
-      for (const [name, rows] of Object.entries(stores)) {
+      for (const name of EXPORT_STORES) {
         const store = t.objectStore(name);
-        for (const row of rows) {
-          if (!row || typeof row !== 'object') continue;
-          store.put(row as object);
-        }
+        store.clear();
+        for (const row of stores[name] ?? []) store.put(row);
       }
       t.oncomplete = () => resolve();
       t.onerror = () => reject(t.error ?? new Error('تعذر استيراد النسخة'));
       t.onabort = () => reject(t.error ?? new Error('أُلغيت عملية الاستيراد'));
     });
-    const studentRows = stores[STORE_STUDENTS];
-    const settingsRows = stores[STORE_SETTINGS];
     return {
-      students: Array.isArray(studentRows) ? studentRows.length : 0,
-      hasSettings: Array.isArray(settingsRows) && settingsRows.length > 0,
+      students: stores[STORE_STUDENTS].length,
+      hasSettings: stores[STORE_SETTINGS].length > 0,
     };
   } finally {
     db.close();
@@ -681,6 +839,13 @@ export async function clearAllStudents(): Promise<void> {
     await done(STORE_CV);
     await done(STORE_SETTINGS);
     await done(STORE_GAMIFICATION);
+    await done(STORE_STUDENT_PROFILES);
+    await done(STORE_ADMISSION_SESSIONS);
+    await done(STORE_ADMISSION_RESPONSES);
+    await done(STORE_ASSESSMENT_SESSIONS);
+    await done(STORE_ASSESSMENT_RESULTS);
+    await done(STORE_SKILL_MASTERY);
+    await done(STORE_LEARNING_PLANS);
   } finally {
     db.close();
   }
