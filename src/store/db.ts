@@ -106,7 +106,7 @@ export interface CertificateSigningKeyRecord {
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = () => {
+    req.onupgradeneeded = (event) => {
       const db = req.result;
       if (!db.objectStoreNames.contains(STORE_STUDENTS)) db.createObjectStore(STORE_STUDENTS, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORE_META)) db.createObjectStore(STORE_META, { keyPath: 'key' });
@@ -726,7 +726,10 @@ export function validateBackupPayload(value: unknown): TalaqaBackup {
     if (!allowed.has(name)) throw new Error(`مخزن غير معروف في النسخة: ${name}`);
     if (!Array.isArray(sourceStores[name])) throw new Error(`بيانات المخزن ${name} غير صالحة`);
   }
-  for (const name of LEGACY_EXPORT_STORES) {
+  const requiredLegacyStores = value.dbVersion >= 9
+    ? LEGACY_EXPORT_STORES
+    : LEGACY_EXPORT_STORES.filter((name) => name !== STORE_GAMIFICATION);
+  for (const name of requiredLegacyStores) {
     if (!Array.isArray(sourceStores[name])) throw new Error(`النسخة ناقصة: مخزن ${name} مطلوب`);
   }
   if (value.dbVersion >= 10) {
