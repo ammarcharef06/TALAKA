@@ -26,7 +26,7 @@ const ACADEMIC_FIXTURES: Record<string, unknown[]> = {
   'learning-plans': [{ id: 'plan1' }],
 };
 
-function backup(dbVersion: number, academic = false) {
+function backup(dbVersion: number, academic = false): {\n  format: string;\n  version: number;\n  exportedBy: string;\n  exportedAt: string;\n  dbVersion: number;\n  stores: Record<string, unknown[]>;\n} {
   return {
     format: 'talaqa-backup',
     version: 1,
@@ -83,7 +83,7 @@ describe('التحقق من النسخ الاحتياطية قبل الاستي�
   });
 
   it('يرفض المخازن غير المعروفة والمصفوفات غير الصالحة', () => {
-    const unknown = backup(9) as ReturnType<typeof backup>;
+    const unknown = backup(9);
     unknown.stores.unexpected = [];
     expect(() => validateBackupPayload(unknown)).toThrow(/غير معروف/);
 
