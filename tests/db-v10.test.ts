@@ -70,8 +70,17 @@ describe('التحقق من النسخ الاحتياطية قبل الاستي�
     expect(valid.stores['student-profiles']).toHaveLength(1);
   });
 
-  it('يرفض النسخ الأقدم من v9 إلى أن يُوثّق مخططها التاريخي', () => {
-    expect(() => validateBackupPayload(backup(8))).toThrow(/قديم/);
+  it('يقبل نسخة v8 الموثقة دون مخزن التحفيز الذي أضيف في v9', () => {
+    const legacyV8 = backup(8);
+    delete legacyV8.stores.gamification;
+    const valid = validateBackupPayload(legacyV8);
+    expect(valid.stores.gamification).toEqual([]);
+    expect(valid.stores.students).toHaveLength(1);
+    expect(valid.stores['student-profiles']).toHaveLength(1);
+  });
+
+  it('يرفض الإصدارات الأقدم من v8 التي لم نتحقق من مخططها', () => {
+    expect(() => validateBackupPayload(backup(7))).toThrow(/قديم/);
   });
 
   it('يقبل نسخة v10 فقط عند وجود المخازن السبعة كلها', () => {
