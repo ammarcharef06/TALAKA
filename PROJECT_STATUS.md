@@ -1,12 +1,20 @@
 # PROJECT_STATUS.md — الذاكرة الشاملة لمشروع طَلَاقَة
 
-> **آخر تحديث:** 2026-11-10 — أُنشئ فرع `feat/local-first-validation` لإضافة مشغّل تحقق محلي `npm run ci:local` ينفّذ validate/build/test ويرسل commit status عبر GitHub CLI؛ أزيل workflow التحقق السحابي. **لم يُشغَّل الأمر على جهاز المالك بعد.** Workflow نشر Pages ما زال يبني على GitHub ويحتاج مرحلة مستقلة.\n> **آخر تحديث سابق:** 2026-11-10 — فرع التنفيذ `feat/db-v10-academic-foundation` · الإصدار المستهدف **v0.18.0** · Service Worker `talaqa-v19` · قاعدة IndexedDB **v10** (19 مخزناً) · اختبارات هذه الخطوة: أُضيفت، وأُضيف workflow للتحقق التلقائي من validate/build/test على PR؛ لم تظهر نتيجة تشغيل بعد.
+> **آخر تحديث:** 2026-11-10 — أُنشئ فرع `feat/local-first-validation` لإضافة مشغّل تحقق محلي `npm run ci:local` ينفّذ validate/build/test ويرسل commit status عبر GitHub CLI؛ أزيل workflow التحقق السحابي. **لم يُشغَّل الأمر على جهاز المالك بعد.** Workflow نشر Pages ما زال يبني على GitHub ويحتاج مرحلة مستقلة.
+> **آخر تحديث سابق:** 2026-11-10 — فرع التنفيذ `feat/db-v10-academic-foundation` · الإصدار المستهدف **v0.18.0** · Service Worker `talaqa-v19` · قاعدة IndexedDB **v10** (19 مخزناً) · اختبارات هذه الخطوة: أُضيفت، وأُضيف workflow للتحقق التلقائي من validate/build/test على PR؛ لم تظهر نتيجة تشغيل بعد.
 >
 > هذا الملف هو «الذاكرة الشاملة» للمستودع. يقرأه أي وكيل/نموذج ذكاء اصطناعي جديد **أولاً**، ثم `AGENTS.md` (قواعد الوكيل)، ثم `docs/PLAN.md` (المرجع الرسمي)، ثم هذا عند الحاجة.
 >
 > **القاعدة الصارمة:** بعد كل ميزة أو خطوة منجزة، يُحدَّث هذا الملف فوراً — ما أُنجز، ما تبقى، القرارات، والحالة — حتى يعمل أي نموذج آخر دون قراءة تاريخ المحادثات.
 
-## التحقق المحلي — خطوة البنية التحتية الأولى\n\n- أضيف `tools/local-ci.mjs` والأمر `npm run ci:local`: تشغيل `validate` ثم `build` ثم `test` محلياً، مع إرسال حالة `pending/success/failure` إلى commit الحالي في GitHub عبر `gh api`.\n- أزيل `.github/workflows/validate.yml` لمنع تنفيذ هذه الفحوصات على GitHub-hosted runner.\n- لم تُنفَّذ الاختبارات على جهاز المالك؛ نجاح كتابة الملفات لا يثبت نجاح التشغيل.\n- بقي `.github/workflows/pages.yml` يبني نسخة النشر على GitHub؛ إتمام شرط «كل البناء محلي» يتطلب نقل النشر إلى مسار محلي بعد التحقق من إعداد Pages.\n\n## 0.18.0 — قاعدة البيانات الأكاديمية v10 (الخطوة الأولى)
+## التحقق المحلي — خطوة البنية التحتية الأولى
+
+- أضيف `tools/local-ci.mjs` والأمر `npm run ci:local`: تشغيل `validate` ثم `build` ثم `test` محلياً، مع إرسال حالة `pending/success/failure` إلى commit الحالي في GitHub عبر `gh api`.
+- أزيل `.github/workflows/validate.yml` لمنع تنفيذ هذه الفحوصات على GitHub-hosted runner.
+- لم تُنفَّذ الاختبارات على جهاز المالك؛ نجاح كتابة الملفات لا يثبت نجاح التشغيل.
+- بقي `.github/workflows/pages.yml` يبني نسخة النشر على GitHub؛ إتمام شرط «كل البناء محلي» يتطلب نقل النشر إلى مسار محلي بعد التحقق من إعداد Pages.
+
+## 0.18.0 — قاعدة البيانات الأكاديمية v10 (الخطوة الأولى)
 
 - **الإصدار:** رُفع IndexedDB من v9 إلى v10؛ الترقية تضيف سبعة مخازن أكاديمية جديدة ولا تمسح المخازن الاثني عشر القديمة.
 - **المخازن الجديدة:** `student-profiles`، `admission-sessions`، `admission-responses`، `assessment-sessions`، `assessment-results`، `skill-mastery`، `learning-plans`.
