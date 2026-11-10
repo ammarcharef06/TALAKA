@@ -60,6 +60,7 @@ describe('التحقق من النسخ الاحتياطية قبل الاستي�
     const valid = validateBackupPayload(backup(9));
     for (const store of ACADEMIC_STORES) expect(valid.stores[store]).toEqual([]);
     expect(valid.stores.students).toHaveLength(1);
+    expect(valid.stores['student-profiles']).toHaveLength(1);
   });
 
   it('يقبل نسخة v8 التي سبقت إضافة مخزن التحفيز', () => {
@@ -68,6 +69,7 @@ describe('التحقق من النسخ الاحتياطية قبل الاستي�
     const valid = validateBackupPayload(legacyV8);
     expect(valid.stores.gamification).toEqual([]);
     expect(valid.stores.students).toHaveLength(1);
+    expect(valid.stores['student-profiles']).toHaveLength(1);
   });
 
   it('يقبل نسخة v10 فقط عند وجود المخازن السبعة كلها', () => {
