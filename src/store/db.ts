@@ -103,6 +103,41 @@ export interface CertificateSigningKeyRecord {
   createdAt: string;
 }
 
+function createLegacyStudentProfile(value: unknown): StudentProfile | null {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
+  const student = value as Partial<StudentRecord>;
+  if (typeof student.id !== 'string' || !student.id.trim()) return null;
+  const legacyGoal = typeof student.goal === 'string' && student.goal.trim() && student.goal.trim() !== '—'
+    ? student.goal.trim()
+    : null;
+  const ageBand = typeof student.ageBand === 'string' && student.ageBand.trim() && student.ageBand.trim() !== '—'
+    ? student.ageBand.trim()
+    : null;
+  const dailyMinutes = typeof student.dailyMinutes === 'number' && Number.isFinite(student.dailyMinutes) && student.dailyMinutes > 0
+    ? student.dailyMinutes
+    : null;
+  const migratedAt = typeof student.registeredAt === 'string' && student.registeredAt
+    ? student.registeredAt
+    : new Date().toISOString();
+  return {
+    version: 1,
+    studentId: student.id,
+    ageBand,
+    goals: { primary: legacyGoal, secondary: [], source: 'legacy-single-goal' },
+    availability: { dailyMinutes, source: 'legacy-student-record' },
+    preferences: {
+      instructionLanguage: 'ar',
+      targetAccent: 'en-US',
+      s0AudioFirst: true,
+      progressiveReveal: true,
+      voiceRecording: false,
+      voiceAssessment: false,
+    },
+    createdAt: migratedAt,
+    updatedAt: migratedAt,
+  };
+}
+
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
@@ -129,7 +164,7 @@ function openDb(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_LEARNING_PLANS)) db.createObjectStore(STORE_LEARNING_PLANS, { keyPath: 'id' });
 
       // ترحيل وصفي لا يمس سجل الطالب: ينشئ ملفاً أكاديمياً أولياً من الحقول القديمة المتاحة فقط.
-      const oldVersion = (event as IDBVersionChangeEvent).oldVersion;
+      const oldVersion = event.oldVersion;
       if (oldVersion < 10 && req.transaction && db.objectStoreNames.contains(STORE_STUDENTS)) {
         const students = req.transaction.objectStore(STORE_STUDENTS);
         const profiles = req.transaction.objectStore(STORE_STUDENT_PROFILES);
@@ -137,39 +172,8 @@ function openDb(): Promise<IDBDatabase> {
         cursorRequest.onsuccess = () => {
           const cursor = cursorRequest.result;
           if (!cursor) return;
-          const student = cursor.value as Partial<StudentRecord>;
-          if (typeof student.id === 'string' && student.id.trim()) {
-            const legacyGoal = typeof student.goal === 'string' && student.goal.trim() && student.goal.trim() !== '—'
-              ? student.goal.trim()
-              : null;
-            const ageBand = typeof student.ageBand === 'string' && student.ageBand.trim() && student.ageBand.trim() !== '—'
-              ? student.ageBand.trim()
-              : null;
-            const dailyMinutes = typeof student.dailyMinutes === 'number' && Number.isFinite(student.dailyMinutes) && student.dailyMinutes > 0
-              ? student.dailyMinutes
-              : null;
-            const migratedAt = typeof student.registeredAt === 'string' && student.registeredAt
-              ? student.registeredAt
-              : new Date().toISOString();
-            const profile: StudentProfile = {
-              version: 1,
-              studentId: student.id,
-              ageBand,
-              goals: { primary: legacyGoal, secondary: [], source: 'legacy-single-goal' },
-              availability: { dailyMinutes, source: 'legacy-student-record' },
-              preferences: {
-                instructionLanguage: 'ar',
-                targetAccent: 'en-US',
-                s0AudioFirst: true,
-                progressiveReveal: true,
-                voiceRecording: false,
-                voiceAssessment: false,
-              },
-              createdAt: migratedAt,
-              updatedAt: migratedAt,
-            };
-            profiles.put(profile);
-          }
+          const profile = createLegacyStudentProfile(cursor.value);
+          if (profile) profiles.put(profile);
           cursor.continue();
         };
       }
@@ -753,6 +757,13 @@ export function validateBackupPayload(value: unknown): TalaqaBackup {
       seen.add(key);
     }
     normalizedStores[name] = rows;
+  }
+
+  // نسخ v8/v9 لا تحتوي ملف الطالب الأكاديمي؛ يُعاد بناؤه من الحقول القديمة المعروفة فقط.
+  if (value.dbVersion < 10) {
+    normalizedStores[STORE_STUDENT_PROFILES] = normalizedStores[STORE_STUDENTS]
+      .map(createLegacyStudentProfile)
+      .filter((profile): profile is StudentProfile => profile !== null);
   }
 
   return {
